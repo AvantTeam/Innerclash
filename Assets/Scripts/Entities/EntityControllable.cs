@@ -8,6 +8,7 @@ namespace Innerclash.Entities {
         public Transform ground;
 
         private Rigidbody2D body;
+        public Vector2 RelVelocity { get; set; }
         public bool Grounded { get; private set; }
         private float jumpStart;
 
@@ -19,7 +20,8 @@ namespace Innerclash.Entities {
         private void Update() {
             RaycastHit2D hit = Physics2D.Raycast(ground.position, Vector2.down, 0.01f, LayerMask.GetMask("Ground"));
             Grounded = hit.transform != null;
-            Debug.Log(Grounded);
+
+            body.velocity += RelVelocity * Time.deltaTime;
         }
 
         public void Move(float x) {
@@ -29,11 +31,9 @@ namespace Innerclash.Entities {
         public void Jump() {
             if(Grounded) {
                 jumpStart = Time.time;
-                body.velocity += new Vector2(0f, jumpHeight / jumpDuration);
-            } else {
-                if(Time.time < jumpStart + jumpDuration) {
-                    body.velocity = new Vector2(body.velocity.x, Mathf.Max(jumpHeight / jumpDuration, body.velocity.y));
-                }
+                body.velocity = new Vector2(body.velocity.x, jumpHeight / jumpDuration);
+            } else if(Time.time < jumpStart + jumpDuration) {
+                body.velocity = new Vector2(body.velocity.x, jumpHeight / jumpDuration);
             }
         }
     }

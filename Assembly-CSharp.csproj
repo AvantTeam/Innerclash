@@ -56,9 +56,10 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\EntityController.cs" />
-    <Compile Include="Assets\Scripts\EntityControllable.cs" />
-    <Compile Include="Assets\Scripts\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Entities\EntityController.cs" />
+    <Compile Include="Assets\Scripts\Entities\EntityControllable.cs" />
+    <Compile Include="Assets\Scripts\Entities\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Logic.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

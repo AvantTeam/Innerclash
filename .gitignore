@@ -1,5 +1,6 @@
 .vsconfig
 *.htm
+*.meta
 
 Packages/
 UserSettings/

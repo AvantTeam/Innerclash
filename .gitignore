@@ -1,0 +1,10 @@
+.vsconfig
+*.htm
+
+Packages/
+UserSettings/
+Library/
+Logs/
+Temp/
+
+obj/

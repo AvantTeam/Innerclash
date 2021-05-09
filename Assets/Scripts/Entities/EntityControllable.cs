@@ -13,7 +13,6 @@ namespace Innerclash.Entities {
         private Rigidbody2D body;
         public Vector2 RelVelocity { get; set; }
         public bool Grounded { get; private set; }
-        private float jumpStart;
 
         private void Start() {
             body = gameObject.GetComponent<Rigidbody2D>();

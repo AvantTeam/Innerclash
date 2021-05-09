@@ -60,6 +60,7 @@
     <Compile Include="Assets\Scripts\Entities\EntityControllable.cs" />
     <Compile Include="Assets\Scripts\Entities\EntityController.cs" />
     <Compile Include="Assets\Scripts\Logic.cs" />
+    <Compile Include="Assets\Scripts\Core\ScriptedTile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

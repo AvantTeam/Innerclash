@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Innerclash.Entities;
 
 namespace Innerclash {
@@ -8,7 +9,7 @@ namespace Innerclash {
         public Camera mainCamera;
         public PlayerController player;
         public EntityControllable playerSpawnEntity;
-        public Grid grid;
+        public Tilemap tilemap;
 
         private void Awake() {
             Instance = this;

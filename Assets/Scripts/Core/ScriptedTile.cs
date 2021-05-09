@@ -3,12 +3,16 @@ using UnityEngine.Tilemaps;
 
 namespace Innerclash.Core {
     [CreateAssetMenu]
-    public class ScriptedTile : TileBase {
-        public PhysicsMaterial2D material;
+    public class ScriptedTile : Tile {
+        public float drag = 1f;
+        public float speedMult = 1f;
+        public float jumpMult = 1f;
 
         public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject obj) {
-            obj.GetComponent<Collider2D>().sharedMaterial = material;
-            obj.layer = 3;
+            TileBehavior comp = obj.GetComponent<TileBehavior>();
+            comp.drag = drag;
+            comp.speedMult = speedMult;
+            comp.jumpMult = jumpMult;
 
             return base.StartUp(position, tilemap, obj);
         }

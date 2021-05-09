@@ -4,8 +4,11 @@ namespace Innerclash.Entities {
     [RequireComponent(typeof(Rigidbody2D))]
     public class EntityControllable : MonoBehaviour {
         public float speed = 16f;
-        public float jumpDuration = 0.5f, jumpHeight = 1f;
+        public float accel = 2f;
+        public float jumpHeight = 3f;
+
         public Transform ground;
+        public float groundWidth = 1f;
 
         private Rigidbody2D body;
         public Vector2 RelVelocity { get; set; }
@@ -18,23 +21,24 @@ namespace Innerclash.Entities {
         }
 
         private void Update() {
-            RaycastHit2D hit = Physics2D.Raycast(ground.position, Vector2.down, 0.01f, LayerMask.GetMask("Ground"));
+            RaycastHit2D hit = Physics2D.BoxCast(ground.position, new Vector2(groundWidth, 0.01f), 0f, Vector2.down, 0.01f, LayerMask.GetMask("Ground"));
             Grounded = hit.transform != null;
 
             body.velocity += RelVelocity * Time.deltaTime;
         }
 
         public void Move(float x) {
-            body.velocity += new Vector2(x * speed * Time.deltaTime, 0f);
+            body.velocity = Vector2.Lerp(body.velocity, body.velocity + new Vector2(x * speed, 0f) * SpeedMultiplier() * Time.deltaTime, accel);
         }
 
         public void Jump() {
             if(Grounded) {
-                jumpStart = Time.time;
-                body.velocity = new Vector2(body.velocity.x, jumpHeight / jumpDuration);
-            } else if(Time.time < jumpStart + jumpDuration) {
-                body.velocity = new Vector2(body.velocity.x, jumpHeight / jumpDuration);
+                body.velocity += new Vector2(0f, Mathf.Sqrt(2f * -Physics2D.gravity.y * jumpHeight));
             }
+        }
+
+        protected float SpeedMultiplier() {
+            return Grounded ? 1f : 0.3f;
         }
     }
 }

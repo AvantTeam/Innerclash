@@ -17,8 +17,10 @@ namespace Innerclash {
         }
 
         private void Start() {
-            player.controllable = Instantiate(playerSpawnEntity, Vector3.zero, Quaternion.identity);
+            player.controllable = Instantiate(playerSpawnEntity);
             cameraSettings.followTarget = player.controllable.transform;
+
+            ResetPosition();
         }
 
         private void LateUpdate() {
@@ -33,6 +35,12 @@ namespace Innerclash {
 
         public void TogglePause() {
             Time.timeScale = Time.timeScale < 1f ? 1f : 0f;
+        }
+
+        public void ResetPosition() {
+            if(player.controllable != null) {
+                player.controllable.transform.position = Vector3.zero;
+            }
         }
 
         [System.Serializable]

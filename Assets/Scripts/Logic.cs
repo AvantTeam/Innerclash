@@ -13,6 +13,7 @@ namespace Innerclash {
 
         private void Awake() {
             Instance = this;
+            Time.timeScale = 0f;
         }
 
         private void Start() {
@@ -28,6 +29,10 @@ namespace Innerclash {
 
                 cam.position = new Vector3(newPos.x, newPos.y, cam.position.z);
             }
+        }
+
+        public void TogglePause() {
+            Time.timeScale = Time.timeScale < 1f ? 1f : 0f;
         }
 
         [System.Serializable]

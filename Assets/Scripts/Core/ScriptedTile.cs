@@ -10,9 +10,7 @@ namespace Innerclash.Core {
 
         public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject obj) {
             TileBehavior comp = obj.GetComponent<TileBehavior>();
-            comp.drag = drag;
-            comp.speedMult = speedMult;
-            comp.jumpMult = jumpMult;
+            comp.Tile = this;
 
             return base.StartUp(position, tilemap, obj);
         }

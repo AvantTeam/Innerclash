@@ -36,15 +36,12 @@ namespace Innerclash.Entities {
             body.velocity += RelVelocity * Time.deltaTime;
         }
 
+        private void LateUpdate() {
+            body.velocity -= RelVelocity * Time.deltaTime;
+        }
+
         public void Move(float x) {
             Moving = x != 0f;
-
-            /*if(!Grounded) x *= AccelMultiplier();
-
-            Vector2 target = new Vector2(body.velocity.x, 0f);
-            Vector2.SmoothDamp(new Vector2(body.velocity.x, 0f), new Vector2(x * speed * SpeedMultiplier(), 0f), ref target, 1f / accel, speed * SpeedMultiplier(), Time.deltaTime);
-
-            body.velocity = new Vector2(target.x, body.velocity.y);*/
             moveTarget = new Vector2(x * speed * SpeedMultiplier(), 0f);
         }
 
@@ -59,7 +56,7 @@ namespace Innerclash.Entities {
         }
 
         protected float GroundSpeedMultiplier() {
-            return TileOn == null ? 1f : TileOn.speedMult;
+            return TileOn == null ? 1f : TileOn.Tile.speedMult;
         }
 
         protected float AirSpeedMultiplier() {
@@ -75,11 +72,11 @@ namespace Innerclash.Entities {
         }
 
         protected float Drag() {
-            return TileOn == null ? 0f : (Moving ? 0f : TileOn.drag);
+            return TileOn == null ? 0f : (Moving ? 0f : TileOn.Tile.drag);
         }
 
         protected float JumpMultiplier() {
-            return TileOn == null ? 1f : TileOn.jumpMult;
+            return TileOn == null ? 1f : TileOn.Tile.jumpMult;
         }
     }
 }

@@ -20,17 +20,13 @@ namespace Innerclash {
             cameraSettings.followTarget = player.controllable.transform;
         }
 
-        /*private void Update() {
-            
-        }*/
-
         private void LateUpdate() {
             if(cameraSettings.followTarget != null) {
                 Transform cam = cameraSettings.mainCamera.transform;
                 Transform tar = cameraSettings.followTarget;
                 Vector2 newPos = Vector2.Lerp(cam.position, tar.position, cameraSettings.followSpeed * Time.deltaTime);
+
                 cam.position = new Vector3(newPos.x, newPos.y, cam.position.z);
-                
             }
         }
 

@@ -8,5 +8,6 @@ UserSettings/
 Library/
 Logs/
 Temp/
+Build/
 
 obj/

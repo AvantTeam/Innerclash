@@ -13,8 +13,17 @@ namespace Innerclash {
 
         private void Awake() {
             Instance = this;
+        }
 
+        private void Start() {
             player.controllable = Instantiate(playerSpawnEntity, Vector3.zero, Quaternion.identity);
+        }
+
+        private void Update() {
+            if(player.controllable != null) {
+                Vector3 pos = player.controllable.transform.position;
+                mainCamera.transform.position = new Vector3(pos.x, pos.y, mainCamera.transform.position.z);
+            }
         }
     }
 }

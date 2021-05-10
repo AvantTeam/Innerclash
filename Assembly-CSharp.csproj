@@ -60,8 +60,8 @@
     <Compile Include="Assets\Scripts\Entities\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Entities\EntityControllable.cs" />
     <Compile Include="Assets\Scripts\Entities\EntityController.cs" />
-    <Compile Include="Assets\Scripts\Logic.cs" />
     <Compile Include="Assets\Scripts\Core\TileBehavior.cs" />
+    <Compile Include="Assets\Scripts\Logic.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

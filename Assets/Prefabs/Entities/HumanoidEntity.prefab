@@ -183,7 +183,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &4792612583176505679
 MonoBehaviour:
@@ -200,5 +200,9 @@ MonoBehaviour:
   speed: 16
   accel: 4
   jumpHeight: 3
+  midAirAccel: 0.2
   ground: {fileID: 1008490981761418805}
   groundWidth: 1
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8

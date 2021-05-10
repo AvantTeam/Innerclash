@@ -34,6 +34,6 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 5367189913339417069, guid: 63f25b42738f20247833f1f832b6fa4b, type: 3}
   m_Flags: 1
   m_ColliderType: 2
-  drag: 0
+  drag: 0.4
   speedMult: 1
   jumpMult: 1

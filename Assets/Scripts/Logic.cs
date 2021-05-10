@@ -6,7 +6,7 @@ namespace Innerclash {
     public class Logic : MonoBehaviour {
         public static Logic Instance { get; private set; }
 
-        public Camera mainCamera;
+        public CameraSettings cameraSettings;
         public PlayerController player;
         public EntityControllable playerSpawnEntity;
         public Tilemap tilemap;
@@ -17,13 +17,28 @@ namespace Innerclash {
 
         private void Start() {
             player.controllable = Instantiate(playerSpawnEntity, Vector3.zero, Quaternion.identity);
+            cameraSettings.followTarget = player.controllable.transform;
         }
 
-        private void Update() {
-            if(player.controllable != null) {
-                Vector3 pos = player.controllable.transform.position;
-                mainCamera.transform.position = new Vector3(pos.x, pos.y, mainCamera.transform.position.z);
+        /*private void Update() {
+            
+        }*/
+
+        private void LateUpdate() {
+            if(cameraSettings.followTarget != null) {
+                Transform cam = cameraSettings.mainCamera.transform;
+                Transform tar = cameraSettings.followTarget;
+                Vector2 newPos = Vector2.Lerp(cam.position, tar.position, cameraSettings.followSpeed * Time.deltaTime);
+                cam.position = new Vector3(newPos.x, newPos.y, cam.position.z);
+                
             }
+        }
+
+        [System.Serializable]
+        public class CameraSettings {
+            public Camera mainCamera;
+            public Transform followTarget;
+            public float followSpeed = 2f;
         }
     }
 }

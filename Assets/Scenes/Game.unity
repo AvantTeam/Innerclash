@@ -155,7 +155,7 @@ MonoBehaviour:
   cameraSettings:
     mainCamera: {fileID: 519420031}
     followTarget: {fileID: 0}
-    followSpeed: 10
+    followSpeed: 2
   player: {fileID: 424059190}
   playerSpawnEntity: {fileID: 4792612583176505679, guid: a2274ab110e925e41b53ccbb51571e0e, type: 3}
   tilemap: {fileID: 383504762}

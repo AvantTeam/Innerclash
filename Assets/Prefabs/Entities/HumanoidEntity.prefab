@@ -122,9 +122,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2110781873573744214}
+  - component: {fileID: 4792612583176505679}
   - component: {fileID: 1868240707188411650}
   - component: {fileID: 2263897466070161285}
-  - component: {fileID: 4792612583176505679}
   m_Layer: 0
   m_Name: HumanoidEntity
   m_TagString: Untagged
@@ -148,6 +148,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4792612583176505679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8897934353507453049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 408378ebf2f7d9a4baeed766e2b621e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 12
+  accel: 4
+  jumpHeight: 3
+  midAirAccel: 0.2
+  ground: {fileID: 1008490981761418805}
+  groundWidth: 1
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!70 &1868240707188411650
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -185,24 +206,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &4792612583176505679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8897934353507453049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 408378ebf2f7d9a4baeed766e2b621e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 12
-  accel: 4
-  jumpHeight: 3
-  midAirAccel: 0.2
-  ground: {fileID: 1008490981761418805}
-  groundWidth: 1
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 8

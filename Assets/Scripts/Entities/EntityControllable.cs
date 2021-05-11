@@ -18,6 +18,7 @@ namespace Innerclash.Entities {
         public Vector2 RelVelocity { get; set; }
         public bool Grounded { get; private set; }
         public bool Moving { get; private set; }
+        public bool Jumping { get; private set; }
 
         private Vector2 moveTarget = Vector2.zero;
 
@@ -30,10 +31,18 @@ namespace Innerclash.Entities {
             RaycastHit2D hit = Physics2D.BoxCast(ground.position, new Vector2(groundWidth, 0.01f), 0f, Vector2.down, 0.01f, groundMask);
             Grounded = hit.transform != null;
             TileOn = hit.transform != null ? hit.transform.GetComponent<TileBehavior>() : null;
+        }
 
+        private void FixedUpdate() {
             body.drag = Drag();
-            body.velocity = new Vector2(Mathf.Lerp(body.velocity.x, moveTarget.x, accel * AccelMultiplier() * Time.deltaTime), body.velocity.y);
-            body.velocity += RelVelocity * Time.deltaTime;
+
+            if(Jumping) {
+                body.velocity += new Vector2(0f, Mathf.Sqrt(2f * -Physics2D.gravity.y * (jumpHeight * JumpMultiplier())));
+                Jumping = false;
+            }
+
+            body.velocity = new Vector2(Mathf.Lerp(body.velocity.x, moveTarget.x, accel * AccelMultiplier() * Time.fixedDeltaTime), body.velocity.y);
+            body.velocity += RelVelocity * Time.fixedDeltaTime;
         }
 
         private void LateUpdate() {
@@ -46,9 +55,7 @@ namespace Innerclash.Entities {
         }
 
         public void Jump() {
-            if(Grounded) {
-                body.velocity += new Vector2(0f, Mathf.Sqrt(2f * -Physics2D.gravity.y * (jumpHeight * JumpMultiplier())));
-            }
+            if(Grounded) Jumping = true;
         }
 
         protected float SpeedMultiplier() {
@@ -72,7 +79,7 @@ namespace Innerclash.Entities {
         }
 
         protected float Drag() {
-            return TileOn == null ? 0f : (Moving ? 0f : TileOn.Tile.drag);
+            return TileOn == null ? 0f : ((Moving || Jumping) ? 0f : TileOn.Tile.drag);
         }
 
         protected float JumpMultiplier() {

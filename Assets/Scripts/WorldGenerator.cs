@@ -5,7 +5,7 @@ namespace Innerclash {
     public class WorldGenerator : MonoBehaviour {
         public bool randomSeed;
         public int seed;
-        public Vector2Int mapSize = new Vector2Int(2000, 500);
+        public WorldDimension mapDimension;
         public Vector2Int sectorCenter = Vector2Int.zero;
         public int seaLevel = 200;
 
@@ -29,8 +29,8 @@ namespace Innerclash {
                 pass.offsets = new Vector2[pass.octave];
                 for (int i = 0; i < pass.octave; i++) pass.offsets[i] = new Vector2((float)rand.NextDouble(), (float)rand.NextDouble()).normalized * (float)rand.NextDouble() * 100f;
 
-                for(int x = 0; x < mapSize.x; x++) {
-                    float sourcePhase = (float)x / mapSize.x;
+                for(int x = 0; x < mapDimension.WorldWidth; x++) {
+                    float sourcePhase = (float)x / mapDimension.WorldWidth;
                     float sourceAngle = sourcePhase * 2 * Mathf.PI;
                     Vector2 sourcePoint = new Vector2(Mathf.Cos(sourceAngle), Mathf.Sin(sourceAngle)) + sectorCenter;
                     float freq = 1f, amp = 1f, height = 0f;
@@ -44,14 +44,14 @@ namespace Innerclash {
                         amp *= pass.persistence;
                     }
 
-                    int finalHeight = (int)Mathf.LerpUnclamped(pass.heightRange.x, pass.heightRange.y, pass.remap.Evaluate(height / 1.33f));
+                    int finalHeight = (int)Mathf.Min(Mathf.LerpUnclamped(pass.heightRange.x, pass.heightRange.y, pass.remap.Evaluate(height / 1.33f)), mapDimension.worldHeight - 1);
                     worldTilemaps[pass.targetTilemapIndex].BoxFill(new Vector3Int(x, finalHeight, 0), pass.tile, x, 0, x, finalHeight);
                 }
             }
         }
 
         public Vector3Int FindWorldCenter(Tilemap world) {
-            Vector3Int pos = new Vector3Int(mapSize.x / 2, mapSize.y, 0);
+            Vector3Int pos = new Vector3Int(mapDimension.WorldWidth / 2, mapDimension.worldHeight, 0);
             bool found = false;
             while(!found && pos.y > 0) {
                 if(world.GetTile(pos + Vector3Int.down) != null) {
@@ -61,6 +61,12 @@ namespace Innerclash {
                 }
             }
             return pos;
+        }
+
+        [System.Serializable]
+        public class WorldDimension {
+            public int chunkSize = 50, worldChunkCount = 40, worldHeight = 500;
+            public int WorldWidth { get => chunkSize * worldChunkCount; }
         }
 
         [System.Serializable]

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Innerclash.Entities;
@@ -12,12 +13,25 @@ namespace Innerclash {
         public Tilemap tilemap;
 
         public WorldGenerator worldGenerator;
+        public WorldManager worldManager;
+
+        public TileBase[] tilesArray;
+        public Dictionary<TileBase, short> tilesID;
 
         public Vector3 Spawn { get; private set; }
 
         private void Awake() {
             Instance = this;
             Time.timeScale = 0f;
+
+            tilesID = new Dictionary<TileBase, short>();
+            for(int id = 0; id < tilesArray.Length; id++) {
+                if (!tilesID.ContainsKey(tilesArray[id])){
+                    tilesID.Add(tilesArray[id], (short)id);
+                } else {
+                    Debug.LogError($"Duplicate tile {tilesArray[id]} found for ID {tilesID[tilesArray[id]]} and {id}");
+                }
+            }
         }
 
         private void Start() {
@@ -50,7 +64,7 @@ namespace Innerclash {
         public void ResetPosition() {
             if(player.controllable != null) {
                 player.controllable.transform.position = Spawn;
-                cameraSettings.mainCamera.transform.position = Spawn;
+                cameraSettings.mainCamera.transform.position = Spawn + Vector3.back * 10;
             }
         }
 

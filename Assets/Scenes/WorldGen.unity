@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 279572240}
   - component: {fileID: 279572239}
   - component: {fileID: 279572241}
+  - component: {fileID: 279572242}
   m_Layer: 0
   m_Name: Logic
   m_TagString: GameController
@@ -161,6 +162,10 @@ MonoBehaviour:
   playerSpawnEntity: {fileID: 4792612583176505679, guid: a2274ab110e925e41b53ccbb51571e0e, type: 3}
   tilemap: {fileID: 383504762}
   worldGenerator: {fileID: 279572241}
+  worldManager: {fileID: 279572242}
+  tilesArray:
+  - {fileID: 11400000, guid: a451f4afd24eef64197e28646829e60c, type: 2}
+  - {fileID: 11400000, guid: ad57d3cee1f8414459947939bfa11b4d, type: 2}
 --- !u!4 &279572240
 Transform:
   m_ObjectHideFlags: 0
@@ -189,6 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   randomSeed: 0
   seed: 0
+  chunkWidth: 50
   mapSize: {x: 2000, y: 500}
   sectorCenter: {x: 0, y: 0}
   seaLevel: 200
@@ -244,6 +250,18 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+--- !u!114 &279572242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279572238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10022977f99771d4585926edb62c5f7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &358506256
 GameObject:
   m_ObjectHideFlags: 0

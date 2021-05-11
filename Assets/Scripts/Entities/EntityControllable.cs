@@ -42,12 +42,12 @@ namespace Innerclash.Entities {
             }
 
             body.velocity = new Vector2(Mathf.Lerp(body.velocity.x, moveTarget.x, accel * AccelMultiplier() * Time.fixedDeltaTime), body.velocity.y);
-            body.velocity += RelVelocity * Time.fixedDeltaTime;
+            //body.velocity += RelVelocity * Time.fixedDeltaTime;
         }
 
-        private void LateUpdate() {
+        /*private void LateUpdate() {
             body.velocity -= RelVelocity * Time.deltaTime;
-        }
+        }*/
 
         public void Move(float x) {
             Moving = x != 0f;

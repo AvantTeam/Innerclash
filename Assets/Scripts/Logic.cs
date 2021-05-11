@@ -11,12 +11,22 @@ namespace Innerclash {
         public EntityControllable playerSpawnEntity;
         public Tilemap tilemap;
 
+        public WorldGenerator worldGenerator;
+
+        public Vector3 Spawn { get; private set; }
+
         private void Awake() {
             Instance = this;
             Time.timeScale = 0f;
         }
 
         private void Start() {
+            if(worldGenerator != null) {
+                worldGenerator.Initialize();
+                worldGenerator.GenerateMap();
+                Spawn = worldGenerator.FindWorldCenter(tilemap) + Vector3.up + new Vector3(0.5f, 0.5f);
+            }
+
             player.controllable = Instantiate(playerSpawnEntity);
             cameraSettings.followTarget = player.controllable.transform;
 
@@ -39,7 +49,8 @@ namespace Innerclash {
 
         public void ResetPosition() {
             if(player.controllable != null) {
-                player.controllable.transform.position = Vector3.zero;
+                player.controllable.transform.position = Spawn;
+                cameraSettings.mainCamera.transform.position = Spawn;
             }
         }
 

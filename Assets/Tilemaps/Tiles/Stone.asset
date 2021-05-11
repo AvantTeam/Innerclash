@@ -85,3 +85,14 @@ MonoBehaviour:
   - {fileID: -2249311264822966187, guid: 397cbb8e7ceee594fb320eccd3904525, type: 3}
   - {fileID: 7907144638541224616, guid: 397cbb8e7ceee594fb320eccd3904525, type: 3}
   - {fileID: 4891255856527629848, guid: 397cbb8e7ceee594fb320eccd3904525, type: 3}
+  variators:
+  - maskTarget: 255
+    mode: 1
+    variationThreshold: 0.67
+    variationDensity: 0.33
+    variationSprites: []
+  - maskTarget: 255
+    mode: 2
+    variationThreshold: 0.7
+    variationDensity: 0.3
+    variationSprites: []

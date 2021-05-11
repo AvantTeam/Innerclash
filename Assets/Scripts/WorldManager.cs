@@ -14,17 +14,16 @@ namespace Innerclash {
 
         public class WorldChunk {
             public byte Pos { get; private set; }
-            public short[][] Tile { get; private set; }
+            public short[,] Tile { get; private set; }
 
             public WorldChunk(byte pos, Vector2Int dimension) {
                 Pos = pos;
-                Tile = new short[dimension.x][];
-                for (int i = 0; i < Tile.Length; i++) Tile[i] = new short[dimension.y];
+                Tile = new short[dimension.x, dimension.y];
             }
 
             public TileBase LocalTileAt(Vector2Int localPosition) {
-                if (localPosition.x < 0 || localPosition.y < 0 || localPosition.x > Tile.Length || localPosition.y > Tile[0].Length) return null;
-                return Logic.Instance.tilesArray[Tile[localPosition.x][localPosition.y]];
+                if (localPosition.x < 0 || localPosition.y < 0 || localPosition.x > Tile.GetUpperBound(0) || localPosition.y > Tile.GetUpperBound(1)) return null;
+                return Logic.Instance.tilesArray[Tile[localPosition.x, localPosition.y]];
             }
 
             public TileBase GlobalTileAt(Vector2Int position) {

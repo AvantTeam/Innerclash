@@ -56,7 +56,7 @@ namespace Innerclash.Entities {
         }
 
         public void Jump() {
-            if(Grounded) Jumping = true;
+            Jumping = true;
         }
 
         protected float SpeedMultiplier() {

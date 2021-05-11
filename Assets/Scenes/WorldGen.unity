@@ -561,6 +561,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllable: {fileID: 0}
+  maxJumpBufferTime: 0.1
+  maxCoyoteTime: 0.04
 --- !u!4 &424059191
 Transform:
   m_ObjectHideFlags: 0

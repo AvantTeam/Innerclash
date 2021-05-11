@@ -64,6 +64,7 @@ namespace Innerclash {
         public void ResetPosition() {
             if(player.controllable != null) {
                 player.controllable.transform.position = Spawn;
+                player.controllable.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 cameraSettings.mainCamera.transform.position = Spawn + Vector3.back * 10;
             }
         }

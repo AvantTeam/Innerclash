@@ -165,7 +165,7 @@ MonoBehaviour:
   jumpHeight: 3
   midAirAccel: 0.2
   ground: {fileID: 1008490981761418805}
-  groundWidth: 1
+  groundWidth: 0.9
   groundMask:
     serializedVersion: 2
     m_Bits: 8

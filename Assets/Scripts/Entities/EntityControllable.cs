@@ -12,7 +12,7 @@ namespace Innerclash.Entities {
         [SerializeField] private Transform ground;
         public float groundWidth = 1f;
         public LayerMask groundMask;
-        public TileBehavior TileOn { get; private set; }
+        public ScriptedTile TileOn { get; private set; }
 
         private Rigidbody2D body;
         public Vector2 RelVelocity { get; set; }
@@ -30,7 +30,8 @@ namespace Innerclash.Entities {
         private void Update() {
             RaycastHit2D hit = Physics2D.BoxCast(ground.position, new Vector2(groundWidth, 0.01f), 0f, Vector2.down, 0.01f, groundMask);
             Grounded = hit.transform != null;
-            TileOn = hit.transform != null ? hit.transform.GetComponent<TileBehavior>() : null;
+            //TileOn = hit.transform != null ? hit.transform.GetComponent<TileBehavior>() : null;
+            TileOn = Logic.Instance.tilemap.GetTile(new Vector3Int((int)ground.position.x, (int)(ground.position.y - 0.01f), 0)) as ScriptedTile;
         }
 
         private void FixedUpdate() {
@@ -63,7 +64,7 @@ namespace Innerclash.Entities {
         }
 
         protected float GroundSpeedMultiplier() {
-            return TileOn == null ? 1f : TileOn.Tile.speedMult;
+            return TileOn == null ? 1f : TileOn.speedMult;
         }
 
         protected float AirSpeedMultiplier() {
@@ -79,11 +80,11 @@ namespace Innerclash.Entities {
         }
 
         protected float Drag() {
-            return TileOn == null ? 0f : ((Moving || Jumping) ? 0f : TileOn.Tile.drag);
+            return TileOn == null ? 0f : ((Moving || Jumping) ? 0f : TileOn.drag);
         }
 
         protected float JumpMultiplier() {
-            return TileOn == null ? 1f : TileOn.Tile.jumpMult;
+            return TileOn == null ? 1f : TileOn.jumpMult;
         }
     }
 }

@@ -8,11 +8,11 @@ namespace Innerclash.Core {
         public float speedMult = 1f;
         public float jumpMult = 1f;
 
-        public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject obj) {
+        /*public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject obj) {
             TileBehavior comp = obj.GetComponent<TileBehavior>();
             comp.Tile = this;
 
             return base.StartUp(position, tilemap, obj);
-        }
+        }*/
     }
 }

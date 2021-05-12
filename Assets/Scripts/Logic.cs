@@ -39,6 +39,18 @@ namespace Innerclash {
                 worldGenerator.Initialize();
                 worldGenerator.GenerateMap();
                 Spawn = worldGenerator.FindWorldCenter(tilemap) + Vector3.up + new Vector3(0.5f, 0.5f);
+            } else {
+                Vector3Int pos = new Vector3Int(tilemap.size.x / 2, tilemap.size.y, 0);
+                bool found = false;
+                while(!found && pos.y > 0) {
+                    if(tilemap.GetTile(pos + Vector3Int.down) != null) {
+                        found = true;
+                    } else {
+                        pos += Vector3Int.down;
+                    }
+                }
+
+                Spawn = new Vector3(pos.x, pos.y) + Vector3.up + new Vector3(0.5f, 0.5f);
             }
 
             player.controllable = Instantiate(playerSpawnEntity);

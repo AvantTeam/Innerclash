@@ -196,7 +196,7 @@ MonoBehaviour:
   seed: 0
   mapDimension:
     chunkSize: 50
-    worldChunkCount: 40
+    worldChunkCount: 10
     worldHeight: 500
   sectorCenter: {x: 0, y: 0}
   seaLevel: 200
@@ -206,7 +206,7 @@ MonoBehaviour:
   - targetTilemapIndex: 0
     tile: {fileID: 11400000, guid: a451f4afd24eef64197e28646829e60c, type: 2}
     heightRange: {x: 20, y: 80}
-    scale: 4.67
+    scale: 1.1675
     octave: 6
     lacunarity: 1.7
     persistence: 0.55

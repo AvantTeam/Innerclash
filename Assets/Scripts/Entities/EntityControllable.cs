@@ -25,6 +25,7 @@ namespace Innerclash.Entities {
         private void Start() {
             body = gameObject.GetComponent<Rigidbody2D>();
             Grounded = false;
+            TileOn = null;
         }
 
         private void Update() {

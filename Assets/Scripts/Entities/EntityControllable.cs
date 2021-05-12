@@ -6,13 +6,7 @@ namespace Innerclash.Entities {
     public class EntityControllable : MonoBehaviour {
         public EntityType Type { get; set; }
 
-        public float Speed { get => Type.speed; }
-        public float Accel { get => Type.accel; }
-        public float JumpHeight { get => Type.jumpHeight; }
-        public float MidAirAccel { get => Type.midAirAccel; }
-
         [SerializeField] private Transform ground;
-        public float groundWidth = 1f;
         public LayerMask groundMask;
         public ScriptedTile TileOn { get; private set; }
 
@@ -25,20 +19,28 @@ namespace Innerclash.Entities {
         public float GroundSpeedMultiplier { get => TileOn == null ? 1f : TileOn.speedMult; }
         public float AirSpeedMultiplier { get => 1f; }
         public float AccelMultiplier { get => Grounded ? 1f : AirAccelMultiplier; }
-        public float AirAccelMultiplier { get => MidAirAccel; }
+        public float AirAccelMultiplier { get => Type.midAirAccel; }
         public float Drag { get => TileOn == null ? 0f : ((Moving || Jumping) ? 0f : TileOn.drag); }
         public float JumpMultiplier { get => TileOn == null ? 1f : TileOn.jumpMult; }
 
         private Vector2 moveTarget = Vector2.zero;
 
         private void Start() {
-            body = gameObject.GetComponent<Rigidbody2D>();
+            body = GetComponent<Rigidbody2D>();
             Grounded = false;
             TileOn = null;
+
+            Collider2D co = GetComponent<Collider2D>();
+            Vector2 size = new Vector2(Type.hitSizeX, Type.hitSizeY);
+            if(co is BoxCollider2D box) {
+                box.size = size;
+            }else if(co is CapsuleCollider2D cap) {
+                cap.size = size;
+            }
         }
 
         private void Update() {
-            RaycastHit2D hit = Physics2D.BoxCast(ground.position, new Vector2(groundWidth, 0.01f), 0f, Vector2.down, 0.01f, groundMask);
+            RaycastHit2D hit = Physics2D.BoxCast(ground.position, new Vector2(Type.hitSizeX - 0.01f, 0.01f), 0f, Vector2.down, 0.01f, groundMask);
             Grounded = hit.transform != null;
             TileOn = Logic.Instance.tilemap.GetTile(new Vector3Int((int)ground.position.x, (int)(ground.position.y - 0.01f), 0)) as ScriptedTile;
         }
@@ -47,16 +49,16 @@ namespace Innerclash.Entities {
             body.drag = Drag;
 
             if(Jumping) {
-                body.velocity += new Vector2(0f, Mathf.Sqrt(2f * -Physics2D.gravity.y * (JumpHeight * JumpMultiplier)));
+                body.velocity += new Vector2(0f, Mathf.Sqrt(2f * -Physics2D.gravity.y * (Type.jumpHeight * JumpMultiplier)));
                 Jumping = false;
             }
 
-            body.velocity = new Vector2(Mathf.Lerp(body.velocity.x, moveTarget.x, Accel * AccelMultiplier * Time.fixedDeltaTime), body.velocity.y);
+            body.velocity = new Vector2(Mathf.Lerp(body.velocity.x, moveTarget.x, Type.accel * AccelMultiplier * Time.fixedDeltaTime), body.velocity.y);
         }
 
         public void Move(float x) {
             Moving = x != 0f;
-            moveTarget = new Vector2(x * Speed * SpeedMultiplier, 0f);
+            moveTarget = new Vector2(x * Type.speed * SpeedMultiplier, 0f);
         }
 
         public void Jump() {

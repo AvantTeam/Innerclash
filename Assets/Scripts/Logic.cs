@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Innerclash.Core;
 using Innerclash.Entities;
 
 namespace Innerclash {
@@ -9,7 +10,7 @@ namespace Innerclash {
 
         public CameraSettings cameraSettings;
         public PlayerController player;
-        public EntityControllable playerSpawnEntity;
+        public EntityType playerSpawnType;
         public Tilemap tilemap;
 
         public WorldGenerator worldGenerator;
@@ -53,7 +54,7 @@ namespace Innerclash {
                 Spawn = new Vector3(pos.x, pos.y) + Vector3.up + new Vector3(0.5f, 0.5f);
             }
 
-            player.controllable = Instantiate(playerSpawnEntity);
+            player.controllable = playerSpawnType.create();
             cameraSettings.followTarget = player.controllable.transform;
 
             ResetPosition();

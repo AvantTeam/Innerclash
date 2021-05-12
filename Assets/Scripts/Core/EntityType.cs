@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Innerclash.Entities;
 
-public class EntityType : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+namespace Innerclash.Core {
+    [CreateAssetMenu]
+    public class EntityType : ScriptableObject {
+        public float speed = 16f;
+        public float accel = 2f;
+        public float jumpHeight = 3f;
+        [Range(0, 1)] public float midAirAccel = 0.2f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public EntityControllable entity;
+
+        public EntityControllable create() {
+            EntityControllable ent = Instantiate(entity, Vector3.zero, Quaternion.identity);
+            ent.Type = this;
+            return ent;
+        }
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Innerclash.Entities {
     public class PlayerController : EntityController {
-        public float minJumpDelay = 0.2f, maxJumpBufferTime = 0.1f, maxCoyoteTime = 0.04f;
+        public float minJumpDelay = 0.2f, maxJumpBufferTime = 0.15f, maxCoyoteTime = 0.06f;
 
         private float jumpTimer = 0f, jumpBufferTimer = -Mathf.Infinity, coyoteTimer = 0f;
         private bool hasJumped;

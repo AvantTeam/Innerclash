@@ -159,7 +159,7 @@ MonoBehaviour:
     followTarget: {fileID: 0}
     followSpeed: 5
   player: {fileID: 424059190}
-  playerSpawnType: {fileID: 11400000, guid: 49fae626a5da3774aad82226f8afc51b, type: 2}
+  playerSpawnType: {fileID: 4792612583176505679, guid: a2274ab110e925e41b53ccbb51571e0e, type: 3}
   tilemap: {fileID: 383504762}
   worldGenerator: {fileID: 279572241}
   worldManager: {fileID: 279572242}
@@ -562,8 +562,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controllable: {fileID: 0}
   minJumpDelay: 0.2
-  maxJumpBufferTime: 0.1
-  maxCoyoteTime: 0.04
+  maxJumpBufferTime: 0.15
+  maxCoyoteTime: 0.06
 --- !u!4 &424059191
 Transform:
   m_ObjectHideFlags: 0

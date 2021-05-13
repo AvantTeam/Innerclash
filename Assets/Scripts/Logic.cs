@@ -10,7 +10,7 @@ namespace Innerclash {
 
         public CameraSettings cameraSettings;
         public PlayerController player;
-        public EntityType playerSpawnType;
+        public EntityControllable playerSpawnType;
         public Tilemap tilemap;
 
         public WorldGenerator worldGenerator;
@@ -54,7 +54,7 @@ namespace Innerclash {
                 Spawn = new Vector3(pos.x, pos.y) + Vector3.up + new Vector3(0.5f, 0.5f);
             }
             Spawn = WorldGenerator.FindWorldCenter(tilemap) + Vector3.up + new Vector3(0.5f, 0.5f);
-            player.controllable = playerSpawnType.create();
+            player.controllable = Instantiate(playerSpawnType, Spawn, Quaternion.identity);
             cameraSettings.followTarget = player.controllable.transform;
 
             ResetPosition();

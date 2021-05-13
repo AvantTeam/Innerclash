@@ -31,18 +31,17 @@ namespace Innerclash.Entities {
             TileOn = null;
 
             Collider2D co = GetComponent<Collider2D>();
-            Vector2 size = new Vector2(Type.hitSizeX, Type.hitSizeY);
             if(co is BoxCollider2D box) {
-                box.size = size;
+                box.size = Type.hitSize;
             }else if(co is CapsuleCollider2D cap) {
-                cap.size = size;
+                cap.size = Type.hitSize;
             }
         }
 
         private void Update() {
-            RaycastHit2D hit = Physics2D.BoxCast(ground.position, new Vector2(Type.hitSizeX - 0.01f, 0.01f), 0f, Vector2.down, 0.01f, groundMask);
+            RaycastHit2D hit = Physics2D.BoxCast(ground.position, new Vector2(Type.hitSize.x - 0.01f, 0.01f), 0f, Vector2.down, 0.01f, groundMask);
             Grounded = hit.transform != null;
-            TileOn = Logic.Instance.tilemap.GetTile(new Vector3Int((int)ground.position.x, (int)(ground.position.y - 0.01f), 0)) as ScriptedTile;
+            TileOn = Logic.Instance.tilemap.GetTile(Logic.Instance.tilemap.WorldToCell(ground.position + Vector3.down * 0.01f)) as ScriptedTile;
         }
 
         private void FixedUpdate() {

@@ -50,8 +50,8 @@ namespace Innerclash {
             }
         }
 
-        public Vector3Int FindWorldCenter(Tilemap world) {
-            Vector3Int pos = new Vector3Int(mapDimension.WorldWidth / 2, mapDimension.worldHeight, 0);
+        public static Vector3Int FindWorldCenter(Tilemap world) {
+            Vector3Int pos = new Vector3Int(world.size.x / 2, world.size.y, 0);
             bool found = false;
             while(!found && pos.y > 0) {
                 if(world.GetTile(pos + Vector3Int.down) != null) {

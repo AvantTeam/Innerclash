@@ -17,5 +17,4 @@ MonoBehaviour:
   jumpHeight: 3
   midAirAccel: 0.2
   entity: {fileID: 4792612583176505679, guid: a2274ab110e925e41b53ccbb51571e0e, type: 3}
-  hitSizeX: 1
-  hitSizeY: 1.9
+  hitSize: {x: 0.95, y: 1.9}

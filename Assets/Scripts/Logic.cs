@@ -39,7 +39,7 @@ namespace Innerclash {
             if(worldGenerator != null) {
                 worldGenerator.Initialize();
                 worldGenerator.GenerateMap();
-                Spawn = worldGenerator.FindWorldCenter(tilemap) + Vector3.up + new Vector3(0.5f, 0.5f);
+                Spawn = WorldGenerator.FindWorldCenter(tilemap) + Vector3.up + new Vector3(0.5f, 0.5f);
             } else {
                 Vector3Int pos = new Vector3Int(tilemap.size.x / 2, tilemap.size.y, 0);
                 bool found = false;
@@ -53,7 +53,7 @@ namespace Innerclash {
 
                 Spawn = new Vector3(pos.x, pos.y) + Vector3.up + new Vector3(0.5f, 0.5f);
             }
-
+            Spawn = WorldGenerator.FindWorldCenter(tilemap) + Vector3.up + new Vector3(0.5f, 0.5f);
             player.controllable = playerSpawnType.create();
             cameraSettings.followTarget = player.controllable.transform;
 

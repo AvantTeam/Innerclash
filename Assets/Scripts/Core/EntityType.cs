@@ -10,8 +10,7 @@ namespace Innerclash.Core {
         [Range(0, 1)] public float midAirAccel = 0.2f;
 
         public EntityControllable entity;
-        public float hitSizeX = 1f;
-        public float hitSizeY = 1.9f;
+        public Vector2 hitSize;
 
         public EntityControllable create() {
             EntityControllable ent = Instantiate(entity, Vector3.zero, Quaternion.identity);

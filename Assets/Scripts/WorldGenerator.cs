@@ -45,7 +45,8 @@ namespace Innerclash {
                     }
 
                     int finalHeight = (int)Mathf.Min(Mathf.LerpUnclamped(pass.heightRange.x, pass.heightRange.y, pass.remap.Evaluate(height / 1.33f)), mapDimension.worldHeight - 1);
-                    worldTilemaps[pass.targetTilemapIndex].BoxFill(new Vector3Int(x, finalHeight, 0), pass.tile, x, 0, x, finalHeight);
+                    worldTilemaps[(int)pass.targetLayer].BoxFill(new Vector3Int(x, finalHeight, 0), pass.tile, x, 0, x, finalHeight);
+                    if(pass.generateBackgroundTile)worldTilemaps[(int)TilemapLayer.background].BoxFill(new Vector3Int(x, finalHeight, 0), pass.tile, x, 0, x, finalHeight);
                 }
             }
         }
@@ -65,14 +66,15 @@ namespace Innerclash {
 
         [System.Serializable]
         public class WorldDimension {
-            public int chunkSize = 50, worldChunkCount = 40, worldHeight = 500;
+            public int chunkSize = 50, worldChunkCount = 48, worldHeight = 500;
             public int WorldWidth { get => chunkSize * worldChunkCount; }
         }
 
         [System.Serializable]
         public class TileNoisePass {
-            public int targetTilemapIndex;
+            public TilemapLayer targetLayer;
             public TileBase tile;
+            public bool generateBackgroundTile = true;
             public Vector2Int heightRange;
             public float scale = 1f;
             [Range(1, 16)] public int octave = 4;
@@ -81,6 +83,10 @@ namespace Innerclash {
             public AnimationCurve remap;
 
             internal Vector2[] offsets;
+        }
+
+        public enum TilemapLayer {
+            front = 0, foreground = 1, background = 2
         }
     }
 }

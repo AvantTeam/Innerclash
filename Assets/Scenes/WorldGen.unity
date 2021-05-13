@@ -159,7 +159,7 @@ MonoBehaviour:
     followTarget: {fileID: 0}
     followSpeed: 5
   player: {fileID: 424059190}
-  playerSpawnEntity: {fileID: 4792612583176505679, guid: a2274ab110e925e41b53ccbb51571e0e, type: 3}
+  playerSpawnType: {fileID: 11400000, guid: 49fae626a5da3774aad82226f8afc51b, type: 2}
   tilemap: {fileID: 383504762}
   worldGenerator: {fileID: 279572241}
   worldManager: {fileID: 279572242}
@@ -196,7 +196,7 @@ MonoBehaviour:
   seed: 0
   mapDimension:
     chunkSize: 50
-    worldChunkCount: 10
+    worldChunkCount: 48
     worldHeight: 500
   sectorCenter: {x: 0, y: 0}
   seaLevel: 200
@@ -206,7 +206,7 @@ MonoBehaviour:
   - targetTilemapIndex: 0
     tile: {fileID: 11400000, guid: a451f4afd24eef64197e28646829e60c, type: 2}
     heightRange: {x: 20, y: 80}
-    scale: 1.1675
+    scale: 4.67
     octave: 6
     lacunarity: 1.7
     persistence: 0.55
@@ -377,7 +377,7 @@ GameObject:
   - component: {fileID: 383504762}
   - component: {fileID: 383504761}
   - component: {fileID: 383504763}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -561,6 +561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllable: {fileID: 0}
+  minJumpDelay: 0.2
   maxJumpBufferTime: 0.1
   maxCoyoteTime: 0.04
 --- !u!4 &424059191

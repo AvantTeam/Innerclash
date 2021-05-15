@@ -160,9 +160,17 @@ MonoBehaviour:
     followSpeed: 5
   player: {fileID: 424059190}
   playerSpawnType: {fileID: 4792612583176505679, guid: a2274ab110e925e41b53ccbb51571e0e, type: 3}
-  tilemap: {fileID: 383504762}
+  generateWorld: 1
+  worldDimension:
+    chunkSize: 50
+    worldChunkCount: 48
+    worldHeight: 500
   worldGenerator: {fileID: 279572241}
   worldManager: {fileID: 279572242}
+  tilemaps:
+  - {fileID: 1037304773}
+  - {fileID: 383504762}
+  - {fileID: 1331603694}
   tilesArray:
   - {fileID: 11400000, guid: a451f4afd24eef64197e28646829e60c, type: 2}
   - {fileID: 11400000, guid: ad57d3cee1f8414459947939bfa11b4d, type: 2}
@@ -194,16 +202,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   randomSeed: 0
   seed: 0
-  mapDimension:
-    chunkSize: 50
-    worldChunkCount: 48
-    worldHeight: 500
   sectorCenter: {x: 0, y: 0}
   seaLevel: 200
-  worldTilemaps:
-  - {fileID: 1037304773}
-  - {fileID: 383504762}
-  - {fileID: 1331603694}
   noisePasses:
   - targetLayer: 1
     tile: {fileID: 11400000, guid: a451f4afd24eef64197e28646829e60c, type: 2}
@@ -267,6 +267,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10022977f99771d4585926edb62c5f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chunkRefreshRate: 1
+  chunkLoadDistance: 2
 --- !u!1 &358506256
 GameObject:
   m_ObjectHideFlags: 0

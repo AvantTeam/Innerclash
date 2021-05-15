@@ -40,7 +40,7 @@ namespace Innerclash.Entities {
         private void Update() {
             RaycastHit2D hit = Physics2D.BoxCast(ground.position, new Vector2(groundCheckWidth, 0.01f), 0f, Vector2.down, 0.01f, groundMask);
             Grounded = hit.transform != null;
-            TileOn = Logic.Instance.tilemap.GetTile(Logic.Instance.tilemap.WorldToCell(ground.position + Vector3.down * 0.01f)) as ScriptedTile;
+            TileOn = Logic.Instance.ForegroundTileAt(ground.position + Vector3.down * 0.01f) as ScriptedTile;
         }
 
         private void FixedUpdate() {

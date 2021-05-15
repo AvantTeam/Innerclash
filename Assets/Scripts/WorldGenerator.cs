@@ -3,19 +3,24 @@ using UnityEngine.Tilemaps;
 
 namespace Innerclash {
     public class WorldGenerator : MonoBehaviour {
+        [Header("Generator")]
         public bool randomSeed;
         public int seed;
-        public WorldDimension mapDimension;
+
+        [Header("Parameters")]
         public Vector2Int sectorCenter = Vector2Int.zero;
         public int seaLevel = 200;
 
-        public Tilemap[] worldTilemaps;
         public TileNoisePass[] noisePasses;
 
+        private Logic.WorldDimension mapDimension;
+        private Tilemap[] worldTilemaps;
         private System.Random rand;
 
         public void Initialize() {
-            if (randomSeed) seed = System.DateTime.Now.GetHashCode();
+            if(randomSeed) seed = System.DateTime.Now.GetHashCode();
+            mapDimension = Logic.Instance.worldDimension;
+            worldTilemaps = Logic.Instance.tilemaps;
             ResetGenerator();
         }
 
@@ -27,7 +32,7 @@ namespace Innerclash {
             ResetGenerator();
             foreach(TileNoisePass pass in noisePasses) {
                 pass.offsets = new Vector2[pass.octave];
-                for (int i = 0; i < pass.octave; i++) pass.offsets[i] = new Vector2((float)rand.NextDouble(), (float)rand.NextDouble()).normalized * (float)rand.NextDouble() * 100f;
+                for(int i = 0; i < pass.octave; i++) pass.offsets[i] = new Vector2((float)rand.NextDouble(), (float)rand.NextDouble()).normalized * (float)rand.NextDouble() * 100f;
 
                 for(int x = 0; x < mapDimension.WorldWidth; x++) {
                     float sourcePhase = (float)x / mapDimension.WorldWidth;
@@ -46,7 +51,7 @@ namespace Innerclash {
 
                     int finalHeight = (int)Mathf.Min(Mathf.LerpUnclamped(pass.heightRange.x, pass.heightRange.y, pass.remap.Evaluate(height / 1.33f)), mapDimension.worldHeight - 1);
                     worldTilemaps[(int)pass.targetLayer].BoxFill(new Vector3Int(x, finalHeight, 0), pass.tile, x, 0, x, finalHeight);
-                    if(pass.generateBackgroundTile)worldTilemaps[(int)TilemapLayer.background].BoxFill(new Vector3Int(x, finalHeight, 0), pass.tile, x, 0, x, finalHeight);
+                    if(pass.generateBackgroundTile) worldTilemaps[(int)TilemapLayer.background].BoxFill(new Vector3Int(x, finalHeight, 0), pass.tile, x, 0, x, finalHeight);
                 }
             }
         }
@@ -65,12 +70,6 @@ namespace Innerclash {
         }
 
         [System.Serializable]
-        public class WorldDimension {
-            public int chunkSize = 50, worldChunkCount = 48, worldHeight = 500;
-            public int WorldWidth { get => chunkSize * worldChunkCount; }
-        }
-
-        [System.Serializable]
         public class TileNoisePass {
             public TilemapLayer targetLayer;
             public TileBase tile;
@@ -84,9 +83,9 @@ namespace Innerclash {
 
             internal Vector2[] offsets;
         }
+    }
 
-        public enum TilemapLayer {
-            front = 0, foreground = 1, background = 2
-        }
+    public enum TilemapLayer {
+        front = 0, foreground = 1, background = 2
     }
 }

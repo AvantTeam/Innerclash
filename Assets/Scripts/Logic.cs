@@ -1,29 +1,39 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Innerclash.Core;
 using Innerclash.Entities;
 
 namespace Innerclash {
+    [RequireComponent(typeof(WorldManager))]
     public class Logic : MonoBehaviour {
         public static Logic Instance { get; private set; }
 
+        public AsyncExecutor Async { get; private set; }
+
+        [Header("Player & Camera")]
         public CameraSettings cameraSettings;
         public PlayerController player;
         public EntityControllable playerSpawnType;
-        public Tilemap tilemap;
 
+        [Header("World")]
+        public bool generateWorld = true;
+        public WorldDimension worldDimension;
         public WorldGenerator worldGenerator;
         public WorldManager worldManager;
-
+        public Tilemap[] tilemaps;
         public TileBase[] tilesArray;
+
         public Dictionary<TileBase, short> tilesID;
 
         public Vector3 Spawn { get; private set; }
 
         private void Awake() {
             Instance = this;
+            Async = new AsyncExecutor();
             Time.timeScale = 0f;
+
+            worldManager = GetComponent<WorldManager>();
 
             tilesID = new Dictionary<TileBase, short>();
             for(int id = 0; id < tilesArray.Length; id++) {
@@ -36,11 +46,10 @@ namespace Innerclash {
         }
 
         private void Start() {
-            if(worldGenerator != null) {
+            if(generateWorld && worldGenerator != null) {
                 worldGenerator.Initialize();
                 worldGenerator.GenerateMap();
-                Spawn = WorldGenerator.FindWorldCenter(tilemap) + Vector3.up + new Vector3(0.5f, 0.5f);
-            } else {
+            }/* else {
                 Vector3Int pos = new Vector3Int(tilemap.size.x / 2, tilemap.size.y, 0);
                 bool found = false;
                 while(!found && pos.y > 0) {
@@ -52,8 +61,11 @@ namespace Innerclash {
                 }
 
                 Spawn = new Vector3(pos.x, pos.y) + Vector3.up + new Vector3(0.5f, 0.5f);
-            }
-            Spawn = WorldGenerator.FindWorldCenter(tilemap) + Vector3.up + new Vector3(0.5f, 0.5f);
+            }*/
+            Spawn = WorldGenerator.FindWorldCenter(tilemaps[(int)TilemapLayer.foreground]) + Vector3.up + new Vector3(0.5f, 0.5f);
+            worldManager.GenerateChunks(new Vector2Int(worldDimension.chunkSize, worldDimension.worldHeight));
+            foreach (Tilemap map in tilemaps) map.ClearAllTiles();
+
             player.controllable = Instantiate(playerSpawnType, Spawn, Quaternion.identity);
             cameraSettings.followTarget = player.controllable.transform;
 
@@ -82,11 +94,32 @@ namespace Innerclash {
             }
         }
 
+        public TileBase ForegroundTileAt(Vector3 worldPosition) {
+            Tilemap foreground = tilemaps[(int)TilemapLayer.foreground];
+            return foreground.GetTile(foreground.WorldToCell(worldPosition));
+        }
+
+        public short GetTileID(TileBase tile) {
+            if (tile != null && tilesID.ContainsKey(tile)) return tilesID[tile];
+            return -1;
+        }
+
+        public TileBase TileOfID(short id) {
+            if (id < 0) return null;
+            return tilesArray[id];
+        }
+
         [System.Serializable]
         public class CameraSettings {
             public Camera mainCamera;
             public Transform followTarget;
             public float followSpeed = 2f;
+        }
+
+        [System.Serializable]
+        public class WorldDimension {
+            public int chunkSize = 50, worldChunkCount = 48, worldHeight = 500;
+            public int WorldWidth { get => chunkSize * worldChunkCount; }
         }
     }
 }

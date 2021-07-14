@@ -32,6 +32,8 @@ namespace Innerclash.Utils {
              2,  1,  2,  1,  9, 45,  9, 19,  2,  1,  2,  1, 14, 18, 14, 13
         };
 
+        public static int surround8 = 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128;
+
         public static int GetMask(MaskPredicate pred) {
             int mask = 0;
             for(int i = 0; i < mask8.Length; i++) {

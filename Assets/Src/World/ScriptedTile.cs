@@ -21,19 +21,18 @@ namespace Innerclash.World {
             // Get the tile mask if has the bitmask rule
             int mask = 0;
             if(rules.HasFlag(TileRule.Bitmask)) {
-                mask = Masks.GetMask((x, y) => IsSameType(tilemap, x, y));
+                mask = Masks.GetMask8((x, y) => IsSameType(tilemap, position.x + x, position.y + y));
                 tileData.sprite = sprites[Masks.tileMap[mask]];
             }
 
             // Check if there is any transform-locking rules
-            // 7 = Rotate | FlipX | FlipY
             // Will be ignored if has the bitmask rule and the tile isn't surrounded
-            if((!rules.HasFlag(TileRule.Bitmask) || mask == Masks.surround8) && ((int)rules & 7) > 0) {
-                Matrix4x4 tr = tileData.transform;
-                Vector3 pos = Vector3.zero;
-                Quaternion rot = Quaternion.identity;
-                Vector3 scl = Vector3.one;
+            var trns = tileData.transform;
+            var pos = Vector3.zero;
+            var rot = Quaternion.identity;
+            var scl = Vector3.one;
 
+            if((!rules.HasFlag(TileRule.Bitmask) || mask == Masks.surround8) && ((int)rules & 7) > 0) { // 7 = Rotate | FlipX | FlipY
                 if(rules.HasFlag(TileRule.Rotate)) {
                     int dir = Random.Range(0, 4);
                     rot = Quaternion.Euler(0f, 0f, dir * 90f);
@@ -51,10 +50,11 @@ namespace Innerclash.World {
                     }
                 }
 
-                tr.SetTRS(pos, rot, scl);
-                tileData.transform = tr;
-                tileData.flags |= TileFlags.LockTransform;
+                trns.SetTRS(pos, rot, scl);
             }
+
+            tileData.transform = trns;
+            tileData.flags |= TileFlags.LockTransform;
 
             if(behaviours != null) {
                 foreach(var behaviour in behaviours) {
@@ -89,9 +89,9 @@ namespace Innerclash.World {
         [System.Flags]
         public enum TileRule {
             None = 0, // Specifies none. This is the default rule
-            Rotate = 1, // Randoms the tile matrix's rotation. Won't affect the rotation of non-center tiles if Bitmask mask rule is present
-            FlipX = 2, // Gives a 50% chance to scale the tile matrix's X scale by -1. Won't affect the rotation of non-center tiles if Bitmask mask rule is present
-            FlipY = 4, // Gives a 50% chance to scale the tile matrix's Y scale by -1. Won't affect the rotation of non-center tiles if Bitmask mask rule is present
+            Rotate = 1, // Randoms the tile matrix's rotation. Won't affect non-center tiles if Bitmask mask rule is present
+            FlipX = 2, // Gives a 50% chance to scale the tile matrix's X scale by -1. Won't affect non-center tiles if Bitmask mask rule is present
+            FlipY = 4, // Gives a 50% chance to scale the tile matrix's Y scale by -1. Won't affect non-center tiles if Bitmask mask rule is present
             Bitmask = 8 // Enables tile bitmasking
         }
     }

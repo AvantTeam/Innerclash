@@ -19,8 +19,7 @@ namespace Innerclash.Entities {
             Body = GetComponent<Rigidbody2D>();
             Collider = GetComponent<CapsuleCollider2D>();
 
-            Vector3 tilesize = Context.Instance.tilemap.cellSize;
-            hits = new RaycastHit2D[Mathf.CeilToInt(Collider.size.x / tilesize.x)];
+            hits = new RaycastHit2D[Mathf.CeilToInt(Collider.size.x / Context.Instance.tilemap.cellSize.x)];
         }
 
         private void Update() {
@@ -29,7 +28,7 @@ namespace Innerclash.Entities {
 
             hitCount = Physics2D.RaycastNonAlloc(origin, Vector2.right, hits, size);
 
-            Tilemap tilemap = Context.Instance.tilemap;
+            var tilemap = Context.Instance.tilemap;
             for(int i = 0; i < hitCount; i++) {
                 var pos = tilemap.WorldToCell(hits[i].point);
                 var tile = tilemap.GetTile<ScriptedTile>(pos);

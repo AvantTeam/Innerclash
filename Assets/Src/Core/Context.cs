@@ -5,10 +5,11 @@ namespace Innerclash.Core {
     public class Context : MonoBehaviour {
         public Tilemap tilemap;
         public Camera mainCamera;
+        public Player player;
 
         public static Context Instance { get; private set; }
 
-        private void Reset() {
+        void Awake() {
             Instance = this;
         }
     }

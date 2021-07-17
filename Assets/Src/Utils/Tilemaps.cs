@@ -10,11 +10,12 @@ namespace Innerclash.Utils {
 
         public static ScriptedTile GetTile(Vector2 rawPos) => Context.Instance.tilemap.GetTile<ScriptedTile>(CellPos(rawPos));
 
-        public static void ApplyTile(Vector2 rawPos, Entity entity) {
+        /// <returns> Whether the entity's X velocity should be forcibly stopped </returns>
+        public static bool ApplyTile(Vector2 rawPos, Entity entity) {
             var pos = CellPos(rawPos);
             var tile = Context.Instance.tilemap.GetTile<ScriptedTile>(pos);
 
-            if(tile != null) tile.Apply(entity, pos);
+            return tile != null && tile.Apply(entity, pos);
         }
 
         public static void WithTile(Vector2 rawPos, Action<ScriptedTile, Vector3Int> action) {

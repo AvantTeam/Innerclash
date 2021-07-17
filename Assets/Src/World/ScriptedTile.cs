@@ -9,15 +9,20 @@ namespace Innerclash.World {
     public class ScriptedTile : Tile {
         public Sprite[] sprites;
 
+        [Header("Behaviour")]
         /// <summary> Rule mask. See docs of TileRule for more specifications </summary>
         public TileRule rules;
-
         /// <summary> Tile behaviours. These can affect tile datas on startup and entities on interaction </summary>
         public TileBehaviour[] behaviours;
 
         [Header("Material")]
-        public float staticFriction = 1000f;
-        public float dynamicFriction = 500f;
+        /// <summary> Friction used when the entity this tile is interacting with is not moving or is turning around </summary>
+        public float staticFriction = 500f;
+        /// <summary> Friction used when the entity this tile is interacting with is moving </summary>
+        public float dynamicFriction = 5000f;
+        /// <summary> When interacting with entity, the entity's X velocity will be clamped to 0 if the magnitude is lower than this </summary>
+        [Range(0f, 1f)] public float frictionThreshold = 0.3f;
+        [Range(0f, 1f)] public float frictionOffset = 0.6f;
 
         public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) {
             base.GetTileData(position, tilemap, ref tileData);
@@ -78,17 +83,25 @@ namespace Innerclash.World {
 
         public bool IsSameType(ITilemap tilemap, int x, int y) => tilemap.GetTile(new Vector3Int(x, y, 0)) == this;
 
-        /// <summary>
-        /// Makes the tile's behaviours interact with the entity (e.g. lowering it's speed, health, and such).
-        /// Call this in MonoBehaviour#FixedUpdate()
-        /// </summary>
-        public void Apply(Entity entity, Vector3Int position) {
+        /// <summary> Call in MonoBehaviour#FixedUpdate() </summary>
+        /// <returns> Whether the entity's X velocity should be forcibly stopped </returns>
+        public bool Apply(Entity entity, Vector3Int position) {
+            bool res = entity.WasMoving;
+
+            // TODO there's got to be a better way than this
             var force = new Vector2(Mathf.Clamp(entity.Body.velocity.x, -1f, 1f) * -1f, 0f);
-            entity.Body.AddForce(force * ((!entity.IsMoving || entity.IsTurning) ? staticFriction : dynamicFriction) * Time.fixedDeltaTime);
+            if(force.magnitude > frictionThreshold) {
+                float curve = frictionOffset + force.magnitude * (1f - frictionOffset);
+                entity.Body.AddForce(curve * force * ((!entity.IsMoving || entity.IsTurning) ? staticFriction : dynamicFriction) * Time.fixedDeltaTime);
+            } else if(!res && !entity.IsMoving) {
+                res = true;
+            }
 
             foreach(var behaviour in behaviours) {
                 behaviour.Apply(this, position, entity);
             }
+
+            return res;
         }
 
         /// <summary> Mask for tile rule specifications </summary>

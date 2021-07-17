@@ -84,4 +84,5 @@ MonoBehaviour:
   - {fileID: -2729080849943688862, guid: 963b0b1648de7384abe01489dc96d8dd, type: 3}
   rules: 10
   behaviours: []
-  friction: 500
+  staticFriction: 2500
+  dynamicFriction: 500

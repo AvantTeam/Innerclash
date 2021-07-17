@@ -8,15 +8,25 @@ namespace Innerclash.Entities {
         public Rigidbody2D Body { get; private set; }
         public Vector2 MoveAxis { get; private set; }
 
-        [Header("Material")]
+        [Header("Movement")]
         public GroundCheck ground;
         /// <summary> Force used to move </summary>
-        public float moveForce = 800f;
+        public float moveForce = 2500f;
+        /// <summary> Force added when turning around </summary>
+        public float turnForce = 2000f;
+        /// <summary> The velocity length at which this entity won't add a move force if the value is >= to this </summary>
+        public float maxSpeed = 15f;
 
         /// <summary> The amount of ground tiles this entity is touching </summary>
         int hitCount;
         /// <summary> Temporary array for raycasting. This array is initialized at #Start() </summary>
         RaycastHit2D[] hits;
+
+        public bool IsGrounded { get => hitCount > 0; }
+
+        public bool IsMoving { get => MoveAxis.magnitude > 0.1f; }
+
+        public bool IsTurning { get => (MoveAxis.x < 0f && Body.velocity.x > 0f) || (MoveAxis.x > 0f && Body.velocity.x < 0f); }
 
         void Start() {
             Body = GetComponent<Rigidbody2D>();
@@ -39,24 +49,24 @@ namespace Innerclash.Entities {
                 }
             }
 
-            Body.AddForce(new Vector2(MoveAxis.x, 0f) * moveForce * Time.fixedDeltaTime, ForceMode2D.Force);
+            var axisX = new Vector2(MoveAxis.x, 0f);
+            var velX = new Vector2(Body.velocity.x, 0f);
+            
+            if(velX.magnitude < maxSpeed) Body.AddForce(moveForce * Time.fixedDeltaTime * axisX, ForceMode2D.Force);
+
+            if(IsGrounded) {
+                if(!IsMoving && Body.velocity.x != 0f) {
+                    Body.AddForce(turnForce * Time.fixedDeltaTime * -1f * velX.normalized, ForceMode2D.Force);
+                } else if(IsTurning) {
+                    Body.AddForce(turnForce * Time.fixedDeltaTime * axisX, ForceMode2D.Force);
+                }
+            }
         }
-
-        public bool IsGrounded() => hitCount > 0;
-
-        public bool IsMoving() => MoveAxis.magnitude > 0.1f;
 
         public void Move(Vector2 axis) => MoveAxis = axis;
 
         void OnDrawGizmos() {
             Gizmos.DrawLine(transform.position + (Vector3)ground.LeftLimit, transform.position + (Vector3)ground.RightLimit);
-
-            for(int i = 0; i < hitCount; i++) {
-                Tilemaps.WithTile(hits[i].point, (tile, pos) => Gizmos.DrawWireCube(
-                    new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.y + 0.5f),
-                    new Vector3(1f, 1f, 1f)
-                ));
-            }
         }
 
         [System.Serializable]

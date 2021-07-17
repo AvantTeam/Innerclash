@@ -86,4 +86,6 @@ MonoBehaviour:
     offsetX: 0
     offsetY: -4
     width: 2
-  moveForce: 1000
+  moveForce: 2500
+  turnForce: 1500
+  maxSpeed: 15

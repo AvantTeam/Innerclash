@@ -16,7 +16,8 @@ namespace Innerclash.World {
         public TileBehaviour[] behaviours;
 
         [Header("Material")]
-        public float friction = 100f;
+        public float staticFriction = 1000f;
+        public float dynamicFriction = 500f;
 
         public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) {
             base.GetTileData(position, tilemap, ref tileData);
@@ -83,7 +84,7 @@ namespace Innerclash.World {
         /// </summary>
         public void Apply(Entity entity, Vector3Int position) {
             var force = new Vector2(Mathf.Clamp(entity.Body.velocity.x, -1f, 1f) * -1f, 0f);
-            entity.Body.AddForce(force * friction * Time.fixedDeltaTime);
+            entity.Body.AddForce(force * ((!entity.IsMoving || entity.IsTurning) ? staticFriction : dynamicFriction) * Time.fixedDeltaTime);
 
             foreach(var behaviour in behaviours) {
                 behaviour.Apply(this, position, entity);

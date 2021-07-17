@@ -1,49 +1,72 @@
 ﻿using UnityEngine;
 using Innerclash.Core;
-using Innerclash.World;
+using Innerclash.Utils;
 
 namespace Innerclash.Entities {
     [RequireComponent(typeof(Rigidbody2D))]
     public class Entity : MonoBehaviour {
         public Rigidbody2D Body { get; private set; }
-        // The collider *must* be a CapsuleCollider2D
-        public CapsuleCollider2D Collider { get; private set; }
+        public Vector2 MoveAxis { get; private set; }
 
-        public float speed;
+        [Header("Material")]
+        public GroundCheck ground;
+        /// <summary> Force used to move </summary>
+        public float moveForce = 800f;
 
-        // The amount of ground tiles this entity is touching
+        /// <summary> The amount of ground tiles this entity is touching </summary>
         int hitCount;
-        // Temporary array for raycasting. This array is initialized at #Start()
+        /// <summary> Temporary array for raycasting. This array is initialized at #Start() </summary>
         RaycastHit2D[] hits;
 
         void Start() {
             Body = GetComponent<Rigidbody2D>();
-            Collider = GetComponent<CapsuleCollider2D>();
+            MoveAxis = new Vector2();
 
-            hits = new RaycastHit2D[Mathf.CeilToInt(Collider.size.x / Context.Instance.tilemap.cellSize.x)];
+            hits = new RaycastHit2D[Mathf.FloorToInt(ground.width / Context.Instance.tilemap.cellSize.x) + 1];
         }
 
-        void Update() {
+        void FixedUpdate() {
             if(hits != null) {
-                float size = Collider.size.x;
-                Vector2 origin = (Vector2)transform.position - new Vector2(size / 2f, 0.001f);
+                hitCount = Physics2D.RaycastNonAlloc(
+                    (Vector2)transform.position + new Vector2(ground.offsetX - ground.width / 2f, ground.offsetY - 0.1f),
+                    Vector2.right,
+                    hits,
+                    ground.width
+                );
 
-                hitCount = Physics2D.RaycastNonAlloc(origin, Vector2.right, hits, size);
-
-                var tilemap = Context.Instance.tilemap;
                 for(int i = 0; i < hitCount; i++) {
-                    var pos = tilemap.WorldToCell(hits[i].point);
-                    var tile = tilemap.GetTile<ScriptedTile>(pos);
-
-                    if(tile != null) tile.Apply(this, pos);
+                    Tilemaps.ApplyTile(hits[i].point, this);
                 }
             }
+
+            Body.AddForce(new Vector2(MoveAxis.x, 0f) * moveForce * Time.fixedDeltaTime, ForceMode2D.Force);
         }
 
         public bool IsGrounded() => hitCount > 0;
 
-        public void Move(Vector2 axis) {
-            Body.AddForce(new Vector2(axis.x, 0f) * speed * Time.fixedDeltaTime, ForceMode2D.Force);
+        public bool IsMoving() => MoveAxis.magnitude > 0.1f;
+
+        public void Move(Vector2 axis) => MoveAxis = axis;
+
+        void OnDrawGizmos() {
+            Gizmos.DrawLine(transform.position + (Vector3)ground.LeftLimit, transform.position + (Vector3)ground.RightLimit);
+
+            for(int i = 0; i < hitCount; i++) {
+                Tilemaps.WithTile(hits[i].point, (tile, pos) => Gizmos.DrawWireCube(
+                    new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.y + 0.5f),
+                    new Vector3(1f, 1f, 1f)
+                ));
+            }
+        }
+
+        [System.Serializable]
+        public struct GroundCheck {
+            public float offsetX;
+            public float offsetY;
+            public float width;
+
+            public Vector2 LeftLimit { get => new Vector2(offsetX - width / 2f, offsetY); }
+            public Vector2 RightLimit { get => new Vector2(offsetX + width / 2f, offsetY); }
         }
     }
 }

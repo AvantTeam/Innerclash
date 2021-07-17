@@ -9,11 +9,14 @@ namespace Innerclash.World {
     public class ScriptedTile : Tile {
         public Sprite[] sprites;
 
-        // Rule mask. See docs of TileRule for more specifications
+        /// <summary> Rule mask. See docs of TileRule for more specifications </summary>
         public TileRule rules;
 
-        // Tile behaviours. These can affect tile datas on startup and entities on interaction
+        /// <summary> Tile behaviours. These can affect tile datas on startup and entities on interaction </summary>
         public TileBehaviour[] behaviours;
+
+        [Header("Material")]
+        public float friction = 100f;
 
         public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) {
             base.GetTileData(position, tilemap, ref tileData);
@@ -56,10 +59,8 @@ namespace Innerclash.World {
             tileData.transform = trns;
             tileData.flags |= TileFlags.LockTransform;
 
-            if(behaviours != null) {
-                foreach(var behaviour in behaviours) {
-                    behaviour.Data(this, position, tilemap, ref tileData);
-                }
+            foreach(var behaviour in behaviours) {
+                behaviour.Data(this, position, tilemap, ref tileData);
             }
         }
 
@@ -76,23 +77,32 @@ namespace Innerclash.World {
 
         public bool IsSameType(ITilemap tilemap, int x, int y) => tilemap.GetTile(new Vector3Int(x, y, 0)) == this;
 
-        // Makes the tile's behaviours interact with the entity (e.g. lowering it's speed, health, and such)
+        /// <summary>
+        /// Makes the tile's behaviours interact with the entity (e.g. lowering it's speed, health, and such).
+        /// Call this in MonoBehaviour#FixedUpdate()
+        /// </summary>
         public void Apply(Entity entity, Vector3Int position) {
-            if(behaviours != null) {
-                foreach(var behaviour in behaviours) {
-                    behaviour.Apply(this, position, entity);
-                }
+            var force = new Vector2(Mathf.Clamp(entity.Body.velocity.x, -1f, 1f) * -1f, 0f);
+            entity.Body.AddForce(force * friction * Time.fixedDeltaTime);
+
+            foreach(var behaviour in behaviours) {
+                behaviour.Apply(this, position, entity);
             }
         }
 
-        // Mask for tile rule specifications
+        /// <summary> Mask for tile rule specifications </summary>
         [System.Flags]
         public enum TileRule {
-            None = 0, // Specifies none. This is the default rule
-            Rotate = 1, // Randoms the tile matrix's rotation. Won't affect non-center tiles if Bitmask mask rule is present
-            FlipX = 2, // Gives a 50% chance to scale the tile matrix's X scale by -1. Won't affect non-center tiles if Bitmask mask rule is present
-            FlipY = 4, // Gives a 50% chance to scale the tile matrix's Y scale by -1. Won't affect non-center tiles if Bitmask mask rule is present
-            Bitmask = 8 // Enables tile bitmasking
+            /// <summary> Specifies none. This is the default rule </summary>
+            None = 0,
+            /// <summary> Randoms the tile matrix's rotation. Won't affect non-center tiles if Bitmask mask rule is present </summary>
+            Rotate = 1,
+            /// <summary> Gives a 50% chance to scale the tile matrix's X scale by -1. Won't affect non-center tiles if Bitmask mask rule is present </summary>
+            FlipX = 2,
+            /// <summary> Gives a 50% chance to scale the tile matrix's Y scale by -1. Won't affect non-center tiles if Bitmask mask rule is present </summary>
+            FlipY = 4,
+            /// <summary> Enables tile bitmasking </summary>
+            Bitmask = 8
         }
     }
 }

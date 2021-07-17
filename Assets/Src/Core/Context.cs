@@ -12,5 +12,10 @@ namespace Innerclash.Core {
         void Awake() {
             Instance = this;
         }
+
+        void FixedUpdate() {
+            var pos = player.controlled.transform.position;
+            mainCamera.transform.position = new Vector3(pos.x, pos.y, -10f);
+        }
     }
 }

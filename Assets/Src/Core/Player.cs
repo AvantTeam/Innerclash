@@ -18,6 +18,7 @@ namespace Innerclash.Core {
 
         void FixedUpdate() {
             controlled.Move(moveAxis);
+            controlled.Jump(jump);
         }
 
         void OnEnable() {

@@ -14,18 +14,28 @@ namespace Innerclash.Entities {
         public float moveForce = 2500f;
         /// <summary> The velocity length at which this entity won't add a move force if the value is >= to this </summary>
         public float maxSpeed = 15f;
+        /// <summary> The force used when jumping on ground </summary>
+        public float jumpForce = 6f;
+        /// <summary> The force used to continue the jump mid-air </summary>
+        public float jumpContinuousForce = 45f;
+        /// <summary> The maximum duration of jump continuation in seconds </summary>
+        public float jumpDuration = 0.5f;
 
-        /// <summary> The amount of ground tiles this entity is touching </summary>
         int hitCount;
-        /// <summary> Temporary array for raycasting. This array is initialized at #Start() </summary>
         RaycastHit2D[] hits;
 
+        bool shouldStop = false;
+        bool jumped = false;
+
+        /// <summary> Whether its #ground check is colliding with a tile </summary>
         public bool IsGrounded { get => hitCount > 0; }
+        /// <summary> Whether it has a movement target direction </summary>
         public bool IsMoving { get => MoveAxis.magnitude > 0.1f; }
         public bool WasMoving { get; private set; }
+        /// <summary> Whether its movement target direction clashes with the velocity's direction </summary>
         public bool IsTurning { get => (MoveAxis.x < 0f && Body.velocity.x > 0f) || (MoveAxis.x > 0f && Body.velocity.x < 0f); }
-
-        private bool shouldStop = false;
+        public bool IsJumping { get; private set; }
+        public float JumpTime { get; private set; }
 
         void Start() {
             Body = GetComponent<Rigidbody2D>();
@@ -61,11 +71,39 @@ namespace Innerclash.Entities {
 
                 if(!shouldStop && WasMoving) shouldStop = true;
             }
+
+            if(jumped) {
+                jumped = false;
+                IsJumping = true;
+                JumpTime = 0f;
+
+                Body.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+            } else if(IsJumping) {
+                JumpTime += Time.fixedDeltaTime;
+
+                if(JumpTime >= jumpDuration) {
+                    IsJumping = false;
+                    JumpTime = 0f;
+                } else {
+                    float alpha = 1f - JumpTime / jumpDuration;
+                    Body.AddForce(alpha * new Vector2(0f, jumpContinuousForce), ForceMode2D.Force);
+                }
+            } else {
+                JumpTime = 0f;
+            }
         }
 
         public void Move(Vector2 axis) {
-            MoveAxis = axis;
             WasMoving = false;
+            MoveAxis = axis;
+        }
+
+        public void Jump(bool jump) {
+            if(IsGrounded) {
+                jumped = jump;
+            } else if(IsJumping && JumpTime < jumpDuration) {
+                IsJumping = jump;
+            }
         }
 
         void OnDrawGizmos() {

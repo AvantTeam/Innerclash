@@ -87,5 +87,7 @@ MonoBehaviour:
     offsetY: -4
     width: 2
   moveForce: 2500
-  turnForce: 1500
   maxSpeed: 15
+  jumpForce: 6
+  jumpContinuousForce: 45
+  jumpDuration: 0.5

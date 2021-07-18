@@ -17,9 +17,9 @@ namespace Innerclash.World {
 
         [Header("Material")]
         /// <summary> Friction used when the entity this tile is interacting with is not moving or is turning around </summary>
-        public float staticFriction = 500f;
+        public float staticFriction = 5000f;
         /// <summary> Friction used when the entity this tile is interacting with is moving </summary>
-        public float dynamicFriction = 5000f;
+        public float dynamicFriction = 500f;
         /// <summary> When interacting with entity, the entity's X velocity will be clamped to 0 if the magnitude is lower than this </summary>
         [Range(0f, 1f)] public float frictionThreshold = 0.3f;
         [Range(0f, 1f)] public float frictionOffset = 0.6f;
@@ -42,21 +42,19 @@ namespace Innerclash.World {
             var scl = Vector3.one;
 
             if((!rules.HasFlag(TileRule.Bitmask) || mask == Masks.surround8) && ((int)rules & 7) > 0) { // 7 = Rotate | FlipX | FlipY
+                var nscl = 1f / Mathf.PI;
+
                 if(rules.HasFlag(TileRule.Rotate)) {
-                    int dir = Random.Range(0, 4);
+                    int dir = (int)(Mathf.Clamp01(Mathf.PerlinNoise(position.x * nscl, position.y * nscl)) * 3.999f);
                     rot = Quaternion.Euler(0f, 0f, dir * 90f);
                 }
 
-                if(rules.HasFlag(TileRule.FlipX)) {
-                    if(Random.Range(0f, 1f) > 0.5f) {
-                        scl.x *= -1;
-                    }
+                if(rules.HasFlag(TileRule.FlipX) && Mathf.Clamp01(Mathf.PerlinNoise((position.x + 1) * nscl, (position.y + 2) * nscl)) > 0.5f) {
+                    scl.x *= -1;
                 }
 
-                if(rules.HasFlag(TileRule.FlipY)) {
-                    if(Random.Range(0f, 1f) > 0.5f) {
-                        scl.y *= -1;
-                    }
+                if(rules.HasFlag(TileRule.FlipY) && Mathf.Clamp01(Mathf.PerlinNoise((position.x + 3) * nscl, (position.y + 5) * nscl)) > 0.5f) {
+                    scl.y *= -1;
                 }
 
                 trns.SetTRS(pos, rot, scl);

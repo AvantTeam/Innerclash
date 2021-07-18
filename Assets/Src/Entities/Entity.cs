@@ -48,7 +48,7 @@ namespace Innerclash.Entities {
         void FixedUpdate() {
             var axisX = new Vector2(MoveAxis.x, 0f);
             var velX = new Vector2(Body.velocity.x, 0f);
-            if(velX.magnitude < maxSpeed) {
+            if(velX.magnitude < maxSpeed || IsTurning) {
                 Body.AddForce(moveForce * Time.fixedDeltaTime * axisX, ForceMode2D.Force);
             }
 

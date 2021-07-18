@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 90322996918772517}
   - component: {fileID: 1460111780393416917}
   - component: {fileID: 2617332894666756226}
+  - component: {fileID: -140059896247527948}
   m_Layer: 0
   m_Name: MainEntity
   m_TagString: Untagged
@@ -91,3 +92,16 @@ MonoBehaviour:
   jumpForce: 6
   jumpContinuousForce: 45
   jumpDuration: 0.5
+--- !u!114 &-140059896247527948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6811923929446224116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d185754a1b01b0045a089ca60a2d7be9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100

@@ -77,7 +77,7 @@ namespace Innerclash.Entities {
                 IsJumping = true;
                 JumpTime = 0f;
 
-                Body.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
+                Body.AddForce(new Vector2(0f, jumpForce) * Time.fixedDeltaTime, ForceMode2D.Impulse);
             } else if(IsJumping) {
                 JumpTime += Time.fixedDeltaTime;
 
@@ -86,7 +86,7 @@ namespace Innerclash.Entities {
                     JumpTime = 0f;
                 } else {
                     float alpha = 1f - JumpTime / jumpDuration;
-                    Body.AddForce(alpha * new Vector2(0f, jumpContinuousForce), ForceMode2D.Force);
+                    Body.AddForce(alpha * new Vector2(0f, jumpContinuousForce) * Time.fixedDeltaTime, ForceMode2D.Force);
                 }
             } else {
                 JumpTime = 0f;

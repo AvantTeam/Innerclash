@@ -101,7 +101,10 @@ namespace Innerclash.World {
             var force = new Vector2(Mathf.Clamp(entity.Body.velocity.x, -1f, 1f) * -1f, 0f);
             if(force.magnitude > frictionThreshold) {
                 float curve = frictionOffset + force.magnitude * (1f - frictionOffset);
-                entity.Body.AddForce(curve * force * ((!entity.IsMoving || entity.IsTurning) ? staticFriction : dynamicFriction) * Time.fixedDeltaTime);
+                entity.Body.AddForceAtPosition(
+                    curve * force * ((!entity.IsMoving || entity.IsTurning) ? staticFriction : dynamicFriction) * Time.fixedDeltaTime,
+                    new Vector2(position.x + 0.5f, position.y + 0.5f)
+                );
             } else if(!res && !entity.IsMoving) {
                 res = true;
             }
@@ -130,8 +133,8 @@ namespace Innerclash.World {
 
         [System.Flags]
         public enum TileGroup {
-            Stone = 0,
-            Dirt = 1
+            Stone = 1,
+            Dirt = 2
         }
     }
 }

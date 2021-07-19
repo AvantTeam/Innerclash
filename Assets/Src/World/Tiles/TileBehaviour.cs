@@ -9,6 +9,6 @@ namespace Innerclash.World.Tiles {
         public virtual void Data(ScriptedTile tile, Vector3Int position, ITilemap tilemap, ref TileData tileData) { }
 
         /// <summary> Interacts with an entity. Called on a *fixed rate* in Entity#FixedUpdate() </summary>
-        public virtual void Apply(ScriptedTile tile, Vector3Int position, Entity entity) { }
+        public virtual void Apply(ScriptedTile tile, Vector3Int position, PhysicsTrait entity) { }
     }
 }

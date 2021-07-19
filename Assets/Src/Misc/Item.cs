@@ -3,6 +3,9 @@
 namespace Innerclash.Misc {
     [CreateAssetMenu(menuName = "Content/Misc/Item")]
     public class Item : ScriptableObject {
+        public Sprite sprite;
+        public int maxStack = 100;
+
         [System.Serializable]
         public struct ItemStack {
             public Item item;

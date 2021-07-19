@@ -4,7 +4,7 @@ using Innerclash.Utils;
 
 namespace Innerclash.Entities {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class Entity : MonoBehaviour {
+    public class PhysicsTrait : MonoBehaviour {
         public Rigidbody2D Body { get; private set; }
         public Vector2 MoveAxis { get; private set; }
 

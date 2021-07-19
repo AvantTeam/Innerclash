@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Innerclash.Entities.Traits {
+namespace Innerclash.Entities {
     /// <summary> An entity trait that has a health and can be damaged </summary>
     public class HealthTrait : MonoBehaviour {
         public float maxHealth = 100f;

@@ -7,6 +7,8 @@ namespace Innerclash.Core {
         public Camera mainCamera;
         public Player player;
 
+        public GameObject itemEntity;
+
         public static Context Instance { get; private set; }
 
         void Awake() {

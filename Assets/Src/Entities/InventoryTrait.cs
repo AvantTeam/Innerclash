@@ -2,7 +2,7 @@
 
 using static Innerclash.Misc.Item;
 
-namespace Innerclash.Entities.Traits {
+namespace Innerclash.Entities {
     /// <summary> An entity trait that holds an inventory </summary>
     public class InventoryTrait : MonoBehaviour {
         public int inventoryWidth;

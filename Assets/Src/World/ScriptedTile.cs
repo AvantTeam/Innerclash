@@ -4,6 +4,8 @@ using Innerclash.Entities;
 using Innerclash.Utils;
 using Innerclash.World.Tiles;
 
+using static Innerclash.Misc.Item;
+
 namespace Innerclash.World {
     [CreateAssetMenu(menuName = "Content/World/Scripted Tile")]
     public class ScriptedTile : Tile {
@@ -12,8 +14,12 @@ namespace Innerclash.World {
         [Header("Behaviour")]
         /// <summary> Rule mask. See docs of TileRule for more specifications </summary>
         public TileRule rules;
+        /// <summary> Tile groups, mainly used for bit-masking </summary>
+        public TileGroup groups;
         /// <summary> Tile behaviours. These can affect tile datas on startup and entities on interaction </summary>
         public TileBehaviour[] behaviours;
+        /// <summary> The item that drops when this tile is destroyed </summary>
+        public ItemStack itemDrop;
 
         [Header("Material")]
         /// <summary> Friction used when the entity this tile is interacting with is not moving or is turning around </summary>
@@ -73,17 +79,22 @@ namespace Innerclash.World {
                 int x = position.x + off.x;
                 int y = position.y + off.y;
 
-                if(IsSameType(tilemap, x, y)) {
+                if(IsSameGroup(tilemap, x, y)) {
                     tilemap.RefreshTile(new Vector3Int(x, y, 0));
                 }
             }
+        }
+
+        public bool IsSameGroup(ITilemap tilemap, int x, int y) {
+            var tile = tilemap.GetTile<ScriptedTile>(new Vector3Int(x, y, 0));
+            return tile != null && (groups & tile.groups) > 0;
         }
 
         public bool IsSameType(ITilemap tilemap, int x, int y) => tilemap.GetTile(new Vector3Int(x, y, 0)) == this;
 
         /// <summary> Call in MonoBehaviour#FixedUpdate() </summary>
         /// <returns> Whether the entity's X velocity should be forcibly stopped </returns>
-        public bool Apply(Entity entity, Vector3Int position) {
+        public bool Apply(PhysicsTrait entity, Vector3Int position) {
             bool res = entity.WasMoving;
 
             // TODO there's got to be a better way than this
@@ -115,6 +126,12 @@ namespace Innerclash.World {
             FlipY = 4,
             /// <summary> Enables tile bitmasking </summary>
             Bitmask = 8
+        }
+
+        [System.Flags]
+        public enum TileGroup {
+            Stone = 0,
+            Dirt = 1
         }
     }
 }

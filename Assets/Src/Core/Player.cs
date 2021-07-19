@@ -5,7 +5,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Innerclash.Core {
     public class Player : MonoBehaviour {
-        public Entity controlled;
+        public GameObject controlled;
 
         MainInput input;
 
@@ -17,8 +17,9 @@ namespace Innerclash.Core {
         }
 
         void FixedUpdate() {
-            controlled.Move(moveAxis);
-            controlled.Jump(jump);
+            var phys = controlled.GetComponent<PhysicsTrait>();
+            phys.Move(moveAxis);
+            phys.Jump(jump);
         }
 
         void OnEnable() {

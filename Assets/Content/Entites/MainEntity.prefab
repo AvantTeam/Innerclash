@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 1460111780393416917}
   - component: {fileID: 2617332894666756226}
   - component: {fileID: -140059896247527948}
+  - component: {fileID: -6062521894878367818}
   - component: {fileID: -5123172739458013964}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MainEntity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,6 +107,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+--- !u!114 &-6062521894878367818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6811923929446224116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff498a5dde4bf5d48aee303c8bbd7ada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryWidth: 4
+  inventoryHeight: 3
 --- !u!212 &-5123172739458013964
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -146,7 +161,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 3c1ab9c04e5f560409eb3cc94ef469ec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

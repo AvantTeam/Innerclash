@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2152187431061858105}
   - component: {fileID: 2152187431061858106}
   - component: {fileID: 2152187431061858107}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ItemEntity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!58 &1241279750636188978
 CircleCollider2D:
@@ -90,8 +90,8 @@ MonoBehaviour:
     width: 0.9
   moveForce: 0
   maxSpeed: 0
-  jumpForce: 6
-  jumpContinuousForce: 45
+  jumpForce: 360
+  jumpContinuousForce: 2400
   jumpDuration: 0.5
 --- !u!114 &2152187431061858106
 MonoBehaviour:
@@ -148,7 +148,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

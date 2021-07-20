@@ -8,11 +8,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Tilemap
   - Water
   - UI
-  - 
-  - 
+  - Entity
+  - Item
   - 
   - 
   - 

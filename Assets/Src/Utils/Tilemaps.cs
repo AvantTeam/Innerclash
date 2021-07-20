@@ -29,14 +29,11 @@ namespace Innerclash.Utils {
             var pos = CellPos(rawPos);
             var map = Context.Instance.tilemap;
             var tile = map.GetTile<ScriptedTile>(pos);
-
+            
             if(tile != null) {
                 map.SetTile(pos, null);
-                if(tile != null && tile.itemDrop.item != null && tile.itemDrop.amount > 0) {
-                    var ent = Context.Instantiate(Context.Instance.itemEntity, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0f), Quaternion.identity);
-
-                    var trait = ent.GetComponent<ItemTrait>();
-                    trait.stack = tile.itemDrop;
+                if(tile.itemDrop.item != null) {
+                    tile.itemDrop.item.Create(new Vector2(pos.x + 0.5f, pos.y + 0.5f), tile.itemDrop.amount);
                 }
 
                 foreach(var offset in Masks.mask8) {

@@ -83,7 +83,11 @@ MonoBehaviour:
   - {fileID: -475753922158517413, guid: 963b0b1648de7384abe01489dc96d8dd, type: 3}
   - {fileID: -2729080849943688862, guid: 963b0b1648de7384abe01489dc96d8dd, type: 3}
   rules: 10
+  groups: 1
   behaviours: []
+  itemDrop:
+    item: {fileID: 11400000, guid: e02ffb6d86d374f4f8217c2c06151101, type: 2}
+    amount: 1
   staticFriction: 5000
   dynamicFriction: 500
   frictionThreshold: 0.3

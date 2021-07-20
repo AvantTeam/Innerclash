@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6fa06affc490424e98714a2ce7efdd1, type: 3}
   m_Name: ItemStone
   m_EditorClassIdentifier: 
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: f8847162419ac774c91851e30b82b7d9, type: 3}
   maxStack: 100
+  randForce: 6

@@ -35,21 +35,21 @@ namespace Innerclash.Core {
         /// <summary>
         /// Keyboard: WASD
         /// </summary>
-        public void Move(CallbackContext context) {
+        public void OnMove(CallbackContext context) {
             moveAxis = context.ReadValue<Vector2>();
         }
 
         /// <summary>
         /// Keyboard: Spacebar
         /// </summary>
-        public void Jump(CallbackContext context) {
+        public void OnJump(CallbackContext context) {
             jump = context.performed;
         }
 
         /// <summary>
         /// Mouse: Left click
         /// </summary>
-        public void Break(CallbackContext context) {
+        public void OnBreak(CallbackContext context) {
             if(context.performed) {
                 Tilemaps.RemoveTile(Context.Instance.mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()));
             }
@@ -58,7 +58,7 @@ namespace Innerclash.Core {
         /// <summary>
         /// Mouse: Right click
         /// </summary>
-        public void Interact(CallbackContext context) {
+        public void OnAct(CallbackContext context) {
             if(context.performed) {
 
             }

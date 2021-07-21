@@ -27,13 +27,13 @@ namespace Innerclash.Entities {
         }
 
         void OnCollisionStay2D(Collision2D collision) {
-            ItemTrait trait;
-            if(collision.gameObject.TryGetComponent(out trait) && CanJoin(trait)) {
-                int accept = Mathf.Min(trait.stack.item.maxStack - trait.stack.amount, stack.amount);
-                if(accept > 0) {
-                    trait.stack.amount += accept;
-                    stack.amount -= accept;
-                }
+            if(stack.item == null || stack.amount <= 0) return;
+
+            if(collision.gameObject.TryGetComponent(out ItemTrait otherItem) && CanJoin(otherItem)) {
+                ItemStack.Transfer(ref stack, ref otherItem.stack, stack.amount);
+            } else if(collision.gameObject.TryGetComponent(out InventoryTrait inv)) {
+                int accept = inv.Add(stack);
+                stack.amount -= accept;
             }
         }
 

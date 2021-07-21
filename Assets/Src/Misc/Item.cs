@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Innerclash.Core;
 using Innerclash.Entities;
 
@@ -7,11 +8,13 @@ namespace Innerclash.Misc {
     public class Item : ScriptableObject {
         public Sprite sprite;
 
-        [Header("Entity")]
-        /// <summary> How many items can one item entity contain </summary>
+        [Header("Behaviour")]
+        /// <summary> How many items can one item entity or inventory contain </summary>
         public int maxStack = 100;
         /// <summary> Force impulsed when dropping this item </summary>
         public float randForce = 6f;
+        /// <summary> Used for inventory calculations </summary>
+        public float mass = 1f;
 
         public ItemTrait Create(Vector2 pos, int amount) {
             if(amount <= 0) return null;
@@ -36,19 +39,62 @@ namespace Innerclash.Misc {
             public Item item;
             public int amount;
 
+            public bool Full { get => amount >= item.maxStack; }
+
             public ItemStack(Item item, int amount) {
                 this.item = item;
                 this.amount = amount;
             }
+
+            public static int Transfer(ref ItemStack from, ref ItemStack to, int amount) {
+                if(from.item != to.item) return 0;
+
+                int accept = Mathf.Min(to.item.maxStack - to.amount, amount, from.amount);
+                to.amount += accept;
+                from.amount -= accept;
+
+                return accept;
+            }
         }
 
         public class ItemInventory {
-            public ItemStack[,] Items { get; private set; }
-            public int Width { get; private set; }
-            public int Height { get; private set; }
+            public Dictionary<int, ItemStack> contents = new Dictionary<int, ItemStack>();
 
-            public ItemInventory(int width, int height) {
-                Items = new ItemStack[Width = width, Height = height];
+            public float TotalMass {
+                get {
+                    float result = 0f;
+                    foreach(var stack in contents.Values) {
+                        if(stack.amount <= 0) continue;
+                        result += stack.item.mass * stack.amount;
+                    }
+
+                    return result;
+                }
+            }
+
+            public void Add(ItemStack other, int? slot) {
+                if(slot == null) {
+                    foreach(int i in contents.Keys) {
+                        if(other.amount <= 0) return;
+
+                        var stack = contents[i];
+                        ItemStack.Transfer(ref other, ref stack, other.amount);
+                    }
+
+                    if(other.amount > 0) {
+                        int i = -1;
+                        while(contents.ContainsKey(++i)) ;
+
+                        contents.Add(i, other);
+                    }
+                } else {
+                    if(contents.ContainsKey((int)slot)) {
+                        var existing = contents[(int)slot];
+                        ItemStack.Transfer(ref other, ref existing, other.amount);
+                    } else {
+                        contents.Add((int)slot, other);
+                    }
+                }
             }
         }
     }

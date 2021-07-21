@@ -50,8 +50,8 @@ namespace Innerclash.Core {
         /// Mouse: Left click
         /// </summary>
         public void OnBreak(CallbackContext context) {
-            if(context.performed) {
-                Tilemaps.RemoveTile(Context.Instance.mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()));
+            if(!GameController.Instance.ViewingOverview && context.performed) {
+                Tilemaps.RemoveTile(GameController.Instance.mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()));
             }
         }
 
@@ -59,7 +59,7 @@ namespace Innerclash.Core {
         /// Mouse: Right click
         /// </summary>
         public void OnAct(CallbackContext context) {
-            if(context.performed) {
+            if(!GameController.Instance.ViewingOverview && context.performed) {
 
             }
         }

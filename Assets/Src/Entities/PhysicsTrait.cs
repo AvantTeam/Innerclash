@@ -42,7 +42,7 @@ namespace Innerclash.Entities {
             MoveAxis = new Vector2();
             WasMoving = false;
 
-            hits = new RaycastHit2D[Mathf.CeilToInt(ground.width / Context.Instance.tilemap.cellSize.x) + 1];
+            hits = new RaycastHit2D[Mathf.CeilToInt(ground.width / GameController.Instance.tilemap.cellSize.x) + 1];
         }
 
         void FixedUpdate() {

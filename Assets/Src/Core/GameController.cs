@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace Innerclash.Core {
-    public class Context : MonoBehaviour {
+    public class GameController : MonoBehaviour {
         public Tilemap tilemap;
         public Camera mainCamera;
         public Player player;
@@ -13,7 +13,9 @@ namespace Innerclash.Core {
 
         public GameObject overviewFragment;
 
-        public static Context Instance { get; private set; }
+        public static GameController Instance { get; private set; }
+
+        public bool ViewingOverview { get => overviewFragment.activeInHierarchy; }
 
         void Awake() {
             Instance = this;
@@ -26,7 +28,7 @@ namespace Innerclash.Core {
 
         public void OnOpenOverview(CallbackContext context) {
             if(context.performed) {
-                overviewFragment.SetActive(!overviewFragment.activeInHierarchy);
+                overviewFragment.SetActive(!ViewingOverview);
             }
         }
     }

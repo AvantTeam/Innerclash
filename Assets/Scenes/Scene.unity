@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 15118510}
   - component: {fileID: 15118509}
   m_Layer: 5
-  m_Name: Player Panel
+  m_Name: Character Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -509,7 +509,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Player
+  m_Text: Character
 --- !u!222 &341198206
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -30423,8 +30423,8 @@ GameObject:
   - component: {fileID: 1656387541}
   - component: {fileID: 1656387543}
   m_Layer: 0
-  m_Name: Context
-  m_TagString: Untagged
+  m_Name: Game Controller
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30850,7 +30850,7 @@ GameObject:
   - component: {fileID: 2062650864}
   - component: {fileID: 2062650863}
   m_Layer: 5
-  m_Name: Player
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -16,7 +16,7 @@ namespace Innerclash.Misc {
         public ItemTrait Create(Vector2 pos, int amount) {
             if(amount <= 0) return null;
 
-            var obj = Instantiate(Context.Instance.itemEntity, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
+            var obj = Instantiate(GameController.Instance.itemEntity, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
             var trait = obj.GetComponent<ItemTrait>();
             trait.stack = new ItemStack(this, amount);
 

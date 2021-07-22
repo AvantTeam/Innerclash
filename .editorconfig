@@ -1,7 +1,0 @@
-﻿[*.cs]
-
-# Default severity for analyzer diagnostics with category 'Style'
-dotnet_analyzer_diagnostic.category-Style.severity = silent
-
-# IDE0002: Simplify Member Access
-dotnet_diagnostic.IDE0002.severity = none

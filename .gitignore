@@ -2,6 +2,7 @@
 .vsconfig
 *.htm
 *.csproj
+*.editorconfig
 *.sln
 
 UserSettings/

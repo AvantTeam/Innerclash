@@ -8,16 +8,20 @@ namespace Innerclash.Entities {
         public float maxMass = 1000f;
 
         public ItemInventory Inventory { get; private set; }
+        public bool NeedsUpdate { get; set; }
 
         void Start() {
             Inventory = new ItemInventory();
+            NeedsUpdate = true;
         }
 
         public int Accept(ItemStack stack) {
-            return Mathf.FloorToInt((maxMass - Inventory.TotalMass) / stack.item.mass);
+            return Mathf.Min(Mathf.FloorToInt((maxMass - Inventory.TotalMass) / stack.item.mass), stack.amount);
         }
 
         public int Add(ItemStack stack) {
+            NeedsUpdate = true;
+
             int res = Accept(stack);
             Inventory.Add(new ItemStack(stack.item, res), null);
 

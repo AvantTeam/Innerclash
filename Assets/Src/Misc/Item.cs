@@ -60,6 +60,8 @@ namespace Innerclash.Misc {
         public class ItemInventory {
             public Dictionary<int, ItemStack> contents = new Dictionary<int, ItemStack>();
 
+            private static Dictionary<int, ItemStack> temp = new Dictionary<int, ItemStack>();
+
             public float TotalMass {
                 get {
                     float result = 0f;
@@ -73,12 +75,22 @@ namespace Innerclash.Misc {
             }
 
             public void Add(ItemStack other, int? slot) {
-                if(slot == null) {
-                    foreach(int i in contents.Keys) {
-                        if(other.amount <= 0) return;
+                if(other.amount <= 0) return;
 
-                        var stack = contents[i];
+                if(slot == null) {
+                    temp.Clear();
+
+                    foreach(var key in contents.Keys) {
+                        if(other.amount <= 0) break;
+
+                        var stack = contents[key];
                         ItemStack.Transfer(ref other, ref stack, other.amount);
+
+                        temp.Add(key, stack);
+                    }
+
+                    foreach(var key in temp.Keys) {
+                        contents[key] = temp[key];
                     }
 
                     if(other.amount > 0) {

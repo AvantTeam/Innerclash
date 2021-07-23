@@ -20,10 +20,14 @@ namespace Innerclash.Entities {
         }
 
         public int Add(ItemStack stack) {
+            return Add(stack, null);
+        }
+
+        public int Add(ItemStack stack, int? idx) {
             NeedsUpdate = true;
 
             int res = Accept(stack);
-            Inventory.Add(new ItemStack(stack.item, res), null);
+            Inventory.Add(new ItemStack(stack.item, res), idx);
 
             return res;
         }

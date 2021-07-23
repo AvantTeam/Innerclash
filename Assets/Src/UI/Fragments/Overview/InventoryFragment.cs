@@ -7,56 +7,70 @@ namespace Innerclash.UI.Fragments.Overview {
     public class InventoryFragment : MonoBehaviour {
         [Header("Slot")]
         public GameObject slotPrefab;
+        public int row = 8;
+        public float pad = 15f / 8f;
+        public float margin = 15f;
 
         public InventoryTrait trait;
 
-        List<GameObject> slots = new List<GameObject>();
+        readonly List<GameObject> slots = new List<GameObject>();
 
-        public GameObject SlotParent { get; private set; }
+        public RectTransform SlotParent { get; private set; }
 
         void Start() {
-            SlotParent = gameObject.GetComponent<ScrollRect>().content.gameObject;
+            SlotParent = gameObject.GetComponent<ScrollRect>().content;
         }
 
         void Update() {
             if(trait.NeedsUpdate) {
-                int highest = 0;
+                int highest = -1;
                 foreach(var key in trait.Inventory.contents.Keys) {
                     if(highest < key) highest = key;
                 }
 
-                for(int i = 0; i < highest + 1; i++) {
-                    if(slots.Count <= i + 1) {
-                        while(slots.Count <= i + 1) {
-                            slots.Add(NewSlot(i));
-                        }
+                for(int i = 0; i < highest + 2; i++) {
+                    while(slots.Count <= i) {
+                        slots.Add(NewSlot(i));
                     }
 
                     var slot = slots[i];
-                    var image = slot.GetComponentInChildren<Image>();
+                    var image = slot.GetComponentInChildren<SlotImage>(true);
+                    var text = slot.GetComponentInChildren<Text>(true);
 
                     if(trait.Inventory.contents.ContainsKey(i)) {
+                        var stack = trait.Inventory.contents[i];
+
                         image.enabled = true;
-                        image.sprite = trait.Inventory.contents[i].item.sprite;
+                        image.sprite = stack.item.sprite;
+
+                        text.enabled = true;
+                        text.text = stack.amount.ToString();
                     } else {
                         image.enabled = false;
+                        text.enabled = false;
                     }
                 }
+
+                slots[slots.Count - 1].GetComponent<Button>().enabled = trait.Inventory.TotalMass < trait.maxMass;
 
                 trait.NeedsUpdate = false;
             }
         }
 
         GameObject NewSlot(int idx) {
-            var slot = Instantiate(slotPrefab, SlotParent.transform);
+            var slot = Instantiate(slotPrefab, SlotParent);
             var trns = (RectTransform)slot.transform;
-            trns.localPosition = new Vector3(
-                14f + idx % 8 * 39.5f,
-                -(14f + idx / 8 * 39.5f),
-                0f
-            );
 
-            trns.ForceUpdateRectTransforms();
+            float x = idx % row;
+            float y = idx / row;
+            float width = ((SlotParent.rect.width - 2f * margin) / row) - pad;
+
+            trns.localPosition = new Vector3(
+                margin + x * width + x * row / (row - 1f) * pad,
+                -(margin + y * width + y * row / (row - 1f) * pad)
+            );
+            trns.rect.Set(0f, -width, width, width);
+
             return slot;
         }
     }

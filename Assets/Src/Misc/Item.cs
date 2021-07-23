@@ -58,9 +58,9 @@ namespace Innerclash.Misc {
         }
 
         public class ItemInventory {
-            public Dictionary<int, ItemStack> contents = new Dictionary<int, ItemStack>();
+            public readonly Dictionary<int, ItemStack> contents = new Dictionary<int, ItemStack>();
 
-            private static Dictionary<int, ItemStack> temp = new Dictionary<int, ItemStack>();
+            private static readonly Dictionary<int, ItemStack> temp = new Dictionary<int, ItemStack>();
 
             public float TotalMass {
                 get {
@@ -100,12 +100,7 @@ namespace Innerclash.Misc {
                         contents.Add(i, other);
                     }
                 } else {
-                    if(contents.ContainsKey((int)slot)) {
-                        var existing = contents[(int)slot];
-                        ItemStack.Transfer(ref other, ref existing, other.amount);
-                    } else {
-                        contents.Add((int)slot, other);
-                    }
+                    //...
                 }
             }
         }

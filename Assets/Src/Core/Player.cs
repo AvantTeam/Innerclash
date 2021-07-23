@@ -24,27 +24,19 @@ namespace Innerclash.Core {
             phys.Jump(jump);
         }
 
-        void OnEnable() {
-            input.Enable();
-        }
+        void OnEnable() => input.Enable();
 
-        void OnDisable() {
-            input.Disable();
-        }
+        void OnDisable() => input.Disable();
 
         /// <summary>
         /// Keyboard: WASD
         /// </summary>
-        public void OnMove(CallbackContext context) {
-            moveAxis = context.ReadValue<Vector2>();
-        }
+        public void OnMove(CallbackContext context) => moveAxis = context.ReadValue<Vector2>();
 
         /// <summary>
         /// Keyboard: Spacebar
         /// </summary>
-        public void OnJump(CallbackContext context) {
-            jump = context.performed;
-        }
+        public void OnJump(CallbackContext context) => jump = context.performed;
 
         /// <summary>
         /// Mouse: Left click

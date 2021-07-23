@@ -2,7 +2,6 @@
 using UnityEngine.Tilemaps;
 using Innerclash.Entities;
 using Innerclash.Utils;
-using Innerclash.World.Tiles;
 
 using static Innerclash.Misc.Item;
 
@@ -16,8 +15,6 @@ namespace Innerclash.World {
         public TileRule rules;
         /// <summary> Tile groups, mainly used for bit-masking </summary>
         public TileGroup groups;
-        /// <summary> Tile behaviours. These can affect tile datas on startup and entities on interaction </summary>
-        public TileBehaviour[] behaviours;
         /// <summary> The item that drops when this tile is destroyed </summary>
         public ItemStack itemDrop;
 
@@ -26,9 +23,6 @@ namespace Innerclash.World {
         public float staticFriction = 5000f;
         /// <summary> Friction used when the entity this tile is interacting with is moving </summary>
         public float dynamicFriction = 500f;
-        /// <summary> When interacting with entity, the entity's X velocity will be clamped to 0 if the magnitude is lower than this </summary>
-        [Range(0f, 1f)] public float frictionThreshold = 0.3f;
-        [Range(0f, 1f)] public float frictionOffset = 0.6f;
 
         public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) {
             base.GetTileData(position, tilemap, ref tileData);
@@ -68,10 +62,6 @@ namespace Innerclash.World {
 
             tileData.transform = trns;
             tileData.flags |= TileFlags.LockTransform;
-
-            foreach(var behaviour in behaviours) {
-                behaviour.Data(this, position, tilemap, ref tileData);
-            }
         }
 
         public override void RefreshTile(Vector3Int position, ITilemap tilemap) {
@@ -92,29 +82,18 @@ namespace Innerclash.World {
 
         public bool IsSameType(ITilemap tilemap, int x, int y) => tilemap.GetTile(new Vector3Int(x, y, 0)) == this;
 
-        /// <summary> Call in MonoBehaviour#FixedUpdate() </summary>
-        /// <returns> Whether the entity's X velocity should be forcibly stopped </returns>
-        public bool Apply(PhysicsTrait entity, Vector3Int position) {
-            bool res = entity.WasMoving;
-
-            // TODO there's got to be a better way than this
+        /// <summary> Applies this tile's material to the specified entity. Call in MonoBehaviour#FixedUpdate() </summary>
+        public void Apply(PhysicsTrait entity, Vector3Int position) {
             var force = new Vector2(Mathf.Clamp(entity.Body.velocity.x, -1f, 1f) * -1f, 0f);
-            if(force.magnitude > frictionThreshold) {
-                float curve = frictionOffset + force.magnitude * (1f - frictionOffset);
-                entity.Body.AddForceAtPosition(
-                    curve * force * ((!entity.IsMoving || entity.IsTurning) ? staticFriction : dynamicFriction) * Time.fixedDeltaTime,
-                    new Vector2(position.x + 0.5f, position.y + 0.5f)
-                );
-            } else if(!res && !entity.IsMoving) {
-                res = true;
-            }
+            force *= 0.5f + force.magnitude * 0.5f;
 
-            foreach(var behaviour in behaviours) {
-                behaviour.Apply(this, position, entity);
-            }
-
-            return res;
+            entity.Body.AddForceAtPosition(
+                AppliedFriction(entity) * Time.fixedDeltaTime * force,
+                new Vector2(position.x + 0.5f, position.y + 0.5f)
+            );
         }
+
+        public float AppliedFriction(PhysicsTrait entity) => (!entity.IsMoving || entity.IsTurning) ? staticFriction : dynamicFriction;
 
         /// <summary> Mask for tile rule specifications </summary>
         [System.Flags]

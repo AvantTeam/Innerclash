@@ -5,9 +5,6 @@ using Innerclash.Utils;
 namespace Innerclash.Entities {
     [RequireComponent(typeof(Rigidbody2D))]
     public class PhysicsTrait : MonoBehaviour {
-        public Rigidbody2D Body { get; private set; }
-        public Vector2 MoveAxis { get; private set; }
-
         [Header("Movement")]
         public GroundCheck ground;
         /// <summary> Force used to move </summary>
@@ -24,14 +21,15 @@ namespace Innerclash.Entities {
         int hitCount;
         RaycastHit2D[] hits;
 
-        bool shouldStop = false;
         bool jumped = false;
+
+        public Rigidbody2D Body { get; private set; }
+        public Vector2 MoveAxis { get; private set; }
 
         /// <summary> Whether its #ground check is colliding with a tile </summary>
         public bool IsGrounded { get => hitCount > 0; }
         /// <summary> Whether it has a movement target direction </summary>
         public bool IsMoving { get => MoveAxis.magnitude > 0.1f; }
-        public bool WasMoving { get; private set; }
         /// <summary> Whether its movement target direction clashes with the velocity's direction </summary>
         public bool IsTurning { get => (MoveAxis.x < 0f && Body.velocity.x > 0f) || (MoveAxis.x > 0f && Body.velocity.x < 0f); }
         public bool IsJumping { get; private set; }
@@ -40,7 +38,6 @@ namespace Innerclash.Entities {
         void Start() {
             Body = GetComponent<Rigidbody2D>();
             MoveAxis = new Vector2();
-            WasMoving = false;
 
             hits = new RaycastHit2D[Mathf.CeilToInt(ground.width / GameController.Instance.tilemap.cellSize.x) + 1];
         }
@@ -50,11 +47,6 @@ namespace Innerclash.Entities {
             var velX = new Vector2(Body.velocity.x, 0f);
             if(velX.magnitude < maxSpeed || IsTurning) {
                 Body.AddForce(moveForce * Time.fixedDeltaTime * axis, ForceMode2D.Force);
-            }
-
-            if(shouldStop) {
-                Body.velocity = new Vector2(0f, Body.velocity.y);
-                shouldStop = false;
             }
 
             if(hits != null) {
@@ -67,10 +59,8 @@ namespace Innerclash.Entities {
                 );
 
                 for(int i = 0; i < hitCount; i++) {
-                    WasMoving |= Tilemaps.ApplyTile(hits[i].point, this);
+                    Tilemaps.ApplyTile(hits[i].point, this);
                 }
-
-                if(!shouldStop && WasMoving) shouldStop = true;
             }
 
             if(jumped) {
@@ -94,10 +84,7 @@ namespace Innerclash.Entities {
             }
         }
 
-        public void Move(Vector2 axis) {
-            WasMoving = false;
-            MoveAxis = axis;
-        }
+        public void Move(Vector2 axis) => MoveAxis = axis;
 
         public void Jump(bool jump) {
             if(IsGrounded) {

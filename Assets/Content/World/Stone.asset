@@ -86,6 +86,6 @@ MonoBehaviour:
   groups: 1
   itemDrop:
     item: {fileID: 11400000, guid: e02ffb6d86d374f4f8217c2c06151101, type: 2}
-    amount: 30
+    amount: 1
   staticFriction: 5000
   dynamicFriction: 500

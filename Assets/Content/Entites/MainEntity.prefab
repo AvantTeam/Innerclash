@@ -71,8 +71,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Offset: {x: 0, y: -0.1}
+  m_Size: {x: 0.9, y: 1.8}
   m_Direction: 0
 --- !u!114 &2617332894666756226
 MonoBehaviour:
@@ -89,7 +89,7 @@ MonoBehaviour:
   ground:
     offsetX: 0
     offsetY: -1
-    width: 0.9
+    width: 0.8
   moveForce: 2500
   maxSpeed: 15
   jumpForce: 360

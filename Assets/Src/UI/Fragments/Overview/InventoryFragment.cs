@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Innerclash.Core;
 using Innerclash.Entities;
 
+using static UnityEngine.RectTransform;
 using static Innerclash.Misc.Item;
 
 namespace Innerclash.UI.Fragments.Overview {
@@ -54,7 +55,7 @@ namespace Innerclash.UI.Fragments.Overview {
                     }
                 }
 
-                slots[slots.Count - 1].SetActive(trait.Inventory.TotalMass < trait.maxMass);
+                slots[slots.Count - 1].GetComponent<Button>().enabled = trait.Inventory.TotalMass < trait.maxMass;
 
                 trait.NeedsUpdate = false;
             }
@@ -62,31 +63,32 @@ namespace Innerclash.UI.Fragments.Overview {
 
         void Interact(int idx) {
             if(idx >= slots.Count) return;
+            Debug.Log("Interacting with " + idx);
 
             trait.NeedsUpdate = true;
 
+            var inst = GameController.Instance;
             var content = trait.Inventory.contents;
-            if(GameController.Instance.HoldingStack) { // If is already holding a stack, either put or swap
-                var source = GameController.Instance.CurrentStack;
+
+            if(inst.HoldingStack) { // If is already holding a stack, either put or swap
+                var source = inst.CurrentStack;
                 if(content.ContainsKey(idx)) {
                     var stack = trait.Inventory.contents[idx];
                     if(stack.item == source.item) { // If the item is the same, transfer it
                         ItemStack.Transfer(ref source, ref stack, stack.amount);
 
                         content[idx] = stack;
-                        GameController.Instance.CurrentStack = source;
+                        inst.CurrentStack = source;
                     } else { // Otherwise, simply swap
                         content[idx] = source;
-                        GameController.Instance.CurrentStack = stack;
+                        inst.CurrentStack = stack;
                     }
                 } else {
                     int accepted = trait.Add(source, idx);
                     source.amount -= accepted;
                 }
-
-                GameController.Instance.CurrentStack = source;
             } else if(content.ContainsKey(idx)) { // Otherwise try to take an existing stack from inventory
-                GameController.Instance.CurrentStack = content[idx];
+                inst.CurrentStack = content[idx];
             }
         }
 
@@ -102,7 +104,8 @@ namespace Innerclash.UI.Fragments.Overview {
                 margin + x * width + x * row / (row - 1f) * pad,
                 -(margin + y * width + y * row / (row - 1f) * pad)
             );
-            trns.rect.Set(0f, -width, width, width);
+            trns.SetSizeWithCurrentAnchors(Axis.Horizontal, width);
+            trns.SetSizeWithCurrentAnchors(Axis.Vertical, width);
 
             var b = slot.GetComponent<Button>();
             b.onClick.AddListener(() => Interact(idx));

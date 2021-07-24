@@ -31087,7 +31087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotPrefab: {fileID: 4099862396943744382, guid: 00e0fde6100c6134eaa3219637fa1a7f, type: 3}
-  row: 12
+  row: 10
   pad: 1.875
   margin: 15
   trait: {fileID: 1343315777}

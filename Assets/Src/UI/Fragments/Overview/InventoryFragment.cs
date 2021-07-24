@@ -17,13 +17,18 @@ namespace Innerclash.UI.Fragments.Overview {
 
         [Header("Attributes")]
         public InventoryTrait trait;
-        public RectTransform slotParent;
         public Image massBar;
         public Image massProgression;
 
         readonly List<GameObject> slots = new List<GameObject>();
         readonly List<int> strips = new List<int>();
         bool needsStripping = false;
+
+        public RectTransform SlotParent { get; private set; }
+
+        void Start() {
+            SlotParent = GetComponent<ScrollRect>().content;
+        }
 
         void Update() {
             if(trait.NeedsUpdate) {
@@ -80,10 +85,11 @@ namespace Innerclash.UI.Fragments.Overview {
 
                 float width = ((RectTransform)massBar.transform).sizeDelta.x;
                 float prog = Mathf.Min(trait.Inventory.TotalMass / trait.maxMass, 1f);
+                float min = massProgression.sprite.rect.width * 2f / 3f;
 
                 ((RectTransform)massProgression.transform).SetSizeWithCurrentAnchors(
                     Axis.Horizontal,
-                    prog * width
+                    min + prog * (width - min)
                 );
                 massProgression.color = Color.Lerp(Color.green, Color.red, prog);
 
@@ -101,13 +107,13 @@ namespace Innerclash.UI.Fragments.Overview {
                 var source = inst.CurrentStack;
                 if(content.ContainsKey(idx)) {
                     var stack = content[idx];
-                    if(stack.item == source.item) { // If the item is the same, transfer it
+                    if(stack.item == source.item && !stack.Full) { // If the item is the same, transfer it
                         ItemStack.Transfer(ref source, ref stack, source.amount);
 
                         content[idx] = stack;
                         inst.CurrentStack = source;
 
-                        if(source.amount <= 0) needsStripping = true;
+                        if(source.Empty) needsStripping = true;
                     } else { // Otherwise, simply swap
                         content[idx] = source;
                         inst.CurrentStack = stack;
@@ -147,14 +153,12 @@ namespace Innerclash.UI.Fragments.Overview {
         }
 
         GameObject NewSlot(int idx) {
-            slotParent.ForceUpdateRectTransforms();
-
-            var slot = Instantiate(slotPrefab, slotParent);
+            var slot = Instantiate(slotPrefab, SlotParent);
             var trns = (RectTransform)slot.transform;
 
             float x = idx % row;
             float y = idx / row;
-            float width = ((slotParent.rect.width - 2f * margin) / row) - pad;
+            float width = (((RectTransform)SlotParent.parent.parent).sizeDelta.x - 2f * margin) / row - pad;
 
             trns.localPosition = new Vector3(
                 margin + x * width + x * row / (row - 1f) * pad,

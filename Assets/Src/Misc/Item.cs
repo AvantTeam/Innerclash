@@ -40,6 +40,7 @@ namespace Innerclash.Misc {
             public int amount;
 
             public bool Full { get => amount >= item.maxStack; }
+            public bool Empty { get => amount <= 0; }
 
             public ItemStack(Item item, int amount) {
                 this.item = item;
@@ -66,7 +67,7 @@ namespace Innerclash.Misc {
                 get {
                     float result = 0f;
                     foreach(var stack in contents.Values) {
-                        if(stack.amount <= 0) continue;
+                        if(stack.Empty) continue;
                         result += stack.item.mass * stack.amount;
                     }
 

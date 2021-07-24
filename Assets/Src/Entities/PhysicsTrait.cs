@@ -40,6 +40,18 @@ namespace Innerclash.Entities {
             MoveAxis = new Vector2();
 
             hits = new RaycastHit2D[Mathf.CeilToInt(ground.width / GameController.Instance.tilemap.cellSize.x) + 1];
+
+            if(TryGetComponent(out ControllableTrait control)) {
+                control.Move += OnMove;
+                control.Jump += OnJump;
+            }
+        }
+
+        void OnDestroy() {
+            if(TryGetComponent(out ControllableTrait control)) {
+                control.Move -= OnMove;
+                control.Jump -= OnJump;
+            }
         }
 
         void FixedUpdate() {
@@ -84,9 +96,9 @@ namespace Innerclash.Entities {
             }
         }
 
-        public void Move(Vector2 axis) => MoveAxis = axis;
+        public void OnMove(Vector2 axis) => MoveAxis = axis;
 
-        public void Jump(bool jump) {
+        public void OnJump(bool jump) {
             if(IsGrounded) {
                 jumped = jump;
             } else if(IsJumping && JumpTime < jumpDuration) {

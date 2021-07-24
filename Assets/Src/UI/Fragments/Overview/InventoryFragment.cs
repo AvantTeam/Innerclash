@@ -55,8 +55,6 @@ namespace Innerclash.UI.Fragments.Overview {
                     }
                 }
 
-                slots[slots.Count - 1].GetComponent<Button>().enabled = trait.Inventory.TotalMass < trait.maxMass;
-
                 trait.NeedsUpdate = false;
             }
         }

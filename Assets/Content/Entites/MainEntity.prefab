@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2617332894666756226}
   - component: {fileID: -140059896247527948}
   - component: {fileID: -6062521894878367818}
+  - component: {fileID: 15582664041458997}
   - component: {fileID: -5123172739458013964}
   m_Layer: 6
   m_Name: MainEntity
@@ -120,6 +121,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxMass: 1000
+--- !u!114 &15582664041458997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6811923929446224116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6864a99ba15dde43a5f9ec4aa2cfa01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &-5123172739458013964
 SpriteRenderer:
   m_ObjectHideFlags: 0

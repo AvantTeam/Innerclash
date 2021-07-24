@@ -7,7 +7,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Innerclash.Core {
     public class Player : MonoBehaviour {
-        public GameObject controlled;
+        public ControllableTrait controlled;
 
         MainInput input;
 
@@ -19,9 +19,8 @@ namespace Innerclash.Core {
         }
 
         void FixedUpdate() {
-            var phys = controlled.GetComponent<PhysicsTrait>();
-            phys.Move(moveAxis);
-            phys.Jump(jump);
+            controlled.OnMove(moveAxis);
+            controlled.OnJump(jump);
         }
 
         void OnEnable() => input.Enable();
@@ -29,7 +28,7 @@ namespace Innerclash.Core {
         void OnDisable() => input.Disable();
 
         /// <summary>
-        /// Keyboard: WASD
+        /// Keyboard: W-A-S-D
         /// </summary>
         public void OnMove(CallbackContext context) => moveAxis = context.ReadValue<Vector2>();
 

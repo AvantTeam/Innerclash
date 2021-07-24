@@ -18,6 +18,8 @@ namespace Innerclash.UI.Fragments.Overview {
         public InventoryTrait trait;
 
         readonly List<GameObject> slots = new List<GameObject>();
+        List<int> strips = new List<int>();
+        bool needsStripping = false;
 
         public RectTransform SlotParent { get; private set; }
 
@@ -32,6 +34,7 @@ namespace Innerclash.UI.Fragments.Overview {
                     if(highest < key) highest = key;
                 }
 
+                highest = Mathf.Max(highest, slots.Count - 2);
                 for(int i = 0; i < highest + 2; i++) {
                     while(slots.Count <= i) {
                         slots.Add(NewSlot(i));
@@ -55,15 +58,34 @@ namespace Innerclash.UI.Fragments.Overview {
                     }
                 }
 
+                if(needsStripping) {
+                    strips.Clear();
+
+                    var content = trait.Inventory.contents;
+                    for(int i = slots.Count - 2; i > 0; i--) {
+                        if(!content.ContainsKey(i) && !content.ContainsKey(i + 1)) {
+                            strips.Add(i + 1);
+                        } else if(content.ContainsKey(i)) {
+                            break;
+                        }
+                    }
+
+                    foreach(int strip in strips) {
+                        var slot = slots[strip];
+                        slots.RemoveAt(strip);
+
+                        Destroy(slot);
+                    }
+
+                    needsStripping = false;
+                }
+
                 trait.NeedsUpdate = false;
             }
         }
 
-        void Interact(int idx) {
+        public void Interact(int idx) {
             if(idx >= slots.Count) return;
-            Debug.Log("Interacting with " + idx);
-
-            trait.NeedsUpdate = true;
 
             var inst = GameController.Instance;
             var content = trait.Inventory.contents;
@@ -71,12 +93,14 @@ namespace Innerclash.UI.Fragments.Overview {
             if(inst.HoldingStack) { // If is already holding a stack, either put or swap
                 var source = inst.CurrentStack;
                 if(content.ContainsKey(idx)) {
-                    var stack = trait.Inventory.contents[idx];
+                    var stack = content[idx];
                     if(stack.item == source.item) { // If the item is the same, transfer it
                         ItemStack.Transfer(ref source, ref stack, stack.amount);
 
                         content[idx] = stack;
                         inst.CurrentStack = source;
+
+                        if(source.amount <= 0) needsStripping = true;
                     } else { // Otherwise, simply swap
                         content[idx] = source;
                         inst.CurrentStack = stack;
@@ -84,9 +108,34 @@ namespace Innerclash.UI.Fragments.Overview {
                 } else {
                     int accepted = trait.Add(source, idx);
                     source.amount -= accepted;
+
+                    inst.CurrentStack = source;
+
+                    needsStripping = true;
                 }
+
+                trait.NeedsUpdate = true;
             } else if(content.ContainsKey(idx)) { // Otherwise try to take an existing stack from inventory
                 inst.CurrentStack = content[idx];
+                content.Remove(idx);
+
+                trait.NeedsUpdate = true;
+            }
+        }
+
+        public void OnVisibilityChange(bool visible) {
+            var inst = GameController.Instance;
+            if(!visible && inst.HoldingStack) {
+                var source = inst.CurrentStack;
+
+                int accepted = trait.Add(source);
+                source.amount -= accepted;
+
+                source.item.Create(trait.transform.position, source.amount);
+                inst.CurrentStack = new ItemStack();
+
+                trait.NeedsUpdate = true;
+                needsStripping = true;
             }
         }
 
@@ -105,8 +154,8 @@ namespace Innerclash.UI.Fragments.Overview {
             trns.SetSizeWithCurrentAnchors(Axis.Horizontal, width);
             trns.SetSizeWithCurrentAnchors(Axis.Vertical, width);
 
-            var b = slot.GetComponent<Button>();
-            b.onClick.AddListener(() => Interact(idx));
+            var b = slot.GetComponent<SlotButton>();
+            b.Index = idx;
 
             return slot;
         }

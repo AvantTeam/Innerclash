@@ -100,7 +100,15 @@ namespace Innerclash.Misc {
                         contents.Add(i, other);
                     }
                 } else {
-                    //...
+                    int key = (int)slot;
+                    if(contents.ContainsKey(key)) {
+                        var stack = contents[key];
+                        ItemStack.Transfer(ref other, ref stack, other.amount);
+
+                        contents[key] = stack;
+                    } else {
+                        contents.Add(key, other);
+                    }
                 }
             }
         }

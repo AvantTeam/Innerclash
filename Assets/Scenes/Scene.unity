@@ -29920,7 +29920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -29956,7 +29956,7 @@ GameObject:
   - component: {fileID: 1201435732}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30376,7 +30376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -30592,6 +30592,7 @@ MonoBehaviour:
   itemEntity: {fileID: 2152187431061858085, guid: e5c0282c01d946b47bd3813aaa23d0e3, type: 3}
   cursorItem: {fileID: 529938588}
   overviewFragment: {fileID: 1825247763}
+  inventoryFragment: {fileID: 1854821215}
 --- !u!4 &1656387542
 Transform:
   m_ObjectHideFlags: 0
@@ -31092,7 +31093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfa0177a9fbf8f438815023fabfd477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotPrefab: {fileID: 4099862396943744382, guid: 00e0fde6100c6134eaa3219637fa1a7f, type: 3}
+  slotPrefab: {fileID: 4313090616502337580, guid: 00e0fde6100c6134eaa3219637fa1a7f, type: 3}
   row: 10
   pad: 1.875
   margin: 15

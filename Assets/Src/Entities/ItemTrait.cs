@@ -7,23 +7,33 @@ namespace Innerclash.Entities {
     [RequireComponent(typeof(PhysicsTrait), typeof(CircleCollider2D), typeof(SpriteRenderer))]
     public class ItemTrait : MonoBehaviour {
         public ItemStack stack;
+        public float lifeTime;
 
         private static readonly Collider2D[] collides = new Collider2D[8];
 
         public PhysicsTrait Physics { get; private set; }
         public CircleCollider2D Collider { get; private set; }
         public SpriteRenderer Render { get; private set; }
+        public float Life { get; private set; }
 
         void Start() {
             Physics = GetComponent<PhysicsTrait>();
             Collider = GetComponent<CircleCollider2D>();
             Render = GetComponent<SpriteRenderer>();
+
+            Life = 0f;
         }
 
         void Update() {
+            if(Life >= lifeTime || stack.Empty) {
+                Destroy(gameObject);
+            }
+
+            Life += Time.deltaTime;
+
             int found = Physics2D.OverlapCircleNonAlloc((Vector2)transform.position + Collider.offset, Collider.radius, collides, LayerMask.GetMask("Entity"));
             for(int i = 0; i < found; i++) {
-                if(stack.amount <= 0) break;
+                if(stack.Empty) break;
 
                 if(collides[i].TryGetComponent(out InventoryTrait inv)) {
                     int accept = inv.Add(stack);
@@ -34,17 +44,15 @@ namespace Innerclash.Entities {
             if(stack.item != null) {
                 Render.sprite = stack.item.sprite;
             }
-
-            if(stack.amount <= 0) {
-                Destroy(gameObject);
-            }
         }
 
         void OnCollisionStay2D(Collision2D collision) {
-            if(stack.item == null || stack.amount <= 0) return;
+            if(stack.item == null || stack.Empty) return;
 
             if(collision.gameObject.TryGetComponent(out ItemTrait otherItem) && CanJoin(otherItem)) {
-                ItemStack.Transfer(ref stack, ref otherItem.stack, stack.amount);
+                if(ItemStack.Transfer(ref stack, ref otherItem.stack, stack.amount) > 0) {
+                    otherItem.Life = 0f;
+                }
             }
         }
 

@@ -15,6 +15,8 @@ namespace Innerclash.Misc {
         public float randForce = 6f;
         /// <summary> Used for inventory calculations </summary>
         public float mass = 1f;
+        /// <summary> How long can an item entity would persist in the world context </summary>
+        public float lifeTime = 60f;
 
         public ItemTrait Create(Vector2 pos, int amount) {
             if(amount <= 0) return null;
@@ -22,6 +24,7 @@ namespace Innerclash.Misc {
             var obj = Instantiate(GameController.Instance.itemEntity, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
             var trait = obj.GetComponent<ItemTrait>();
             trait.stack = new ItemStack(this, amount);
+            trait.lifeTime = lifeTime;
 
             obj.GetComponent<Rigidbody2D>().AddForce(
                 new Vector2(

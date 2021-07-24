@@ -15,17 +15,15 @@ namespace Innerclash.UI.Fragments.Overview {
         public float pad = 15f / 8f;
         public float margin = 15f;
 
+        [Header("Attributes")]
         public InventoryTrait trait;
+        public RectTransform slotParent;
+        public Image massBar;
+        public Image massProgression;
 
         readonly List<GameObject> slots = new List<GameObject>();
-        List<int> strips = new List<int>();
+        readonly List<int> strips = new List<int>();
         bool needsStripping = false;
-
-        public RectTransform SlotParent { get; private set; }
-
-        void Start() {
-            SlotParent = gameObject.GetComponent<ScrollRect>().content;
-        }
 
         void Update() {
             if(trait.NeedsUpdate) {
@@ -80,6 +78,15 @@ namespace Innerclash.UI.Fragments.Overview {
                     needsStripping = false;
                 }
 
+                float width = ((RectTransform)massBar.transform).sizeDelta.x;
+                float prog = Mathf.Min(trait.Inventory.TotalMass / trait.maxMass, 1f);
+
+                ((RectTransform)massProgression.transform).SetSizeWithCurrentAnchors(
+                    Axis.Horizontal,
+                    prog * width
+                );
+                massProgression.color = Color.Lerp(Color.green, Color.red, prog);
+
                 trait.NeedsUpdate = false;
             }
         }
@@ -95,7 +102,7 @@ namespace Innerclash.UI.Fragments.Overview {
                 if(content.ContainsKey(idx)) {
                     var stack = content[idx];
                     if(stack.item == source.item) { // If the item is the same, transfer it
-                        ItemStack.Transfer(ref source, ref stack, stack.amount);
+                        ItemStack.Transfer(ref source, ref stack, source.amount);
 
                         content[idx] = stack;
                         inst.CurrentStack = source;
@@ -140,12 +147,14 @@ namespace Innerclash.UI.Fragments.Overview {
         }
 
         GameObject NewSlot(int idx) {
-            var slot = Instantiate(slotPrefab, SlotParent);
+            slotParent.ForceUpdateRectTransforms();
+
+            var slot = Instantiate(slotPrefab, slotParent);
             var trns = (RectTransform)slot.transform;
 
             float x = idx % row;
             float y = idx / row;
-            float width = ((SlotParent.rect.width - 2f * margin) / row) - pad;
+            float width = ((slotParent.rect.width - 2f * margin) / row) - pad;
 
             trns.localPosition = new Vector3(
                 margin + x * width + x * row / (row - 1f) * pad,

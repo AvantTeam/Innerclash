@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff498a5dde4bf5d48aee303c8bbd7ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMass: 1000
+  maxMass: 500
 --- !u!114 &15582664041458997
 MonoBehaviour:
   m_ObjectHideFlags: 0

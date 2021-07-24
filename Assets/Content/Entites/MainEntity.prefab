@@ -119,8 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff498a5dde4bf5d48aee303c8bbd7ada, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryWidth: 4
-  inventoryHeight: 3
+  maxMass: 1000
 --- !u!212 &-5123172739458013964
 SpriteRenderer:
   m_ObjectHideFlags: 0

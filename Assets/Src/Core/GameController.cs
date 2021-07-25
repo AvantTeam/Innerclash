@@ -19,6 +19,7 @@ namespace Innerclash.Core {
 
         [Header("Constant UI fragments")]
         public GameObject cursorItem;
+        public GameObject hoverPanel;
         public GameObject overviewFragment;
         public InventoryFragment inventoryFragment;
 

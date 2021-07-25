@@ -4,21 +4,17 @@ using UnityEngine.UI;
 using Innerclash.Core;
 using Innerclash.Entities;
 
-using static UnityEngine.RectTransform;
 using static Innerclash.Misc.Item;
 
 namespace Innerclash.UI.Fragments.Overview {
     public class InventoryFragment : MonoBehaviour {
-        [Header("Slot")]
         public GameObject slotPrefab;
-        public int row = 8;
-        public float pad = 15f / 8f;
-        public float margin = 15f;
 
         [Header("Attributes")]
         public InventoryTrait trait;
-        public Image massBar;
-        public Image massProgression;
+        public ScrollRect scroll;
+        public Slider massBar;
+        public Image massImage;
 
         readonly List<GameObject> slots = new List<GameObject>();
         readonly List<int> strips = new List<int>();
@@ -27,7 +23,7 @@ namespace Innerclash.UI.Fragments.Overview {
         public RectTransform SlotParent { get; private set; }
 
         void Start() {
-            SlotParent = GetComponent<ScrollRect>().content;
+            SlotParent = scroll.content;
         }
 
         void Update() {
@@ -40,7 +36,10 @@ namespace Innerclash.UI.Fragments.Overview {
                 highest = Mathf.Max(highest, slots.Count - 2);
                 for(int i = 0; i < highest + 2; i++) {
                     while(slots.Count <= i) {
-                        slots.Add(NewSlot(i));
+                        var n = Instantiate(slotPrefab, SlotParent);
+                        n.GetComponent<SlotButton>().Index = i;
+
+                        slots.Add(n);
                     }
 
                     var slot = slots[i];
@@ -83,15 +82,8 @@ namespace Innerclash.UI.Fragments.Overview {
                     needsStripping = false;
                 }
 
-                float width = ((RectTransform)massBar.transform).sizeDelta.x;
-                float prog = Mathf.Min(trait.Inventory.TotalMass / trait.maxMass, 1f);
-                float min = massProgression.sprite.rect.width * 2f / 3f;
-
-                ((RectTransform)massProgression.transform).SetSizeWithCurrentAnchors(
-                    Axis.Horizontal,
-                    min + prog * (width - min)
-                );
-                massProgression.color = Color.Lerp(Color.green, Color.red, prog);
+                massBar.value = Mathf.Min(trait.Inventory.TotalMass / trait.maxMass, 1f);
+                massImage.color = Color.Lerp(Color.green, Color.red, massBar.value);
 
                 trait.NeedsUpdate = false;
             }
@@ -150,27 +142,6 @@ namespace Innerclash.UI.Fragments.Overview {
                 trait.NeedsUpdate = true;
                 needsStripping = true;
             }
-        }
-
-        GameObject NewSlot(int idx) {
-            var slot = Instantiate(slotPrefab, SlotParent);
-            var trns = (RectTransform)slot.transform;
-
-            float x = idx % row;
-            float y = idx / row;
-            float width = (((RectTransform)SlotParent.parent.parent).sizeDelta.x - 2f * margin) / row - pad;
-
-            trns.localPosition = new Vector3(
-                margin + x * width + x * row / (row - 1f) * pad,
-                -(margin + y * width + y * row / (row - 1f) * pad)
-            );
-            trns.SetSizeWithCurrentAnchors(Axis.Horizontal, width);
-            trns.SetSizeWithCurrentAnchors(Axis.Vertical, width);
-
-            var b = slot.GetComponent<SlotButton>();
-            b.Index = idx;
-
-            return slot;
         }
     }
 }

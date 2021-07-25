@@ -128,6 +128,29 @@ namespace Innerclash.UI.Fragments.Overview {
             }
         }
 
+        public void Trash() {
+            GameController.Instance.CurrentStack = new ItemStack();
+
+            trait.NeedsUpdate = true;
+            needsStripping = true;
+        }
+
+        public void Drop() {
+            if(Drop(GameController.Instance.CurrentStack)) {
+                GameController.Instance.CurrentStack = new ItemStack();
+
+                trait.NeedsUpdate = true;
+                needsStripping = true;
+            }
+        }
+
+        public bool Drop(ItemStack stack) {
+            if(stack.Empty) return false;
+
+            var item = stack.item.Create(trait.transform.position, stack.amount);
+            return item.FromEntity = true;
+        }
+
         public void OnVisibilityChange(bool visible) {
             var inst = GameController.Instance;
             if(!visible && inst.HoldingStack) {
@@ -136,7 +159,7 @@ namespace Innerclash.UI.Fragments.Overview {
                 int accepted = trait.Add(source);
                 source.amount -= accepted;
 
-                source.item.Create(trait.transform.position, source.amount);
+                Drop(source);
                 inst.CurrentStack = new ItemStack();
 
                 trait.NeedsUpdate = true;

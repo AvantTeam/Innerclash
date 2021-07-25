@@ -14,7 +14,9 @@ namespace Innerclash.Entities {
         public PhysicsTrait Physics { get; private set; }
         public CircleCollider2D Collider { get; private set; }
         public SpriteRenderer Render { get; private set; }
+
         public float Life { get; private set; }
+        public bool FromEntity { get; set; }
 
         void Start() {
             Physics = GetComponent<PhysicsTrait>();
@@ -31,13 +33,17 @@ namespace Innerclash.Entities {
 
             Life += Time.deltaTime;
 
-            int found = Physics2D.OverlapCircleNonAlloc((Vector2)transform.position + Collider.offset, Collider.radius, collides, LayerMask.GetMask("Entity"));
-            for(int i = 0; i < found; i++) {
-                if(stack.Empty) break;
+            // Only transfer itself to entity with inventories if it is dropped by an entity
+            // and has persisted for more than 3 seconds
+            if(!FromEntity || Life >= 3f) {
+                int found = Physics2D.OverlapCircleNonAlloc((Vector2)transform.position + Collider.offset, Collider.radius, collides, LayerMask.GetMask("Entity"));
+                for(int i = 0; i < found; i++) {
+                    if(stack.Empty) break;
 
-                if(collides[i].TryGetComponent(out InventoryTrait inv)) {
-                    int accept = inv.Add(stack);
-                    stack.amount -= accept;
+                    if(collides[i].TryGetComponent(out InventoryTrait inv)) {
+                        int accept = inv.Add(stack);
+                        stack.amount -= accept;
+                    }
                 }
             }
 

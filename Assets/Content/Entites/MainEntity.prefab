@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6717524689001247442}
   - component: {fileID: 90322996918772517}
-  - component: {fileID: 1460111780393416917}
+  - component: {fileID: 8878394766681302399}
   - component: {fileID: 2617332894666756226}
   - component: {fileID: -140059896247527948}
   - component: {fileID: -6062521894878367818}
@@ -58,7 +58,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!70 &1460111780393416917
+--- !u!70 &8878394766681302399
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,9 +92,11 @@ MonoBehaviour:
     width: 0.8
   moveForce: 2500
   maxSpeed: 15
-  jumpForce: 360
-  jumpContinuousForce: 2400
+  jumpForce: 640
+  jumpContinuousForce: 2500
   jumpDuration: 0.5
+  jumpCooldown: 0.3
+  jumpBufferTime: 0.15
 --- !u!114 &-140059896247527948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +175,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 3c1ab9c04e5f560409eb3cc94ef469ec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

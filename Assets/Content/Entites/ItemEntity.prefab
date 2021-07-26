@@ -90,6 +90,7 @@ MonoBehaviour:
     width: 0.9
   moveForce: 0
   maxSpeed: 0
+  moveFallback: 0.25
   jumpForce: 360
   jumpContinuousForce: 2400
   jumpDuration: 0.5
@@ -108,6 +109,7 @@ MonoBehaviour:
   stack:
     item: {fileID: 0}
     amount: 0
+  lifeTime: 0
 --- !u!212 &2152187431061858107
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -148,7 +150,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

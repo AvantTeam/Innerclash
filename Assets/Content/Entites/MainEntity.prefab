@@ -95,7 +95,7 @@ MonoBehaviour:
   jumpForce: 640
   jumpContinuousForce: 2500
   jumpDuration: 0.5
-  jumpCooldown: 0.3
+  jumpCooldown: 0.6
   jumpBufferTime: 0.15
 --- !u!114 &-140059896247527948
 MonoBehaviour:

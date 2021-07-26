@@ -18,7 +18,7 @@ namespace Innerclash.Entities {
         /// <summary> The maximum duration of jump continuation in seconds </summary>
         public float jumpDuration = 0.5f;
         /// <summary> The entity can regain full jump impulse after waiting for this amount of time after last jump, in seconds </summary>
-        public float jumpCooldown = 0.3f;
+        public float jumpCooldown = 0.6f;
         /// <summary> The entity would still be able to jump when it hits the ground if the jump trigger was within this amount of time, in seconds </summary>
         public float jumpBufferTime = 0.15f;
 
@@ -27,6 +27,7 @@ namespace Innerclash.Entities {
 
         bool impulseJump;
         bool wasJumping;
+        float jumpPower;
         float lastJumped;
         float lastJumpedMidAir;
 
@@ -97,10 +98,9 @@ namespace Innerclash.Entities {
                 IsJumping = true;
                 JumpTime = 0f;
 
-                float alpha = Mathf.Min(Time.time - lastJumped, jumpCooldown) / jumpCooldown;
-                Debug.Log(alpha);
+                jumpPower = Mathf.Pow(Mathf.Min(Time.time - lastJumped, jumpCooldown) / jumpCooldown, 2f);
                 Body.AddForceAtPosition(
-                    Time.fixedDeltaTime * new Vector2(0f, jumpForce * alpha),
+                    Time.fixedDeltaTime * new Vector2(0f, jumpForce * jumpPower),
                     pos + ground.Center,
                     ForceMode2D.Impulse
                 );
@@ -110,7 +110,7 @@ namespace Innerclash.Entities {
             } else if(IsJumping) {
                 JumpTime += Time.fixedDeltaTime;
 
-                if(JumpTime >= jumpDuration) {
+                if(IsGrounded || JumpTime >= jumpDuration * jumpPower) {
                     IsJumping = false;
                     JumpTime = 0f;
                 } else {

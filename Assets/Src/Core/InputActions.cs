@@ -388,6 +388,77 @@ namespace Innerclash.Core
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""World Map"",
+            ""id"": ""270ca9f5-6a2a-49a1-bb7a-6b9d45a572b4"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Button"",
+                    ""id"": ""3e358031-f1c7-436c-acbc-8387bca0739b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""94549161-92e2-4a7a-9b04-54853ac85815"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""63855205-98c5-4553-b171-a12219de56ca"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""b6da07d1-5452-4660-935c-94caa78a5b27"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ad7b92d8-9585-4fec-8805-199ae8b3966d"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""f40ae0a3-1169-40c3-9369-39d095a3a5cb"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -426,6 +497,9 @@ namespace Innerclash.Core
             m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
             m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
             m_UI_Move = m_UI.FindAction("Move", throwIfNotFound: true);
+            // World Map
+            m_WorldMap = asset.FindActionMap("World Map", throwIfNotFound: true);
+            m_WorldMap_Move = m_WorldMap.FindAction("Move", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -625,6 +699,39 @@ namespace Innerclash.Core
             }
         }
         public UIActions @UI => new UIActions(this);
+
+        // World Map
+        private readonly InputActionMap m_WorldMap;
+        private IWorldMapActions m_WorldMapActionsCallbackInterface;
+        private readonly InputAction m_WorldMap_Move;
+        public struct WorldMapActions
+        {
+            private @InputActions m_Wrapper;
+            public WorldMapActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Move => m_Wrapper.m_WorldMap_Move;
+            public InputActionMap Get() { return m_Wrapper.m_WorldMap; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(WorldMapActions set) { return set.Get(); }
+            public void SetCallbacks(IWorldMapActions instance)
+            {
+                if (m_Wrapper.m_WorldMapActionsCallbackInterface != null)
+                {
+                    @Move.started -= m_Wrapper.m_WorldMapActionsCallbackInterface.OnMove;
+                    @Move.performed -= m_Wrapper.m_WorldMapActionsCallbackInterface.OnMove;
+                    @Move.canceled -= m_Wrapper.m_WorldMapActionsCallbackInterface.OnMove;
+                }
+                m_Wrapper.m_WorldMapActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Move.started += instance.OnMove;
+                    @Move.performed += instance.OnMove;
+                    @Move.canceled += instance.OnMove;
+                }
+            }
+        }
+        public WorldMapActions @WorldMap => new WorldMapActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -651,6 +758,10 @@ namespace Innerclash.Core
             void OnScroll(InputAction.CallbackContext context);
             void OnSubmit(InputAction.CallbackContext context);
             void OnCancel(InputAction.CallbackContext context);
+            void OnMove(InputAction.CallbackContext context);
+        }
+        public interface IWorldMapActions
+        {
             void OnMove(InputAction.CallbackContext context);
         }
     }

@@ -9,23 +9,13 @@ namespace Innerclash.Core {
     public class Player : MonoBehaviour {
         public ControllableTrait controlled;
 
-        InputActions input;
-
         Vector2 moveAxis;
         bool jump;
-
-        void Awake() {
-            input = new InputActions();
-        }
 
         void FixedUpdate() {
             controlled.OnMove(moveAxis);
             controlled.OnJump(jump);
         }
-
-        void OnEnable() => input.Enable();
-
-        void OnDisable() => input.Disable();
 
         /// <summary>
         /// Keyboard: W-A-S-D

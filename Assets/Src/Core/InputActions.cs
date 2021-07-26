@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Input/MainInput.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Input/InputActions.inputactions'
 
 using System;
 using System.Collections;
@@ -8,13 +8,13 @@ using UnityEngine.InputSystem.Utilities;
 
 namespace Innerclash.Core
 {
-    public class @MainInput : IInputActionCollection, IDisposable
+    public class @InputActions : IInputActionCollection, IDisposable
     {
         public InputActionAsset asset { get; }
-        public @MainInput()
+        public @InputActions()
         {
             asset = InputActionAsset.FromJson(@"{
-    ""name"": ""MainInput"",
+    ""name"": ""InputActions"",
     ""maps"": [
         {
             ""name"": ""Player"",
@@ -482,8 +482,8 @@ namespace Innerclash.Core
         private readonly InputAction m_Player_OpenOverview;
         public struct PlayerActions
         {
-            private @MainInput m_Wrapper;
-            public PlayerActions(@MainInput wrapper) { m_Wrapper = wrapper; }
+            private @InputActions m_Wrapper;
+            public PlayerActions(@InputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_Player_Move;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Break => m_Wrapper.m_Player_Break;
@@ -550,8 +550,8 @@ namespace Innerclash.Core
         private readonly InputAction m_UI_Move;
         public struct UIActions
         {
-            private @MainInput m_Wrapper;
-            public UIActions(@MainInput wrapper) { m_Wrapper = wrapper; }
+            private @InputActions m_Wrapper;
+            public UIActions(@InputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @Point => m_Wrapper.m_UI_Point;
             public InputAction @LeftClick => m_Wrapper.m_UI_LeftClick;
             public InputAction @RightClick => m_Wrapper.m_UI_RightClick;

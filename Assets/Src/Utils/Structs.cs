@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace Innerclash.Utils {
     public static class Structs {
@@ -34,6 +33,11 @@ namespace Innerclash.Utils {
 
         public static bool Optional<T>(T[] array, Predicate<T> pred, Predicate<T> sec) {
             return !Find(array, pred, out T res) || sec(res);
+        }
+
+        public static T Random<T>(T[] array) {
+            if(array.Length <= 0) return default;
+            return array[UnityEngine.Random.Range(0, array.Length - 1)];
         }
     }
 }

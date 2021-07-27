@@ -10,7 +10,7 @@ namespace Innerclash.Core {
         [Header("Constant Components")]
         public Camera mainCamera;
         public Tilemap worldSectors;
-        public float cameraSpeed = 5f;
+        public float cameraSpeed = 10f;
 
         public SectorPreset[] presets;
         public SectorPreset startSector;

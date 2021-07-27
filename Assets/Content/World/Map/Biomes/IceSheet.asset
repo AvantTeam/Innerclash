@@ -16,7 +16,7 @@ MonoBehaviour:
   attributes:
   - type: 0
     min: 0
-    max: 0.2
+    max: 0.3
   - type: 1
     min: 0
     max: 0.2

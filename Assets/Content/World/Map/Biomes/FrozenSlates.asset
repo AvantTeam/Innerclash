@@ -15,7 +15,7 @@ MonoBehaviour:
   mapColor: {r: 0.6450694, g: 0.78843576, b: 0.9056604, a: 1}
   attributes:
   - type: 0
-    min: 0.2
+    min: 0.3
     max: 0.8
   - type: 2
     min: 0.32

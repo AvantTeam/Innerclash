@@ -1299,7 +1299,7 @@ RectTransform:
   - {fileID: 607315584}
   - {fileID: 529938589}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1378,7 +1378,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &640514913
 GameObject:
@@ -30583,50 +30583,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1163280808}
   m_CullTransparentMesh: 1
---- !u!1 &1201435730
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1201435733}
-  - component: {fileID: 1201435732}
-  m_Layer: 0
-  m_Name: Player
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1201435732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1201435730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d107cf1f3e474a409d0288fb42be6dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controlled: {fileID: 1343315783}
---- !u!4 &1201435733
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1201435730}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1238813107
 GameObject:
   m_ObjectHideFlags: 0
@@ -30963,7 +30919,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1290518724
 GameObject:
@@ -31140,7 +31096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6717524689001247442, guid: 078b437ac278d514c87291844bef2989, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6717524689001247442, guid: 078b437ac278d514c87291844bef2989, type: 3}
       propertyPath: m_LocalPosition.x
@@ -31564,12 +31520,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 1026857122}
   mainCamera: {fileID: 519420031}
-  player: {fileID: 1201435732}
   itemEntity: {fileID: 2152187431061858085, guid: e5c0282c01d946b47bd3813aaa23d0e3, type: 3}
   cursorItem: {fileID: 529938588}
   hoverPanel: {fileID: 607315583}
   overviewFragment: {fileID: 1825247763}
   inventoryFragment: {fileID: 1293518469}
+  controlled: {fileID: 1343315783}
 --- !u!4 &1656387542
 Transform:
   m_ObjectHideFlags: 0
@@ -31611,8 +31567,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1201435732}
-        m_TargetAssemblyTypeName: Innerclash.Core.Player, Assembly-CSharp
+      - m_Target: {fileID: 1656387541}
+        m_TargetAssemblyTypeName: Innerclash.Core.GameController, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -31627,8 +31583,8 @@ MonoBehaviour:
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1201435732}
-        m_TargetAssemblyTypeName: Innerclash.Core.Player, Assembly-CSharp
+      - m_Target: {fileID: 1656387541}
+        m_TargetAssemblyTypeName: Innerclash.Core.GameController, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
@@ -31643,8 +31599,8 @@ MonoBehaviour:
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1201435732}
-        m_TargetAssemblyTypeName: Innerclash.Core.Player, Assembly-CSharp
+      - m_Target: {fileID: 1656387541}
+        m_TargetAssemblyTypeName: Innerclash.Core.GameController, Assembly-CSharp
         m_MethodName: OnBreak
         m_Mode: 0
         m_Arguments:
@@ -31659,8 +31615,8 @@ MonoBehaviour:
     m_ActionName: Player/Break[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1201435732}
-        m_TargetAssemblyTypeName: Innerclash.Core.Player, Assembly-CSharp
+      - m_Target: {fileID: 1656387541}
+        m_TargetAssemblyTypeName: Innerclash.Core.GameController, Assembly-CSharp
         m_MethodName: OnAct
         m_Mode: 0
         m_Arguments:
@@ -31721,6 +31677,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 40c17e52-b1e2-4a73-a1e9-4951bb04b98a
     m_ActionName: Player/Open Overview[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3e358031-f1c7-436c-acbc-8387bca0739b
+    m_ActionName: World Map/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyboardMouse
   m_DefaultActionMap: Player

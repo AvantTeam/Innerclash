@@ -42,7 +42,7 @@ namespace Innerclash.Core
                     ""id"": ""8dc9e45a-3068-4cae-819d-f8e8d364700c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Hold""
                 },
                 {
                     ""name"": ""Act"",

@@ -1,24 +1,32 @@
 using UnityEngine;
 using Innerclash.Core;
+using Innerclash.Utils;
+
+using static Innerclash.World.Map.WorldMapGenerator;
 
 namespace Innerclash.World.Map {
     public class WorldDataInfo : MonoBehaviour {
         public Vector3Int CurrentSectorPosition { get; private set; }
         public Vector2 CurrentSectorWorldPosition { get; private set; }
+        public BiomeData[,] WorldBiomeData { get; private set; }
 
-        float[,] height, temperature, archaic;
-
-        public Color NoiseDataAt(int x, int y) {
-            return new Color(height[x, y], temperature[x, y], archaic[x, y]);
+        public BiomeData BiomeDataAt(Vector2 worldPos) {
+            Vector2Int pixelPos = PixelCoordAt(worldPos);
+            int x = pixelPos.x, y = pixelPos.y;
+            return WorldBiomeData[x, y];
         }
 
-        public void SetData(WorldMapController controller) {
-            CurrentSectorPosition = controller.Hovering;
+        public void SetData(WorldMapController controller, Vector3Int current) {
+            CurrentSectorPosition = current;
             CurrentSectorWorldPosition = controller.worldSectors.CellToWorld(CurrentSectorPosition);
 
-            height = controller.MapGenerator.HeightNoise;
-            temperature = controller.MapGenerator.TemperatureNoise;
-            archaic = controller.MapGenerator.ArchaicNoise;
+            WorldBiomeData = controller.MapGenerator.worldBiomeData;
+        }
+
+        Vector2Int PixelCoordAt(Vector2 worldPos) {
+            int x = (int)MathHelper.Remap(worldPos.x, -32f, 32f, 0f, 1024f),
+                y = (int)MathHelper.Remap(worldPos.y, -32f, 32f, 0f, 1024f);
+            return new Vector2Int(x, y);
         }
     }
 }

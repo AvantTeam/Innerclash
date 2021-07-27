@@ -38,6 +38,7 @@ namespace Innerclash.Core {
                 }
             } else {
                 infoObj = new GameObject("WorldDataInfoObject");
+                infoObj.tag = "WorldDataInfo";
                 worldData = infoObj.AddComponent<WorldDataInfo>();
             }
             DontDestroyOnLoad(infoObj);
@@ -48,7 +49,7 @@ namespace Innerclash.Core {
         }
 
         void Update() {
-            Hovering = worldSectors.WorldToCell(Mouse.current.position.ReadValue());
+            Hovering = worldSectors.WorldToCell(mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()));
         }
 
         void FixedUpdate() {
@@ -56,7 +57,7 @@ namespace Innerclash.Core {
         }
 
         void LoadSector(Vector3Int position) {
-            worldData.SetData(this);
+            worldData.SetData(this, position);
             SceneManager.LoadScene("SectorGen");
         }
 

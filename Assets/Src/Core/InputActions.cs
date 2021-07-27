@@ -400,6 +400,14 @@ namespace Innerclash.Core
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""3c63781c-bcf6-4950-80dd-1f13268db06d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -457,6 +465,17 @@ namespace Innerclash.Core
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1bba3cd6-c900-4cfb-bcad-2026f1f67b70"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -500,6 +519,7 @@ namespace Innerclash.Core
             // World Map
             m_WorldMap = asset.FindActionMap("World Map", throwIfNotFound: true);
             m_WorldMap_Move = m_WorldMap.FindAction("Move", throwIfNotFound: true);
+            m_WorldMap_Click = m_WorldMap.FindAction("Click", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -704,11 +724,13 @@ namespace Innerclash.Core
         private readonly InputActionMap m_WorldMap;
         private IWorldMapActions m_WorldMapActionsCallbackInterface;
         private readonly InputAction m_WorldMap_Move;
+        private readonly InputAction m_WorldMap_Click;
         public struct WorldMapActions
         {
             private @InputActions m_Wrapper;
             public WorldMapActions(@InputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_WorldMap_Move;
+            public InputAction @Click => m_Wrapper.m_WorldMap_Click;
             public InputActionMap Get() { return m_Wrapper.m_WorldMap; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -721,6 +743,9 @@ namespace Innerclash.Core
                     @Move.started -= m_Wrapper.m_WorldMapActionsCallbackInterface.OnMove;
                     @Move.performed -= m_Wrapper.m_WorldMapActionsCallbackInterface.OnMove;
                     @Move.canceled -= m_Wrapper.m_WorldMapActionsCallbackInterface.OnMove;
+                    @Click.started -= m_Wrapper.m_WorldMapActionsCallbackInterface.OnClick;
+                    @Click.performed -= m_Wrapper.m_WorldMapActionsCallbackInterface.OnClick;
+                    @Click.canceled -= m_Wrapper.m_WorldMapActionsCallbackInterface.OnClick;
                 }
                 m_Wrapper.m_WorldMapActionsCallbackInterface = instance;
                 if (instance != null)
@@ -728,6 +753,9 @@ namespace Innerclash.Core
                     @Move.started += instance.OnMove;
                     @Move.performed += instance.OnMove;
                     @Move.canceled += instance.OnMove;
+                    @Click.started += instance.OnClick;
+                    @Click.performed += instance.OnClick;
+                    @Click.canceled += instance.OnClick;
                 }
             }
         }
@@ -763,6 +791,7 @@ namespace Innerclash.Core
         public interface IWorldMapActions
         {
             void OnMove(InputAction.CallbackContext context);
+            void OnClick(InputAction.CallbackContext context);
         }
     }
 }

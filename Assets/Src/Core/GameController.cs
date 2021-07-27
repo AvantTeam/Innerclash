@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Innerclash.Entities;
 using Innerclash.UI.Fragments.Overview;
 using Innerclash.Utils;
+using Innerclash.World;
 
 using static UnityEngine.InputSystem.InputAction;
 using static Innerclash.Misc.Item;
@@ -14,6 +15,8 @@ namespace Innerclash.Core {
         [Header("Constant components")]
         public Tilemap tilemap;
         public Camera mainCamera;
+        public SectorGenerator sectorGenerator;
+        public ControllableTrait controlled;
 
         [Header("Default Prefabs")]
         public GameObject itemEntity;
@@ -23,7 +26,6 @@ namespace Innerclash.Core {
         public GameObject hoverPanel;
         public GameObject overviewFragment;
         public InventoryFragment inventoryFragment;
-        public ControllableTrait controlled;
 
         Vector2 moveAxis;
         bool jump;

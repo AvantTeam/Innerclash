@@ -44,6 +44,8 @@ namespace Innerclash.Core {
 
         void Start() {
             CurrentStack = new ItemStack();
+
+            SetCameraToPlayer();
         }
 
         void Update() {
@@ -82,6 +84,11 @@ namespace Innerclash.Core {
             controlled.OnJump(jump);
             controlled.OnBreak(breakPress);
             controlled.OnAct(actPress);
+        }
+
+        void SetCameraToPlayer() {
+            float z = mainCamera.transform.position.z;
+            mainCamera.transform.position = controlled.transform.position + Vector3.forward * z;
         }
 
         public void OnOpenOverview(CallbackContext context) {

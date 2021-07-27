@@ -33,9 +33,9 @@ namespace Innerclash.World {
             WorldDataInfo worldData = infoObj.GetComponent<WorldDataInfo>();
 
             for(int column = 0; column < mapSize.x; column++) {
-                Vector2 phaseOffset = new Vector2(Mathf.Cos((float)column / mapSize.x * 2f * Mathf.PI), Mathf.Sin((float)column / mapSize.x * 2f * Mathf.PI)) * samplingRadius;
-                Vector2 samplingPoint = worldData.CurrentSectorWorldPosition + phaseOffset;
-                BiomeData sample = worldData.BiomeDataAt(worldData.CurrentSectorWorldPosition + phaseOffset);
+                Vector2 phase = new Vector2(Mathf.Cos((float)column / mapSize.x * 2f * Mathf.PI), Mathf.Sin((float)column / mapSize.x * 2f * Mathf.PI)) * samplingRadius;
+                Vector2 samplingPoint = worldData.CurrentSectorWorldPosition + phase;
+                BiomeData sample = worldData.BiomeDataAt(samplingPoint);
                 int height = (int)Mathf.Min(sample.Height * mapSize.y + (-1f + 2f * Mathf.PerlinNoise(samplingPoint.x * terrainRoughness, samplingPoint.y * terrainRoughness)) * terrainDeviation, mapSize.y);
                 if(column == mapSize.x / 2) spawnHeight = height + 1;
                 for(int y = 0; y < height; y++) {

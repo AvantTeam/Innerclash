@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Innerclash.Utils;
 
 using static Innerclash.Utils.Noises;
@@ -10,6 +11,7 @@ namespace Innerclash.World.Map {
         public bool autoUpdate;
 
         public Sprite mask;
+        public Tilemap decorTilemap;
 
         public NoisePass
             heightPass,
@@ -26,6 +28,7 @@ namespace Innerclash.World.Map {
         public Biome[] biomes;
 
         public static Biome[] Biomes { get; private set; }
+
         public BiomeData[,] worldBiomeData { get; private set; }
         public SpriteRenderer Renderer { get; private set; }
 
@@ -43,6 +46,8 @@ namespace Innerclash.World.Map {
 
         public void Generate() {
             Renderer = GetComponent<SpriteRenderer>();
+
+            decorTilemap.ClearAllTiles();
 
             int width = (int)mask.rect.width;
             int height = (int)mask.rect.height;
@@ -78,10 +83,25 @@ namespace Innerclash.World.Map {
             texture.Apply();
 
             Renderer.sprite = Sprite.Create(texture, new Rect(0, 0, width, height), Vector2.one * 0.5f, 16f);
+            GenerateDecor();
+        }
+
+        void GenerateDecor() {
+            Vector3 cellSize = decorTilemap.layoutGrid.cellSize;
+            Vector2Int size = new Vector2Int((int)(mask.rect.width / mask.pixelsPerUnit / cellSize.x), (int)(mask.rect.height / mask.pixelsPerUnit / cellSize.y));
+
+            for(int x = -size.x / 2; x < size.x / 2; x++) {
+                for(int y = -size.y / 2; y < size.y / 2; y++) {
+                    Vector2Int pixelPos = new Vector2Int((int)MathHelper.Remap(x * 2, -size.x, size.x, 0, mask.rect.width), (int)MathHelper.Remap(y * 2, -size.y, size.y, 0, mask.rect.height));
+                    BiomeData data = worldBiomeData[pixelPos.x, pixelPos.y];
+                    DecorTile toPut = data.Biome.GetDecorTile();
+                    if(toPut != null) decorTilemap.SetTile(new Vector3Int(x, y, 0), toPut);
+                }
+            }
         }
 
         public struct BiomeData {
-            public Biome Biome { get; private set; }
+            public Biome Biome { get; private set; } // Should never be null due to fallback biome types
             public float Height { get; private set; }
             public float Temperature { get; private set; }
             public float ArchaicDensity { get; private set; }

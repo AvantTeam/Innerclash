@@ -24,8 +24,8 @@ namespace Innerclash.World.Map {
         }
 
         Vector2Int PixelCoordAt(Vector2 worldPos) {
-            int x = (int)MathHelper.Remap(worldPos.x, -32f, 32f, 0f, 1024f),
-                y = (int)MathHelper.Remap(worldPos.y, -32f, 32f, 0f, 1024f);
+            int x = (int)MathHelper.Remap(worldPos.x, -32f, 32f, 0f, WorldBiomeData.GetUpperBound(0)),
+                y = (int)MathHelper.Remap(worldPos.y, -32f, 32f, 0f, WorldBiomeData.GetUpperBound(1));
             return new Vector2Int(x, y);
         }
     }

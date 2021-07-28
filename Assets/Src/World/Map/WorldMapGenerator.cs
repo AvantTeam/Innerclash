@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using Innerclash.Utils;
 
 using static Innerclash.Utils.Noises;
@@ -10,6 +11,7 @@ namespace Innerclash.World.Map {
         public bool autoUpdate;
 
         public Sprite mask;
+        public Tilemap decorTilemap;
 
         public NoisePass
             heightPass,
@@ -25,15 +27,27 @@ namespace Innerclash.World.Map {
 
         public Biome[] biomes;
 
+        public static Biome[] Biomes { get; private set; }
+
         public BiomeData[,] worldBiomeData { get; private set; }
         public SpriteRenderer Renderer { get; private set; }
+
+        void Awake() {
+            Init();
+        }
 
         void Start() {
             Generate();
         }
 
+        public void Init() {
+            Biomes = biomes;
+        }
+
         public void Generate() {
             Renderer = GetComponent<SpriteRenderer>();
+
+            decorTilemap.ClearAllTiles();
 
             int width = (int)mask.rect.width;
             int height = (int)mask.rect.height;
@@ -55,24 +69,8 @@ namespace Innerclash.World.Map {
                     float ctemp = temperatureNoise[x, y] * poleTemperatureCurve.Evaluate(pole);
                     float carch = archaicNoise[x, y] * poleArchaicDensityCurve.Evaluate(pole);
 
-                    Biome target = null;
-                    if(Structs.Find(biomes, b =>
-                        Structs.Optional(b.attributes,
-                            a => a.type == BiomeAttributeType.Height,
-                            a => cheight >= a.min && cheight <= a.max
-                        ) &&
-
-                        Structs.Optional(b.attributes,
-                            a => a.type == BiomeAttributeType.Temperature,
-                            a => ctemp >= a.min && ctemp <= a.max
-                        ) &&
-
-                        Structs.Optional(b.attributes,
-                            a => a.type == BiomeAttributeType.ArchaicDensity,
-                            a => carch >= a.min && carch <= a.max
-                        ),
-                        out target
-                    )) {
+                    Biome target;
+                    if(BiomeData.TryEvaluateBiome(cheight, ctemp, carch, out target)) {
                         map[x + y * width] = target.mapColor * mask.texture.GetPixel(x, y) * heightGradient.Evaluate(cheight) * heightMultiplier;
                     }else{
                         map[x + y * width] = Color.black * mask.texture.GetPixel(x, y);
@@ -85,10 +83,25 @@ namespace Innerclash.World.Map {
             texture.Apply();
 
             Renderer.sprite = Sprite.Create(texture, new Rect(0, 0, width, height), Vector2.one * 0.5f, 16f);
+            GenerateDecor();
+        }
+
+        void GenerateDecor() {
+            Vector3 cellSize = decorTilemap.layoutGrid.cellSize;
+            Vector2Int size = new Vector2Int((int)(mask.rect.width / mask.pixelsPerUnit / cellSize.x), (int)(mask.rect.height / mask.pixelsPerUnit / cellSize.y));
+
+            for(int x = -size.x / 2; x < size.x / 2; x++) {
+                for(int y = -size.y / 2; y < size.y / 2; y++) {
+                    Vector2Int pixelPos = new Vector2Int((int)MathHelper.Remap(x * 2, -size.x, size.x, 0, mask.rect.width), (int)MathHelper.Remap(y * 2, -size.y, size.y, 0, mask.rect.height));
+                    BiomeData data = worldBiomeData[pixelPos.x, pixelPos.y];
+                    DecorTile toPut = data.Biome.GetDecorTile();
+                    if(toPut != null) decorTilemap.SetTile(new Vector3Int(x, y, 0), toPut);
+                }
+            }
         }
 
         public struct BiomeData {
-            public Biome Biome { get; private set; }
+            public Biome Biome { get; private set; } // Should never be null due to fallback biome types
             public float Height { get; private set; }
             public float Temperature { get; private set; }
             public float ArchaicDensity { get; private set; }
@@ -100,6 +113,42 @@ namespace Innerclash.World.Map {
                 Height = height;
                 Temperature = temperature;
                 ArchaicDensity = archaicDensity;
+            }
+
+            public static bool TryEvaluateBiome(Color condensedData, out Biome biome) {
+                return TryEvaluateBiome(condensedData.r, condensedData.g, condensedData.b, out biome);
+            }
+
+            public static bool TryEvaluateBiome(float height, float temp, float arch, out Biome biome) {
+                return Structs.Find(Biomes, b =>
+                    Structs.Optional(b.attributes,
+                        a => a.type == BiomeAttributeType.Height,
+                        a => height >= a.min && height <= a.max
+                    ) &&
+
+                    Structs.Optional(b.attributes,
+                        a => a.type == BiomeAttributeType.Temperature,
+                        a => temp >= a.min && temp <= a.max
+                    ) &&
+
+                    Structs.Optional(b.attributes,
+                        a => a.type == BiomeAttributeType.ArchaicDensity,
+                        a => arch >= a.min && arch <= a.max
+                    ),
+                    out biome
+                );
+            }
+
+            public static BiomeData Lerp(BiomeData a, BiomeData b, float t) {
+                float
+                    newHeight = Mathf.Lerp(a.Height, b.Height, t),
+                    newTemp = Mathf.Lerp(a.Temperature, b.Temperature, t),
+                    newArch = Mathf.Lerp(a.ArchaicDensity, b.ArchaicDensity, t);
+                Biome newBiome;
+                if(!TryEvaluateBiome(newHeight, newTemp, newArch, out newBiome)) {
+                    Debug.LogWarning($"Failed to evaluate biome interpolation with value [{newHeight}, {newTemp}, {newArch}]");
+                }
+                return new BiomeData(newBiome, newHeight, newTemp, newArch);
             }
         }
     }

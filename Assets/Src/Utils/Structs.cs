@@ -49,6 +49,19 @@ namespace Innerclash.Utils {
             return -1;
         }
 
+        public static T WeightedRandom<T>(ObjectIntPair<T>[] weightedArray) {
+            if(weightedArray.Length <= 0) return default;
+            int total = 0;
+            foreach(ObjectIntPair<T> pair in weightedArray) total += pair.value;
+            int rand = UnityEngine.Random.Range(0, total);
+            foreach(ObjectIntPair<T> pair in weightedArray) {
+                if(rand < pair.value) return pair.item;
+                rand -= pair.value;
+            }
+            UnityEngine.Debug.LogWarning($"Failed to select weighted random element from weighted array {weightedArray}");
+            return default;
+        }
+
         public static string ToString<T>(IList<T> array) => ToString(array, ", ", t => t.ToString());
 
         public static string ToString<T>(IList<T> array, string separator) => ToString(array, separator, t => t.ToString());

@@ -8,6 +8,7 @@ namespace Innerclash.Editors.World.Map {
         public override void OnInspectorGUI() {
             if(target is WorldMapGenerator gen) {
                 if((DrawDefaultInspector() && gen.autoUpdate) || GUILayout.Button("Generate")) {
+                    gen.Init();
                     gen.Generate();
                 }
             }

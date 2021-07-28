@@ -32,6 +32,8 @@ namespace Innerclash.World {
             if(rules.HasFlag(TileRule.Bitmask)) {
                 mask = Masks.GetMask8((x, y) => IsSameType(tilemap, position.x + x, position.y + y));
                 tileData.sprite = sprites[Masks.tileMap[mask]];
+            } else {
+                tileData.sprite = sprite;
             }
 
             // Check if there is any transform-locking rules
@@ -113,7 +115,7 @@ namespace Innerclash.World {
         [System.Flags]
         public enum TileGroup {
             Stone = 1,
-            Dirt = 2
+            Soil = 2
         }
     }
 }

@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Innerclash.Entities;
+using Innerclash.UI;
+using Innerclash.UI.Fragments;
 using Innerclash.UI.Fragments.Overview;
 using Innerclash.Utils;
 using Innerclash.World;
@@ -22,10 +24,11 @@ namespace Innerclash.Core {
         public GameObject itemEntity;
 
         [Header("Constant UI fragments")]
-        public GameObject cursorItem;
+        public SlotButton cursorItem;
         public GameObject hoverPanel;
         public GameObject overviewFragment;
         public InventoryFragment inventoryFragment;
+        public HotbarFragment hotbarFragment;
 
         Vector2 moveAxis;
         bool jump;
@@ -52,18 +55,10 @@ namespace Innerclash.Core {
         void Update() {
             // Update selected item on cursor
             cursorItem.transform.position = Mouse.current.position.ReadValue();
-
-            var image = cursorItem.GetComponentInChildren<Image>();
-            var text = cursorItem.GetComponentInChildren<Text>();
             if(HoldingStack) {
-                image.enabled = true;
-                image.sprite = CurrentStack.item.sprite;
-
-                text.enabled = true;
-                text.text = CurrentStack.amount.ToString();
+                cursorItem.Set(CurrentStack);
             } else {
-                image.enabled = false;
-                text.enabled = false;
+                cursorItem.ResetIcon();
             }
 
             breakPress = ViewingOverview ? 0f : breakPress;

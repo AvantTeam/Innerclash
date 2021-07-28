@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Innerclash.Core;
+
+using static Innerclash.Misc.Item;
 
 namespace Innerclash.UI {
     public class SlotButton : MonoBehaviour {
@@ -10,6 +11,24 @@ namespace Innerclash.UI {
 
         public void OnClick() {
             handler.Handle(this);
+        }
+
+        public void Set(ItemStack stack) {
+            if(stack.Empty) {
+                ResetIcon();
+                return;
+            }
+
+            icon.enabled = true;
+            icon.sprite = stack.item.sprite;
+
+            text.enabled = true;
+            text.text = stack.amount.ToString();
+        }
+        
+        public void ResetIcon() {
+            icon.enabled = false;
+            text.enabled = false;
         }
     }
 }

@@ -22,5 +22,7 @@ MonoBehaviour:
     max: 1
   decors:
   - item: {fileID: 11400000, guid: 1c21ae293dde24a47821178b9647a948, type: 2}
-    value: 1
-  decorDensity: 0.1
+    value: 7
+  - item: {fileID: 11400000, guid: 34fb6eb774d7ea242a01eaba9a816c52, type: 2}
+    value: 3
+  decorDensity: 0.25

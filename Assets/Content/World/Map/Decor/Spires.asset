@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e8762b11b1fe084bbba58b79cff6f62, type: 3}
   m_Name: Spires
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -7622821279937904649, guid: ec3e679f3b41d9d43ae3440f24503144, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

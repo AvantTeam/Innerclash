@@ -92,6 +92,7 @@ namespace Innerclash.World.Map {
 
             for(int x = -size.x / 2; x < size.x / 2; x++) {
                 for(int y = -size.y / 2; y < size.y / 2; y++) {
+                    if(Mathf.Sqrt(x * x + y * y) >= size.x / 2) continue;
                     Vector2Int pixelPos = new Vector2Int((int)MathHelper.Remap(x * 2, -size.x, size.x, 0, mask.rect.width), (int)MathHelper.Remap(y * 2, -size.y, size.y, 0, mask.rect.height));
                     BiomeData data = worldBiomeData[pixelPos.x, pixelPos.y];
                     DecorTile toPut = data.Biome.GetDecorTile();

@@ -44,6 +44,7 @@ namespace Innerclash.Core {
 
         void Start() {
             CurrentStack = new ItemStack();
+            overviewFragment.SetActive(false);
 
             SetCameraToPlayer();
         }

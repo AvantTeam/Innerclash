@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Innerclash.Core;
 using Innerclash.Entities;
+using Innerclash.Utils;
 
 using static Innerclash.Misc.Item;
 
 namespace Innerclash.UI.Fragments.Overview {
-    public class InventoryFragment : MonoBehaviour {
+    public class InventoryFragment : MonoBehaviour, ISlotButtonHandler {
         public GameObject slotPrefab;
 
         [Header("Attributes")]
@@ -37,14 +38,14 @@ namespace Innerclash.UI.Fragments.Overview {
                 for(int i = 0; i < highest + 2; i++) {
                     while(slots.Count <= i) {
                         var n = Instantiate(slotPrefab, SlotParent);
-                        n.GetComponent<SlotButton>().Index = i;
+                        n.GetComponent<SlotButton>().handler = this;
 
                         slots.Add(n);
                     }
 
-                    var slot = slots[i];
-                    var image = slot.GetComponentInChildren<SlotImage>(true);
-                    var text = slot.GetComponentInChildren<Text>(true);
+                    var slot = slots[i].GetComponent<SlotButton>();
+                    var image = slot.icon;
+                    var text = slot.text;
 
                     if(trait.Inventory.contents.ContainsKey(i)) {
                         var stack = trait.Inventory.contents[i];
@@ -89,8 +90,8 @@ namespace Innerclash.UI.Fragments.Overview {
             }
         }
 
-        public void Interact(int idx) {
-            if(idx >= slots.Count) return;
+        void Interact(int idx) {
+            if(idx < 0 || idx >= slots.Count) return;
 
             var inst = GameController.Instance;
             var content = trait.Inventory.contents;
@@ -126,6 +127,10 @@ namespace Innerclash.UI.Fragments.Overview {
 
                 trait.NeedsUpdate = true;
             }
+        }
+
+        void ISlotButtonHandler.Handle(SlotButton button) {
+            Interact(Structs.IndexOf(slots, button.gameObject));
         }
 
         public void Trash() {

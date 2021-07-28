@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 807981144071224197}
   - component: {fileID: 4018688108154300798}
   - component: {fileID: 7107452423867660688}
-  - component: {fileID: 628742146480742806}
+  - component: {fileID: 5164882445389786122}
+  - component: {fileID: 6687900140712705967}
   m_Layer: 5
   m_Name: ItemSlot
   m_TagString: Untagged
@@ -78,7 +79,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &628742146480742806
+--- !u!114 &5164882445389786122
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +88,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4313090616502337580}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9243a7d8178c4b541be6ac8065346e41, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -105,12 +106,12 @@ MonoBehaviour:
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0
+    m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 90a1b5bd797ea6643b8682e9af454bfe, type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: b672f1b6137024742ae8d98f1a2da322, type: 3}
-    m_SelectedSprite: {fileID: 21300000, guid: 357771b20ee247c43a5e83d0162d65e6, type: 3}
-    m_DisabledSprite: {fileID: 21300000, guid: 03e80c982a0aad34fab087ff61ccb9e3, type: 3}
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -122,8 +123,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 628742146480742806}
-        m_TargetAssemblyTypeName: Innerclash.UI.Fragments.Overview.SlotButton, Assembly-CSharp
+      - m_Target: {fileID: 6687900140712705967}
+        m_TargetAssemblyTypeName: Innerclash.UI.SlotButton, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -134,6 +135,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6687900140712705967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4313090616502337580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9243a7d8178c4b541be6ac8065346e41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 150823240137762790}
+  text: {fileID: 352313002141014077}
 --- !u!1 &6911418918025915127
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,7 +159,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8919577007290346361}
   - component: {fileID: 4033135649686280539}
-  - component: {fileID: 8995154656850053824}
+  - component: {fileID: 150823240137762790}
   m_Layer: 5
   m_Name: Item Icon
   m_TagString: Untagged
@@ -179,7 +194,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6911418918025915127}
   m_CullTransparentMesh: 1
---- !u!114 &8995154656850053824
+--- !u!114 &150823240137762790
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,7 +203,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6911418918025915127}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12f93eb425457154485c2e3b7913ea36, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}

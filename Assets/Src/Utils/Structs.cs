@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Innerclash.Utils {
     public static class Structs {
@@ -38,6 +39,14 @@ namespace Innerclash.Utils {
         public static T Random<T>(T[] array) {
             if(array.Length <= 0) return default;
             return array[UnityEngine.Random.Range(0, array.Length - 1)];
+        }
+
+        public static int IndexOf<T>(List<T> array, T value) {
+            for(int i = 0; i < array.Count; i++) {
+                if(ReferenceEquals(array[i], value)) return i;
+            }
+            
+            return -1;
         }
     }
 }

@@ -37,15 +37,15 @@ namespace Innerclash.UI.Fragments.Overview {
 
         void Update() {
             if(trait.NeedsUpdate) {
-                int highest = Mathf.Max(trait.Inventory.Highest, slots.Count - 2);
+                int highest = Mathf.Max(trait.Inventory.Highest - 1, slots.Count - 2);
+                while(slots.Count < highest + 2) {
+                    var n = Instantiate(slotPrefab, slotParent).GetComponent<SlotButton>();
+                    n.handler = this;
+
+                    slots.Add(n);
+                }
+
                 for(int i = 0; i < highest + 2; i++) {
-                    while(slots.Count <= i) {
-                        var n = Instantiate(slotPrefab, slotParent).GetComponent<SlotButton>();
-                        n.handler = this;
-
-                        slots.Add(n);
-                    }
-
                     var slot = slots[i];
                     if(trait.Inventory.contents.ContainsKey(i)) {
                         slot.Set(trait.Inventory.contents[i]);

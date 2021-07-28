@@ -45,8 +45,6 @@ namespace Innerclash.Entities {
 
         void Start() {
             Body = GetComponent<Rigidbody2D>();
-            MoveAxis = new Vector2();
-
             hits = new RaycastHit2D[Mathf.CeilToInt(ground.width / GameController.Instance.tilemap.cellSize.x) + 1];
 
             if(TryGetComponent(out ControllableTrait control)) {

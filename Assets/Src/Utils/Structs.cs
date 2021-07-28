@@ -41,12 +41,28 @@ namespace Innerclash.Utils {
             return array[UnityEngine.Random.Range(0, array.Length - 1)];
         }
 
-        public static int IndexOf<T>(List<T> array, T value) {
+        public static int IndexOf<T>(IList<T> array, T value) {
             for(int i = 0; i < array.Count; i++) {
                 if(ReferenceEquals(array[i], value)) return i;
             }
-            
+
             return -1;
+        }
+
+        public static string ToString<T>(IList<T> array) => ToString(array, ", ", t => t.ToString());
+
+        public static string ToString<T>(IList<T> array, string separator) => ToString(array, separator, t => t.ToString());
+
+        public static string ToString<T>(IList<T> array, Func<T, string> stringifier) => ToString(array, ", ", stringifier);
+
+        public static string ToString<T>(IList<T> array, string separator, Func<T, string> stringifier) {
+            var res = "[";
+            for(int i = 0; i < array.Count; i++) {
+                if(i > 0) res += separator;
+                res += stringifier(array[i]);
+            }
+
+            return res + "]";
         }
     }
 }

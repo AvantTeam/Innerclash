@@ -35,7 +35,8 @@ namespace Innerclash.Core {
         float breakPress, actPress;
 
         public ItemStack CurrentStack { get; set; }
-        public bool HoldingStack { get => CurrentStack.item != null && CurrentStack.amount > 0; }
+        public bool HoldingStack { get => CurrentStack.item != null && !CurrentStack.Empty; }
+        public bool FromInventory { get; set; }
 
         public static GameController Instance { get; private set; }
 

@@ -63,8 +63,19 @@ namespace Innerclash.Misc {
 
         public class ItemInventory {
             public readonly Dictionary<int, ItemStack> contents = new Dictionary<int, ItemStack>();
+            public int offset;
 
             private static readonly Dictionary<int, ItemStack> temp = new Dictionary<int, ItemStack>();
+
+            public int Highest {
+                get {
+                    int highest = offset - 1;
+                    foreach(var key in contents.Keys) {
+                        if(highest < key) highest = key;
+                    }
+                    return highest;
+                }
+            }
 
             public float TotalMass {
                 get {
@@ -84,13 +95,15 @@ namespace Innerclash.Misc {
                 if(slot == null) {
                     temp.Clear();
 
-                    foreach(var key in contents.Keys) {
+                    int highest = Highest;
+                    for(int i = offset; i <= highest; i++) {
                         if(other.amount <= 0) break;
+                        if(!contents.ContainsKey(i)) continue;
 
-                        var stack = contents[key];
+                        var stack = contents[i];
                         ItemStack.Transfer(ref other, ref stack, other.amount);
 
-                        temp.Add(key, stack);
+                        temp.Add(i, stack);
                     }
 
                     foreach(var key in temp.Keys) {
@@ -98,7 +111,7 @@ namespace Innerclash.Misc {
                     }
 
                     if(other.amount > 0) {
-                        int i = -1;
+                        int i = offset - 1;
                         while(contents.ContainsKey(++i)) ;
 
                         contents.Add(i, other);

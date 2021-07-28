@@ -11,7 +11,9 @@ namespace Innerclash.Entities {
         public bool NeedsUpdate { get; set; }
 
         void Start() {
-            Inventory = new ItemInventory();
+            Inventory = new ItemInventory() {
+                offset = 10
+            };
             NeedsUpdate = true;
         }
 

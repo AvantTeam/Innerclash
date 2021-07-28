@@ -22,8 +22,6 @@ namespace Innerclash.Entities {
             Physics = GetComponent<PhysicsTrait>();
             Collider = GetComponent<CircleCollider2D>();
             Render = GetComponent<SpriteRenderer>();
-
-            Life = 0f;
         }
 
         void Update() {

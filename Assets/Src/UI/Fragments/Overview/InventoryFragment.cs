@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Innerclash.Core;
@@ -13,31 +14,33 @@ namespace Innerclash.UI.Fragments.Overview {
 
         [Header("Attributes")]
         public InventoryTrait trait;
-        public ScrollRect scroll;
+        public RectTransform slotParent;
         public Slider massBar;
         public Image massImage;
+        public HotbarIndexer hotbarIndexer;
+
+        public event Action Updated;
 
         readonly List<SlotButton> slots = new List<SlotButton>();
         readonly List<int> strips = new List<int>();
-
-        public bool NeedsStripping { get; set; }
-        public RectTransform SlotParent { get; private set; }
+        bool needsStripping;
 
         void Start() {
-            SlotParent = scroll.content;
+            foreach(var slot in hotbarIndexer.slots) {
+                slot.left.handler = this;
+                slots.Add(slot.left);
+
+                slot.right.handler = this;
+                slots.Add(slot.right);
+            }
         }
 
         void Update() {
             if(trait.NeedsUpdate) {
-                int highest = -1;
-                foreach(var key in trait.Inventory.contents.Keys) {
-                    if(highest < key) highest = key;
-                }
-
-                highest = Mathf.Max(highest, slots.Count - 2);
+                int highest = Mathf.Max(trait.Inventory.Highest, slots.Count - 2);
                 for(int i = 0; i < highest + 2; i++) {
                     while(slots.Count <= i) {
-                        var n = Instantiate(slotPrefab, SlotParent).GetComponent<SlotButton>();
+                        var n = Instantiate(slotPrefab, slotParent).GetComponent<SlotButton>();
                         n.handler = this;
 
                         slots.Add(n);
@@ -51,11 +54,11 @@ namespace Innerclash.UI.Fragments.Overview {
                     }
                 }
 
-                if(NeedsStripping) {
+                if(needsStripping) {
                     strips.Clear();
 
                     var content = trait.Inventory.contents;
-                    for(int i = slots.Count - 2; i > 0; i--) {
+                    for(int i = slots.Count - 2; i > 10; i--) {
                         if(!content.ContainsKey(i) && !content.ContainsKey(i + 1)) {
                             strips.Add(i + 1);
                         } else if(content.ContainsKey(i)) {
@@ -70,25 +73,28 @@ namespace Innerclash.UI.Fragments.Overview {
                         Destroy(slot.gameObject);
                     }
 
-                    NeedsStripping = false;
+                    needsStripping = false;
                 }
 
                 massBar.value = Mathf.Min(trait.Inventory.TotalMass / trait.maxMass, 1f);
                 massImage.color = Color.Lerp(Color.green, Color.red, massBar.value);
 
                 trait.NeedsUpdate = false;
+
+                Updated?.Invoke();
             }
         }
 
-        void Interact(int idx) {
+        public void Interact(int idx) {
             if(idx < 0 || idx >= slots.Count) return;
 
             var inst = GameController.Instance;
-            var content = trait.Inventory.contents;
+            var inv = trait.Inventory;
+            var content = inv.contents;
 
             if(inst.HoldingStack) { // If is already holding a stack, either put or swap
                 var source = inst.CurrentStack;
-                if(content.ContainsKey(idx)) {
+                if(content.ContainsKey(idx)) { // If already has a stack, either merge or swap
                     var stack = content[idx];
                     if(stack.item == source.item && !stack.Full) { // If the item is the same, transfer it
                         ItemStack.Transfer(ref source, ref stack, source.amount);
@@ -96,18 +102,18 @@ namespace Innerclash.UI.Fragments.Overview {
                         content[idx] = stack;
                         inst.CurrentStack = source;
 
-                        if(source.Empty) NeedsStripping = true;
+                        if(source.Empty) needsStripping = true;
                     } else { // Otherwise, simply swap
                         content[idx] = source;
                         inst.CurrentStack = stack;
                     }
-                } else {
+                } else { // Otherwise, simply put
                     int accepted = trait.Add(source, idx);
                     source.amount -= accepted;
 
                     inst.CurrentStack = source;
 
-                    NeedsStripping = true;
+                    needsStripping = true;
                 }
 
                 trait.NeedsUpdate = true;
@@ -115,11 +121,13 @@ namespace Innerclash.UI.Fragments.Overview {
                 inst.CurrentStack = content[idx];
                 content.Remove(idx);
 
+                inst.FromInventory = true;
+
                 trait.NeedsUpdate = true;
             }
         }
 
-        void ISlotButtonHandler.Handle(SlotButton button) {
+        public void Handle(SlotButton button) {
             Interact(Structs.IndexOf(slots, button));
         }
 
@@ -127,7 +135,7 @@ namespace Innerclash.UI.Fragments.Overview {
             GameController.Instance.CurrentStack = new ItemStack();
 
             trait.NeedsUpdate = true;
-            NeedsStripping = true;
+            needsStripping = true;
         }
 
         public void Drop() {
@@ -135,7 +143,7 @@ namespace Innerclash.UI.Fragments.Overview {
                 GameController.Instance.CurrentStack = new ItemStack();
 
                 trait.NeedsUpdate = true;
-                NeedsStripping = true;
+                needsStripping = true;
             }
         }
 
@@ -158,7 +166,7 @@ namespace Innerclash.UI.Fragments.Overview {
                 inst.CurrentStack = new ItemStack();
 
                 trait.NeedsUpdate = true;
-                NeedsStripping = true;
+                needsStripping = true;
             }
         }
     }

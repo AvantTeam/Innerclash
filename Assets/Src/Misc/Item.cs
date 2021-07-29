@@ -69,7 +69,7 @@ namespace Innerclash.Misc {
 
             public int Highest {
                 get {
-                    int highest = offset;
+                    int highest = -1;
                     foreach(var key in contents.Keys) {
                         if(highest < key) highest = key;
                     }

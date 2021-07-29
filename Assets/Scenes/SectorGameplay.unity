@@ -34398,6 +34398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e265cbf0fb5841c4a8d053f9bc32c79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trait: {fileID: 1343315777}
   slots:
   - {fileID: 2115096315}
   - {fileID: 1175160164}

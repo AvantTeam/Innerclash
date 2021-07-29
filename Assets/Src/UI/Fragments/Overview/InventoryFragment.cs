@@ -19,10 +19,10 @@ namespace Innerclash.UI.Fragments.Overview {
         public Image massImage;
         public HotbarIndexer hotbarIndexer;
 
-        public event Action Updated;
-
         readonly List<SlotButton> slots = new List<SlotButton>();
         readonly List<int> strips = new List<int>();
+        float lastUpdated;
+        bool forceUpdate;
         bool needsStripping;
 
         void Start() {
@@ -36,16 +36,19 @@ namespace Innerclash.UI.Fragments.Overview {
         }
 
         void Update() {
-            if(trait.NeedsUpdate) {
-                int highest = Mathf.Max(trait.Inventory.Highest - 1, slots.Count - 2);
-                while(slots.Count < highest + 2) {
+            if(lastUpdated < trait.LastUpdated || forceUpdate) {
+                forceUpdate = false;
+                lastUpdated = trait.LastUpdated;
+
+                int highest = Mathf.Max(trait.Inventory.Highest + 1, slots.Count - 1, trait.Inventory.offset);
+                while(slots.Count <= highest) {
                     var n = Instantiate(slotPrefab, slotParent).GetComponent<SlotButton>();
                     n.handler = this;
 
                     slots.Add(n);
                 }
 
-                for(int i = 0; i < highest + 2; i++) {
+                for(int i = 0; i < highest; i++) {
                     var slot = slots[i];
                     if(trait.Inventory.contents.ContainsKey(i)) {
                         slot.Set(trait.Inventory.contents[i]);
@@ -58,7 +61,7 @@ namespace Innerclash.UI.Fragments.Overview {
                     strips.Clear();
 
                     var content = trait.Inventory.contents;
-                    for(int i = slots.Count - 2; i > 10; i--) {
+                    for(int i = slots.Count - 2; i >= trait.Inventory.offset; i--) {
                         if(!content.ContainsKey(i) && !content.ContainsKey(i + 1)) {
                             strips.Add(i + 1);
                         } else if(content.ContainsKey(i)) {
@@ -78,10 +81,6 @@ namespace Innerclash.UI.Fragments.Overview {
 
                 massBar.value = Mathf.Min(trait.Inventory.TotalMass / trait.maxMass, 1f);
                 massImage.color = Color.Lerp(Color.green, Color.red, massBar.value);
-
-                trait.NeedsUpdate = false;
-
-                Updated?.Invoke();
             }
         }
 
@@ -115,15 +114,14 @@ namespace Innerclash.UI.Fragments.Overview {
 
                     needsStripping = true;
                 }
-
-                trait.NeedsUpdate = true;
+                
+                forceUpdate = true;
             } else if(content.ContainsKey(idx)) { // Otherwise try to take an existing stack from inventory
                 inst.CurrentStack = content[idx];
                 content.Remove(idx);
 
                 inst.FromInventory = true;
-
-                trait.NeedsUpdate = true;
+                forceUpdate = true;
             }
         }
 
@@ -134,7 +132,7 @@ namespace Innerclash.UI.Fragments.Overview {
         public void Trash() {
             GameController.Instance.CurrentStack = new ItemStack();
 
-            trait.NeedsUpdate = true;
+            forceUpdate = true;
             needsStripping = true;
         }
 
@@ -142,7 +140,7 @@ namespace Innerclash.UI.Fragments.Overview {
             if(Drop(GameController.Instance.CurrentStack)) {
                 GameController.Instance.CurrentStack = new ItemStack();
 
-                trait.NeedsUpdate = true;
+                forceUpdate = true;
                 needsStripping = true;
             }
         }
@@ -165,7 +163,7 @@ namespace Innerclash.UI.Fragments.Overview {
                 Drop(source);
                 inst.CurrentStack = new ItemStack();
 
-                trait.NeedsUpdate = true;
+                forceUpdate = true;
                 needsStripping = true;
             }
         }

@@ -8,13 +8,12 @@ namespace Innerclash.Entities {
         public float maxMass = 1000f;
 
         public ItemInventory Inventory { get; private set; }
-        public bool NeedsUpdate { get; set; }
+        public float LastUpdated { get; private set; }
 
         void Start() {
             Inventory = new ItemInventory() {
                 offset = 10
             };
-            NeedsUpdate = true;
         }
 
         public int Accept(ItemStack stack) {
@@ -26,7 +25,7 @@ namespace Innerclash.Entities {
         }
 
         public int Add(ItemStack stack, int? idx) {
-            NeedsUpdate = true;
+            LastUpdated = Time.time;
 
             int res = Accept(stack);
             Inventory.Add(new ItemStack(stack.item, res), idx);

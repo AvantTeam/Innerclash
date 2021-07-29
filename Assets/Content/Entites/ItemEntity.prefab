@@ -90,10 +90,11 @@ MonoBehaviour:
     width: 0.9
   moveForce: 0
   maxSpeed: 0
-  moveFallback: 0.25
   jumpForce: 360
   jumpContinuousForce: 2400
   jumpDuration: 0.5
+  jumpCooldown: 0.3
+  jumpBufferTime: 0.15
 --- !u!114 &2152187431061858106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,7 +131,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

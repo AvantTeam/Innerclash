@@ -22,11 +22,11 @@ MonoBehaviour:
     max: 0.3
   tileProviders:
   - type: 0
-    tile: {fileID: 11400000, guid: a3ca30f50846d5546af5e12069af6c9a, type: 2}
-    depth: 4
-  - type: 0
     tile: {fileID: 11400000, guid: f048548a53e1e4545b05bd2abcddbc50, type: 2}
     depth: 12
+  - type: 0
+    tile: {fileID: 11400000, guid: a3ca30f50846d5546af5e12069af6c9a, type: 2}
+    depth: 4
   terrainDeviation: 8
   terrainRoughness: 25
   decors: []

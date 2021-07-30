@@ -40,5 +40,7 @@ MonoBehaviour:
   itemDrop:
     item: {fileID: 0}
     amount: 0
-  staticFriction: 5000
-  dynamicFriction: 500
+  staticFriction: 6000
+  dynamicFriction: 600
+  emitsLight: 0
+  emitLight: {r: 1, g: 1, b: 1, a: 1}

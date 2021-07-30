@@ -22,6 +22,7 @@ namespace Innerclash.World.Map {
         public float heightMultiplier;
 
         public AnimationCurve
+            heightRemapCurve,
             poleTemperatureCurve,
             poleArchaicDensityCurve;
 
@@ -57,7 +58,7 @@ namespace Innerclash.World.Map {
             worldBiomeData = new BiomeData[width, height];
 
             float[,]
-                heightNoise = GenNoiseMap(width, height, heightPass),
+                heightNoise = GenNoiseMap(width, height, heightPass, heightRemapCurve),
                 temperatureNoise = GenNoiseMap(width, height, temperaturePass),
                 archaicNoise = GenNoiseMap(width, height, archaicPass);
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Innerclash.Core {
         public SpriteRenderer Renderer { get; private set; }
         public Camera Cam { get => GameController.Instance.mainCamera; }
 
-        Texture2D texture;
+        volatile Texture2D texture;
 
         Color[] colors;
         readonly List<Vector2Int> emits = new List<Vector2Int>();
@@ -26,28 +27,53 @@ namespace Innerclash.Core {
         Color[] singleEmission = new Color[diameter * diameter];
         List<Vector2Int> fillQueue = new List<Vector2Int>();
 
+        volatile bool
+            shouldStop = false,
+            shouldProcess = false,
+            isProcessing = false;
+
+        volatile Func<Action> resultAsync = null;
+        volatile Action resultSync = null;
+
         void Start() {
             Renderer = GetComponent<SpriteRenderer>();
 
             RecalculatePosition();
+
+            var t = new Thread(() => {
+                while(!shouldStop) {
+                    if(shouldProcess) {
+                        isProcessing = true;
+                        shouldProcess = false;
+
+                        var result = resultAsync();
+                        resultSync = result;
+
+                        isProcessing = false;
+                    }
+                }
+            });
+            t.Start();
         }
 
         void Update() {
             RecalculatePosition();
-            RecalculateColors();
+
+            if(!isProcessing && resultAsync == null && resultSync == null) {
+                resultAsync = RecalculateColors();
+                shouldProcess = true;
+            }
+
+            if(resultSync != null) {
+                var act = resultSync;
+                resultSync = null;
+                resultAsync = null;
+
+                act();
+            }
         }
 
         void RecalculatePosition() {
-            Vector2 previous = transform.position;
-            transform.position = new Vector2(
-                Mathf.RoundToInt(Cam.transform.position.x / extension) * extension + 0.5f,
-                Mathf.RoundToInt(Cam.transform.position.y / extension) * extension
-            );
-
-            if(previous != (Vector2)transform.position) {
-                RecalculateColors();
-            }
-
             int height = (int)(Cam.orthographicSize * 2);
             int width = height * Screen.width / Screen.height;
             height += extension * 2;
@@ -59,48 +85,67 @@ namespace Innerclash.Core {
 
                 Renderer.sprite = Sprite.Create(texture, new Rect(0, 0, width, height), Vector2.one * 0.5f, 1);
             }
+
+            Vector2 previous = transform.position;
+            transform.position = new Vector2(
+                Mathf.RoundToInt(Cam.transform.position.x / extension) * extension + 0.5f,
+                Mathf.RoundToInt(Cam.transform.position.y / extension) * extension
+            );
+
+            if(previous != (Vector2)transform.position) {
+                RecalculateColors()()();
+            }
         }
 
-        void RecalculateColors() {
-            if(texture == null) return;
+        /// <summary> Call this synchronously, then call the returned delegate asynchronously, then call the other returned delegate synchronously. </summary>
+        Func<Action> RecalculateColors() {
+            if(texture == null) return () => () => {};
 
             Vector2 pos = transform.position;
             int width = texture.width,
                 height = texture.height;
 
-            emits.Clear();
-            for(int y = 0; y < height; y++) {
-                for(int x = 0; x < width; x++) {
-                    int idx = x + y * width;
+            lock(emits) {
+                emits.Clear();
+                for(int y = 0; y < height; y++) {
+                    for(int x = 0; x < width; x++) {
+                        int idx = x + y * width;
 
-                    var tile = Tilemaps.GetTile(pos + new Vector2(x - width / 2, y - height / 2));
-                    if(tile == null || tile.emitsLight) {
-                        var color = tile == null ? Color.white : tile.emitLight;
-                        colors[idx] = color;
+                        var tile = Tilemaps.GetTile(pos + new Vector2(x - width / 2, y - height / 2));
+                        if(tile == null || tile.emitsLight) {
+                            var color = tile == null ? Color.white : tile.emitLight;
+                            colors[idx] = color;
 
-                        emits.Add(new Vector2Int(x, y));
-                    } else {
-                        colors[idx] = Color.black;
+                            emits.Add(new Vector2Int(x, y));
+                        } else {
+                            colors[idx] = Color.black;
+                        }
                     }
                 }
             }
 
-            foreach(var emit in emits) {
-                Emit(emit.x, emit.y);
-            }
+            return () => {
+                lock(emits) {
+                    foreach(var emit in emits) {
+                        Emit(emit.x, emit.y, width);
+                    }
 
-            texture.SetPixels(colors);
-            texture.Apply();
+                    return () => {
+                        texture.SetPixels(colors);
+                        texture.Apply();
+                    };
+                }
+            };
         }
 
-        void Emit(int rootX, int rootY) {
+        void Emit(int rootX, int rootY, int width) {
             for(int i = 0; i < singleEmission.Length; i++) {
                 singleEmission[i] = new Color();
             }
 
             fillQueue.Clear();
 
-            singleEmission[radius + radius * diameter] = colors[rootX + rootY * texture.width];
+            singleEmission[radius + radius * diameter] = colors[rootX + rootY * width];
             fillQueue.Add(new Vector2Int(rootX, rootY));
 
             while(fillQueue.Count > 0) {
@@ -109,7 +154,7 @@ namespace Innerclash.Core {
 
                 int x = currentTile.x,
                     y = currentTile.y,
-                    index = x + y * texture.width,
+                    index = x + y * width,
                     currentLayer = Mathf.Max(Mathf.Abs(x - rootX), Mathf.Abs(y - rootY));
 
                 bool pass = false;
@@ -138,7 +183,7 @@ namespace Innerclash.Core {
                             int eidx = (radius + nx - rootX) + (radius + ny - rootY) * diameter;
 
                             var emit = singleEmission[eidx];
-                            if(Structs.InBounds(colors, nx + ny * texture.width) && emit.r + emit.g + emit.b == 0f) {
+                            if(Structs.InBounds(colors, nx + ny * width) && emit.r + emit.g + emit.b == 0f) {
                                 fillQueue.Add(new Vector2Int(nx, ny));
                             }
 

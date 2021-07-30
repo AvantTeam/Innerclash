@@ -35,7 +35,7 @@ namespace Innerclash.World {
             // Get the tile mask if has the bitmask rule
             int mask = 0;
             if(rules.HasFlag(TileRule.Bitmask)) {
-                mask = Masks.GetMask8((x, y) => IsSameType(tilemap, position.x + x, position.y + y));
+                mask = Masks.GetMask8((x, y) => IsSameGroup(tilemap, position.x + x, position.y + y) || IsSameType(tilemap, position.x + x, position.y + y));
                 tileData.sprite = sprites[Masks.tileMap[mask]];
             } else {
                 tileData.sprite = sprite;

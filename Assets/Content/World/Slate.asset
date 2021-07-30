@@ -34,8 +34,55 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
   m_ColliderType: 2
-  sprites: []
-  rules: 0
+  sprites:
+  - {fileID: 7715245265873439908, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 4547565183512063883, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -8247275572116167237, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -8790440860311821907, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -9135119840743067746, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 5632047618057718561, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -6909743075776480863, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 3977987283287424659, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 8882655447151472532, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -5525394223603589653, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 3474720314683888848, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -3420450568066564582, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 73354483973024305, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 3723250654774621058, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 6741485891647522224, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 5702973187279058273, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 2999551130924284818, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -4825574562693752057, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -4414219311661179350, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 8672819628198552344, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -1781950309021032198, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -7122664703235883014, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 6742018596187659881, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -6928264691051552211, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 2775726517636785831, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 8926143869274926030, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 8183213819488615797, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -7717735524455274858, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 5482082207723475029, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -1098502159314279185, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -1707933835942527469, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 8147017155208459650, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -1403663910110119595, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -934813244233430278, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -5206216734220951182, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 6109665197356796077, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -251715154741471113, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -3809645528548051598, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -1823299632074911453, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 2357011348835003681, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -8332143275434030093, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: 7649111064334171943, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -5407676227340149258, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -4046146827230427181, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -3402918275978880380, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -1902554151804109804, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  - {fileID: -6947135178813898435, guid: e9a1787fd857c7e48aba06daa690372d, type: 3}
+  rules: 8
   groups: 2147483647
   itemDrop:
     item: {fileID: 0}

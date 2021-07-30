@@ -23,11 +23,11 @@ namespace Innerclash.Utils {
             return nheight;
         }
 
-        public static float[,] GenNoiseMap(int width, int height, NoisePass pass) {
-            return GenNoiseMap(width, height, pass.scale, pass.octaves, pass.persistence, pass.lacunarity);
+        public static float[,] GenNoiseMap(int width, int height, NoisePass pass, AnimationCurve remap = null) {
+            return GenNoiseMap(width, height, pass.scale, pass.octaves, pass.persistence, pass.lacunarity, remap);
         }
 
-        public static float[,] GenNoiseMap(int width, int height, float scale, int octaves, float persistence, float lacunarity) {
+        public static float[,] GenNoiseMap(int width, int height, float scale, int octaves, float persistence, float lacunarity, AnimationCurve remap = null) {
             float min = float.MaxValue;
             float max = float.MinValue;
 
@@ -40,7 +40,6 @@ namespace Innerclash.Utils {
                     } else if(noise < min) {
                         min = noise;
                     }
-
                     res[x, y] = noise;
                 }
             }
@@ -48,6 +47,7 @@ namespace Innerclash.Utils {
             for(int x = 0; x < width; x++) {
                 for(int y = 0; y < height; y++) {
                     res[x, y] = Mathf.InverseLerp(min, max, res[x, y]);
+                    if(remap != null) res[x, y] = remap.Evaluate(res[x, y]);
                 }
             }
 

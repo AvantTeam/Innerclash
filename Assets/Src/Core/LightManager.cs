@@ -21,7 +21,7 @@ namespace Innerclash.Core {
         static readonly int radius = 8;
         static readonly float normalDropoff = 0.7f;
         static readonly float diagonalDropoff = Mathf.Pow(normalDropoff, Mathf.Sqrt(2f));
-        static readonly float threshold = 0.02f;
+        static readonly float threshold = 0.04f;
         static readonly int diameter = radius * 2 + 1;
 
         readonly Color[] singleEmission = new Color[diameter * diameter];

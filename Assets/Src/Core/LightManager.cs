@@ -13,7 +13,7 @@ namespace Innerclash.Core {
         public SpriteRenderer Renderer { get; private set; }
         public Camera Cam { get => GameController.Instance.mainCamera; }
 
-        volatile Texture2D texture;
+        Texture2D texture;
 
         Color[] colors;
         readonly List<Vector2Int> emits = new List<Vector2Int>();

@@ -75,7 +75,7 @@ namespace Innerclash.World.Map {
                     }else{
                         map[x + y * width] = Color.black * mask.texture.GetPixel(x, y);
                     }
-                    worldBiomeData[x, y] = new BiomeData(target, cheight, ctemp, carch);
+                    worldBiomeData[x, y] = new BiomeData(target, cheight, ctemp, carch, target.terrainDeviation, target.terrainRoughness);
                 }
             }
 
@@ -107,16 +107,19 @@ namespace Innerclash.World.Map {
             public float Temperature { get; private set; }
             public float ArchaicDensity { get; private set; }
 
-            public int TerrainDeviation => Biome.terrainDeviation;
-            public float TerrainRoughness => Biome.terrainRoughness;
+            public int TerrainDeviation { get; private set; }
+            public float TerrainRoughness { get; private set; }
 
             public Color NoiseData { get => new Color(Height, Temperature, ArchaicDensity); }
 
-            public BiomeData(Biome biome, float height, float temperature, float archaicDensity) {
+            public BiomeData(Biome biome, float height, float temperature, float archaicDensity, int terrainDeviation, float terrainRoughness) {
                 Biome = biome;
                 Height = height;
                 Temperature = temperature;
                 ArchaicDensity = archaicDensity;
+
+                TerrainDeviation = terrainDeviation;
+                TerrainRoughness = terrainRoughness;
             }
 
             public static bool TryEvaluateBiome(Color noiseData, out Biome biome) {
@@ -148,11 +151,13 @@ namespace Innerclash.World.Map {
                     newHeight = Mathf.Lerp(a.Height, b.Height, t),
                     newTemp = Mathf.Lerp(a.Temperature, b.Temperature, t),
                     newArch = Mathf.Lerp(a.ArchaicDensity, b.ArchaicDensity, t);
+                int newTerrainDeviation = (int)Mathf.Lerp(a.TerrainDeviation, b.TerrainDeviation, t);
+                int newTerrainRoughness = (int)Mathf.Lerp(a.TerrainRoughness, b.TerrainRoughness, t);
                 Biome newBiome;
                 if(!TryEvaluateBiome(newHeight, newTemp, newArch, out newBiome)) {
                     Debug.LogWarning($"Failed to evaluate biome interpolation with value [{newHeight}, {newTemp}, {newArch}]");
                 }
-                return new BiomeData(newBiome, newHeight, newTemp, newArch);
+                return new BiomeData(newBiome, newHeight, newTemp, newArch, newTerrainDeviation, newTerrainRoughness);
             }
         }
     }

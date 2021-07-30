@@ -2436,7 +2436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotPrefab: {fileID: 4313090616502337580, guid: 00e0fde6100c6134eaa3219637fa1a7f, type: 3}
-  trait: {fileID: 0}
+  trait: {fileID: 1343315777}
   slotParent: {fileID: 857373352}
   massBar: {fileID: 2097012799}
   massImage: {fileID: 559634667}

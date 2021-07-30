@@ -20,6 +20,10 @@ MonoBehaviour:
   - type: 2
     min: 0.32
     max: 1
+  tileProviders:
+  - type: 0
+    tile: {fileID: 11400000, guid: c89cd88c6eda5b84ea6490671a84a892, type: 2}
+    depth: 30
   terrainDeviation: 10
   terrainRoughness: 27
   decors:

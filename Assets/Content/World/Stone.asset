@@ -89,3 +89,5 @@ MonoBehaviour:
     amount: 1
   staticFriction: 5000
   dynamicFriction: 500
+  emitsLight: 0
+  emitLight: {r: 1, g: 1, b: 1, a: 1}

@@ -20,6 +20,8 @@ MonoBehaviour:
   - type: 2
     min: 0.32
     max: 1
+  terrainDeviation: 10
+  terrainRoughness: 27
   decors:
   - item: {fileID: 11400000, guid: 1c21ae293dde24a47821178b9647a948, type: 2}
     value: 7

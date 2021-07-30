@@ -10,17 +10,14 @@ using static Innerclash.World.Map.WorldMapGenerator;
 namespace Innerclash.World {
     public class SectorGenerator : MonoBehaviour {
         [Range(0f, 1f)] public float samplingRadius = 0.33f;
-        public int samplingInterval = 2;
-        public int terrainDeviation = 10;
-        public float terrainRoughness = 20f;
-        public Vector2Int mapSize = new Vector2Int(800, 300);
+        public int samplingInterval = 3;
+        public Vector2Int mapSize = new Vector2Int(1200, 300);
+        public Vector2Int heightmapBounds = new Vector2Int(40, 250);
 
         public ScriptedTile baseTile;
 
         Tilemap tilemap;
         Dictionary<Vector3Int, ScriptedTile> tiles;
-
-        int spawnHeight;
 
         void Start() {
             tilemap = GameController.Instance.tilemap;
@@ -31,8 +28,15 @@ namespace Innerclash.World {
         }
 
         public void GenerateSector() {
-            var infoObj = GameObject.FindWithTag("WorldDataInfo");
-            WorldDataInfo worldData = infoObj.GetComponent<WorldDataInfo>();
+            WorldDataInfo worldData;
+            try {
+                var infoObj = GameObject.FindWithTag("WorldDataInfo");
+                worldData = infoObj.GetComponent<WorldDataInfo>();
+                infoObj = worldData.gameObject.gameObject;
+            } catch(System.NullReferenceException) {
+                Debug.LogError("No WorldDataInfo component found in scene; sector generation will be terminated.", this);
+                return;
+            }
 
             BiomeData? previous = null;
             int prevColumn = -1;
@@ -47,8 +51,7 @@ namespace Innerclash.World {
                         BiomeData used = BiomeData.Lerp(prev, data, t);
 
                         Vector2 terrainDeviationPoint = worldData.CurrentSectorWorldPosition + MathHelper.PolarToRect(samplingRadius, (float)column / mapSize.x * 2f * Mathf.PI);
-                        int height = (int)Mathf.Min(used.Height * mapSize.y + (2f * Mathf.PerlinNoise(terrainDeviationPoint.x * terrainRoughness, terrainDeviationPoint.y * terrainRoughness) - 1f) * terrainDeviation, mapSize.y);
-                        if(column == mapSize.x / 2) spawnHeight = height + 1;
+                        int height = (int)Mathf.Min(MathHelper.Remap(used.Height, 0f, 1f, heightmapBounds.x, heightmapBounds.y) + (2f * Mathf.PerlinNoise(terrainDeviationPoint.x * used.TerrainRoughness, terrainDeviationPoint.y * used.TerrainRoughness) - 1f) * used.TerrainDeviation, mapSize.y);
                         for(int y = 0; y < height; y++) {
                             tiles.Add(new Vector3Int(column, y, 0), baseTile);
                         }
@@ -60,16 +63,6 @@ namespace Innerclash.World {
                 prevColumn = sample;
                 sample += Mathf.Min(sample + samplingInterval, mapSize.x - 1);
             }
-            /*for(int column = 0; column < mapSize.x; column++) {
-                Vector2 phase = new Vector2(Mathf.Cos((float)column / mapSize.x * 2f * Mathf.PI), Mathf.Sin((float)column / mapSize.x * 2f * Mathf.PI)) * samplingRadius;
-                Vector2 samplingPoint = worldData.CurrentSectorWorldPosition + phase;
-                BiomeData sample = worldData.BiomeDataAt(samplingPoint);
-                int height = (int)Mathf.Min(sample.Height * mapSize.y + (-1f + 2f * Mathf.PerlinNoise(samplingPoint.x * terrainRoughness, samplingPoint.y * terrainRoughness)) * terrainDeviation, mapSize.y);
-                if(column == mapSize.x / 2) spawnHeight = height + 1;
-                for(int y = 0; y < height; y++) {
-                    tiles.Add(new Vector3Int(column, y, 0), baseTile);
-                }
-            }*/
 
             Vector3Int[] positionArray = new Vector3Int[tiles.Count];
             ScriptedTile[] tilesArray = new ScriptedTile[tiles.Count];
@@ -85,7 +78,13 @@ namespace Innerclash.World {
         }
 
         void ResetPlayerPosition() {
-            GameController.Instance.controlled.transform.position = new Vector3(mapSize.x / 2, spawnHeight);
+            bool found = false;
+            Vector3Int current = new Vector3Int(mapSize.x / 2, mapSize.y, 0);
+            while(!found && current.y >= 0) {
+                if(tilemap.GetTile(current + Vector3Int.down) != null) found = true;
+                current += Vector3Int.down;
+            }
+            if(found) GameController.Instance.controlled.transform.position = current + Vector3.up * 2f;
         }
     }
 }

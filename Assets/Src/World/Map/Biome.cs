@@ -6,6 +6,8 @@ namespace Innerclash.World.Map {
     public class Biome : ScriptableObject {
         public Color mapColor = Color.black;
         public BiomeAttribute[] attributes;
+        public int terrainDeviation = 5;
+        public float terrainRoughness = 20f;
         public ObjectIntPair<DecorTile>[] decors;
         public float decorDensity;
 

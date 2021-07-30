@@ -20,3 +20,7 @@ MonoBehaviour:
   - type: 1
     min: 0
     max: 0.2
+  terrainDeviation: 3
+  terrainRoughness: 10
+  decors: []
+  decorDensity: 0

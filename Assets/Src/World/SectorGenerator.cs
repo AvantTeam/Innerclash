@@ -73,13 +73,12 @@ namespace Innerclash.World {
                 for(int y = 0; y < mapSize.y; y++) {
                     Vector3Int pos = new Vector3Int(x, y, 0);
                     if(!tiles.ContainsKey(pos)) {
-                        Debug.Log($"Entry {pos} not found, skipping");
+                        Debug.LogWarning($"Entry {pos} not found, skipping.");
                         continue;
                     }
                     TileInfo current = tiles[pos];
-                    foreach(BiomeTileProvider prov in current.Data.Biome.tileProviders) {
-                        if(prov.Act(tiles, pos)) Debug.Log($"Act returns true on {pos}");
-                    }
+                    foreach(BiomeTileProvider prov in current.Data.Biome.tileProviders)
+                        prov.Act(tiles, pos);
                 }
             }
 

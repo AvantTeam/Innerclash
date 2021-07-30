@@ -33,7 +33,7 @@ namespace Innerclash.World {
             try {
                 var infoObj = GameObject.FindWithTag("WorldDataInfo");
                 worldData = infoObj.GetComponent<WorldDataInfo>();
-                infoObj = worldData.gameObject;
+                infoObj = worldData.gameObject.gameObject;
             } catch(System.NullReferenceException) {
                 Debug.LogError("No WorldDataInfo component found in scene; sector generation will be terminated.", this);
                 return;

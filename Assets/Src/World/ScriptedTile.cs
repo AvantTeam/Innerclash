@@ -24,6 +24,10 @@ namespace Innerclash.World {
         /// <summary> Friction used when the entity this tile is interacting with is moving </summary>
         public float dynamicFriction = 500f;
 
+        [Header("World")]
+        public bool emitsLight;
+        public Color emitLight = new Color(1f, 1f, 1f, 1f);
+
         public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) {
             base.GetTileData(position, tilemap, ref tileData);
 

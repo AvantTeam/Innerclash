@@ -62,20 +62,6 @@ namespace Innerclash.Utils {
             return default;
         }
 
-        public static string ToString<T>(IList<T> array) => ToString(array, ", ", t => t.ToString());
-
-        public static string ToString<T>(IList<T> array, string separator) => ToString(array, separator, t => t.ToString());
-
-        public static string ToString<T>(IList<T> array, Func<T, string> stringifier) => ToString(array, ", ", stringifier);
-
-        public static string ToString<T>(IList<T> array, string separator, Func<T, string> stringifier) {
-            var res = "[";
-            for(int i = 0; i < array.Count; i++) {
-                if(i > 0) res += separator;
-                res += stringifier(array[i]);
-            }
-
-            return res + "]";
-        }
+        public static bool InBounds<T>(T[] array, int index) => index >= 0 && index < array.Length;
     }
 }

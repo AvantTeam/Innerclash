@@ -13,19 +13,19 @@ namespace Innerclash.Core {
         public SpriteRenderer Renderer { get; private set; }
         public Camera Cam { get => GameController.Instance.mainCamera; }
 
-        volatile Texture2D texture;
+        Texture2D texture;
 
         Color[] colors;
         readonly List<Vector2Int> emits = new List<Vector2Int>();
 
-        static int radius = 8;
-        static float normalDropoff = 0.7f;
-        static float diagonalDropoff = Mathf.Pow(normalDropoff, Mathf.Sqrt(2f));
-        static float threshold = 0.02f;
-        static int diameter = radius * 2 + 1;
+        static readonly int radius = 8;
+        static readonly float normalDropoff = 0.7f;
+        static readonly float diagonalDropoff = Mathf.Pow(normalDropoff, Mathf.Sqrt(2f));
+        static readonly float threshold = 0.02f;
+        static readonly int diameter = radius * 2 + 1;
 
-        Color[] singleEmission = new Color[diameter * diameter];
-        List<Vector2Int> fillQueue = new List<Vector2Int>();
+        readonly Color[] singleEmission = new Color[diameter * diameter];
+        readonly List<Vector2Int> fillQueue = new List<Vector2Int>();
 
         volatile bool
             shouldStop = false,
@@ -56,6 +56,10 @@ namespace Innerclash.Core {
             t.Start();
         }
 
+        void OnDestroy() {
+            shouldStop = true;
+        }
+
         void Update() {
             RecalculatePosition();
 
@@ -74,10 +78,9 @@ namespace Innerclash.Core {
         }
 
         void RecalculatePosition() {
-            int height = (int)(Cam.orthographicSize * 2);
-            int width = height * Screen.width / Screen.height;
-            height += extension * 2;
-            width += extension * 2;
+            var size = PreferredSize();
+            int width = size.x,
+                height = size.y;
 
             if(texture == null || (texture.width != width || texture.height != height)) {
                 texture = new Texture2D(width, height);
@@ -87,14 +90,27 @@ namespace Innerclash.Core {
             }
 
             Vector2 previous = transform.position;
-            transform.position = new Vector2(
-                Mathf.RoundToInt(Cam.transform.position.x / extension) * extension + 0.5f,
-                Mathf.RoundToInt(Cam.transform.position.y / extension) * extension
+            transform.position = new Vector3(
+                Mathf.RoundToInt(Cam.transform.position.x / extension) * extension,
+                Mathf.RoundToInt(Cam.transform.position.y / extension) * extension,
+                0f
             );
 
             if(previous != (Vector2)transform.position) {
                 RecalculateColors()()();
             }
+        }
+
+        Vector2Int PreferredSize() {
+            int height = (int)(Cam.orthographicSize * 2);
+            int width = height * Screen.width / Screen.height;
+            if(height % 2 != 0) height += 1;
+            if(width % 2 != 0) width += 1;
+
+            height += extension * 2;
+            width += extension * 2;
+
+            return new Vector2Int(width, height);
         }
 
         /// <summary> Call this synchronously, then call the returned delegate asynchronously, then call the other returned delegate synchronously. </summary>

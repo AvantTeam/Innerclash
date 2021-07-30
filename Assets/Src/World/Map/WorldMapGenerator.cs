@@ -107,7 +107,10 @@ namespace Innerclash.World.Map {
             public float Temperature { get; private set; }
             public float ArchaicDensity { get; private set; }
 
-            public Color CondensedData { get => new Color(Height, Temperature, ArchaicDensity); }
+            public int TerrainDeviation => Biome.terrainDeviation;
+            public float TerrainRoughness => Biome.terrainRoughness;
+
+            public Color NoiseData { get => new Color(Height, Temperature, ArchaicDensity); }
 
             public BiomeData(Biome biome, float height, float temperature, float archaicDensity) {
                 Biome = biome;
@@ -116,8 +119,8 @@ namespace Innerclash.World.Map {
                 ArchaicDensity = archaicDensity;
             }
 
-            public static bool TryEvaluateBiome(Color condensedData, out Biome biome) {
-                return TryEvaluateBiome(condensedData.r, condensedData.g, condensedData.b, out biome);
+            public static bool TryEvaluateBiome(Color noiseData, out Biome biome) {
+                return TryEvaluateBiome(noiseData.r, noiseData.g, noiseData.b, out biome);
             }
 
             public static bool TryEvaluateBiome(float height, float temp, float arch, out Biome biome) {

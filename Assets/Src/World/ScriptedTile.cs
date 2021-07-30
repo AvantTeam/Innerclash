@@ -119,7 +119,8 @@ namespace Innerclash.World {
         [System.Flags]
         public enum TileGroup {
             Stone = 1,
-            Soil = 2
+            Soil = 2,
+            Ice = 4
         }
     }
 }

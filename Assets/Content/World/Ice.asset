@@ -36,9 +36,11 @@ MonoBehaviour:
   m_ColliderType: 2
   sprites: []
   rules: 0
-  groups: 1
+  groups: 5
   itemDrop:
     item: {fileID: 0}
     amount: 0
-  staticFriction: 5000
-  dynamicFriction: 500
+  staticFriction: 1000
+  dynamicFriction: 100
+  emitsLight: 0
+  emitLight: {r: 1, g: 1, b: 1, a: 1}

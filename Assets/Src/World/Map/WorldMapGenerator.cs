@@ -102,6 +102,8 @@ namespace Innerclash.World.Map {
         }
 
         public struct BiomeData {
+            public static BiomeData Identity => new BiomeData(null, 0f, 0f, 0f, 0, 0f);
+
             public Biome Biome { get; private set; } // Should never be null due to fallback biome types
             public float Height { get; private set; }
             public float Temperature { get; private set; }

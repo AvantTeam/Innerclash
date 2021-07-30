@@ -17,11 +17,11 @@ namespace Innerclash.World {
         public ScriptedTile baseTile;
 
         Tilemap tilemap;
-        Dictionary<Vector3Int, ScriptedTile> tiles;
+        Dictionary<Vector3Int, TileInfo> tiles;
 
         void Start() {
             tilemap = GameController.Instance.tilemap;
-            tiles = new Dictionary<Vector3Int, ScriptedTile>();
+            tiles = new Dictionary<Vector3Int, TileInfo>();
 
             GenerateSector();
             ResetPlayerPosition();
@@ -38,6 +38,7 @@ namespace Innerclash.World {
                 return;
             }
 
+            // HEIGHTMAP PASS
             BiomeData? previous = null;
             int prevColumn = -1;
             for(int column = 0, sample = 0; column < mapSize.x;) {
@@ -53,7 +54,10 @@ namespace Innerclash.World {
                         Vector2 terrainDeviationPoint = worldData.CurrentSectorWorldPosition + MathHelper.PolarToRect(samplingRadius, (float)column / mapSize.x * 2f * Mathf.PI);
                         int height = (int)Mathf.Min(MathHelper.Remap(used.Height, 0f, 1f, heightmapBounds.x, heightmapBounds.y) + (2f * Mathf.PerlinNoise(terrainDeviationPoint.x * used.TerrainRoughness, terrainDeviationPoint.y * used.TerrainRoughness) - 1f) * used.TerrainDeviation, mapSize.y);
                         for(int y = 0; y < height; y++) {
-                            tiles.Add(new Vector3Int(column, y, 0), baseTile);
+                            tiles.Add(new Vector3Int(column, y, 0), new TileInfo(baseTile, used));
+                        }
+                        for(int y = height; y < mapSize.y; y++) {
+                            tiles.Add(new Vector3Int(column, y, 0), new TileInfo(null, used));
                         }
                         column++;
                         if(column >= mapSize.x) break;
@@ -64,12 +68,28 @@ namespace Innerclash.World {
                 sample += Mathf.Min(sample + samplingInterval, mapSize.x - 1);
             }
 
+            // BIOME TILE PROVIDER PASS
+            for(int x = 0; x < mapSize.x; x++) {
+                for(int y = 0; y < mapSize.y; y++) {
+                    Vector3Int pos = new Vector3Int(x, y, 0);
+                    if(!tiles.ContainsKey(pos)) {
+                        Debug.Log($"Entry {pos} not found, skipping");
+                        continue;
+                    }
+                    TileInfo current = tiles[pos];
+                    foreach(BiomeTileProvider prov in current.Data.Biome.tileProviders) {
+                        if(prov.Act(tiles, pos)) Debug.Log($"Act returns true on {pos}");
+                    }
+                }
+            }
+
+            // GENERATION
             Vector3Int[] positionArray = new Vector3Int[tiles.Count];
             ScriptedTile[] tilesArray = new ScriptedTile[tiles.Count];
             int i = 0;
-            foreach(KeyValuePair<Vector3Int, ScriptedTile> pair in tiles) {
+            foreach(KeyValuePair<Vector3Int, TileInfo> pair in tiles) {
                 positionArray[i] = pair.Key;
-                tilesArray[i] = pair.Value;
+                tilesArray[i] = pair.Value.Tile;
                 i++;
             }
 
@@ -85,6 +105,16 @@ namespace Innerclash.World {
                 current += Vector3Int.down;
             }
             if(found) GameController.Instance.controlled.transform.position = current + Vector3.up * 2f;
+        }
+
+        public struct TileInfo {
+            public ScriptedTile Tile { get; set; }
+            public BiomeData Data { get; set; }
+
+            public TileInfo(ScriptedTile tile, BiomeData data) {
+                Tile = tile;
+                Data = data;
+            }
         }
     }
 }

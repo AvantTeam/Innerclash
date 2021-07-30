@@ -4,10 +4,14 @@ using Innerclash.Utils;
 namespace Innerclash.World.Map {
     [CreateAssetMenu(menuName = "Content/World/Map/Biome")]
     public class Biome : ScriptableObject {
+        [Header("Sector")]
         public Color mapColor = Color.black;
         public BiomeAttribute[] attributes;
+        public BiomeTileProvider[] tileProviders;
         public int terrainDeviation = 5;
         public float terrainRoughness = 20f;
+
+        [Header("World Map")]
         public ObjectIntPair<DecorTile>[] decors;
         public float decorDensity;
 

@@ -127,11 +127,11 @@ namespace Innerclash.Core {
                     for(int x = 0; x < width; x++) {
                         int idx = x + y * width;
 
-                        var tile = Tilemaps.GetTile(pos + new Vector2(x - width / 2, y - height / 2));
-                        if(tile == null || tile.emitsLight) {
-                            var color = tile == null ? Color.white : tile.emitLight;
-                            colors[idx] = color;
+                        var tilePos = pos + new Vector2(x - width / 2, y - height / 2);
+                        var tile = Tilemaps.GetTile(tilePos);
 
+                        if(tile == null || tile.emitsLight) {
+                            colors[idx] = tile == null ? Color.white : tile.emitLight;
                             emits.Add(new Vector2Int(x, y));
                         } else {
                             colors[idx] = Color.black;

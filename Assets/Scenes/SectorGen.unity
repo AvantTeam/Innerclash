@@ -2360,49 +2360,11 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   m_TileSpriteArray:
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 0
@@ -2438,8 +2400,8 @@ Tilemap:
       e13: 1.47e-43
       e20: 7.12333e+32
       e21: 1.1e-44
-      e22: -96.7442
-      e23: 9.160966e+9
+      e22: -11.441048
+      e23: 8.648851e+9
       e30: 4.5905e-41
       e31: 0
       e32: 7.58e-43
@@ -2456,20 +2418,20 @@ Tilemap:
       e13: 1.47e-43
       e20: 7.12333e+32
       e21: 7.17e-43
-      e22: -144.0758
-      e23: 9.160966e+9
+      e22: -10.742958
+      e23: 8.648851e+9
       e30: 4.5905e-41
       e31: 0
       e32: 7.58e-43
       e33: 7.61e-43
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: 6.8947e-41, g: 6.8947e-41, b: 6.8947e-41, a: 6.8947e-41}
+    m_Data: {r: 8.7867e-41, g: 8.7867e-41, b: 8.7867e-41, a: 8.7867e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -149, y: -57, z: 0}
-  m_Size: {x: 356, y: 66, z: 1}
+  m_Size: {x: 356, y: 70, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -3594,7 +3556,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   extension: 10
   padding: 2
-  threshold: 0.04
 --- !u!212 &1260473070
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4628,8 +4589,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1656387542}
   - component: {fileID: 1656387541}
-  - component: {fileID: 1656387544}
   - component: {fileID: 1656387543}
+  - component: {fileID: 1656387544}
   m_Layer: 0
   m_Name: Game Controller
   m_TagString: GameController

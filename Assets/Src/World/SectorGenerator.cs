@@ -91,7 +91,7 @@ namespace Innerclash.World {
                 tilesArray[i] = pair.Value.Tile;
                 i++;
             }
-
+            tilemap.ClearAllTiles();
             tilemap.SetTiles(positionArray, tilesArray);
             tilemap.RefreshAllTiles();
         }

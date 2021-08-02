@@ -27,7 +27,6 @@ namespace Innerclash.World {
         [Header("World")]
         public bool emitsLight;
         public Color emitLight = new Color(1f, 1f, 1f, 1f);
-        [Range(0f, 1f)] public float transparency;
 
         public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) {
             base.GetTileData(position, tilemap, ref tileData);

@@ -20,7 +20,7 @@ namespace Innerclash.Core {
         public SectorGenerator sectorGenerator;
         public ControllableTrait controlled;
 
-        [Header("Default Prefabs")]
+        [Header("Default prefabs")]
         public GameObject itemEntity;
 
         [Header("Constant UI fragments")]

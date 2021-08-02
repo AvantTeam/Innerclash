@@ -63,5 +63,13 @@ namespace Innerclash.Utils {
         }
 
         public static bool InBounds<T>(T[] array, int index) => index >= 0 && index < array.Length;
+
+        public static void Fill<T>(T[] array, T value) => Fill(array, () => default);
+
+        public static void Fill<T>(T[] array, Func<T> value) {
+            for(int i = 0; i < array.Length; i++) {
+                array[i] = value();
+            }
+        }
     }
 }

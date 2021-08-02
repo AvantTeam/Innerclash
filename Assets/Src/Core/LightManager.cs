@@ -16,15 +16,10 @@ namespace Innerclash.Core {
         Texture2D texture;
 
         Color[] colors;
-        readonly List<Vector2Int> emits = new List<Vector2Int>();
-
-        static readonly int radius = 8;
-        static readonly float normalDropoff = 0.7f;
-        static readonly float diagonalDropoff = Mathf.Pow(normalDropoff, Mathf.Sqrt(2f));
+        readonly List<EmitLight> emits = new List<EmitLight>();
         static readonly float threshold = 0.04f;
-        static readonly int diameter = radius * 2 + 1;
 
-        readonly Color[] singleEmission = new Color[diameter * diameter];
+        readonly Dictionary<int, Color[]> emissions = new Dictionary<int, Color[]>();
         readonly List<Vector2Int> fillQueue = new List<Vector2Int>();
 
         volatile bool
@@ -132,7 +127,11 @@ namespace Innerclash.Core {
 
                         if(tile == null || tile.emitsLight) {
                             colors[idx] = tile == null ? Color.white : tile.emitLight;
-                            emits.Add(new Vector2Int(x, y));
+                            emits.Add(new EmitLight() {
+                                rootX = x,
+                                rootY = y,
+                                dropoff = 0.7f
+                            });
                         } else {
                             colors[idx] = Color.black;
                         }
@@ -143,7 +142,7 @@ namespace Innerclash.Core {
             return () => {
                 lock(emits) {
                     foreach(var emit in emits) {
-                        Emit(emit.x, emit.y, width);
+                        Emit(emit.rootX, emit.rootY, emit.dropoff, width);
                     }
 
                     return () => {
@@ -154,14 +153,20 @@ namespace Innerclash.Core {
             };
         }
 
-        void Emit(int rootX, int rootY, int width) {
-            for(int i = 0; i < singleEmission.Length; i++) {
-                singleEmission[i] = new Color();
-            }
+        void Emit(int rootX, int rootY, float normalDropoff, int width) {
+            float diagonalDropoff = Mathf.Pow(normalDropoff, Mathf.Sqrt(2f));
+
+            int radius = (int)Mathf.Log(threshold, normalDropoff);
+            if(radius % 2 != 0) radius++;
+
+            int diameter = radius * 2 + 1;
+
+            var emission = GetEmissions(radius);
+            Structs.Fill(emission, default(Color));
 
             fillQueue.Clear();
 
-            singleEmission[radius + radius * diameter] = colors[rootX + rootY * width];
+            emission[radius + radius * diameter] = colors[rootX + rootY * width];
             fillQueue.Add(new Vector2Int(rootX, rootY));
 
             while(fillQueue.Count > 0) {
@@ -175,7 +180,7 @@ namespace Innerclash.Core {
 
                 bool pass = false;
                 var currentColor = colors[index];
-                var targetColor = singleEmission[(radius + x - rootX) + (radius + y - rootY) * diameter];
+                var targetColor = emission[radius + x - rootX + (radius + y - rootY) * diameter];
 
                 if(
                     (targetColor.r > threshold || targetColor.g > threshold || targetColor.b > threshold) &&
@@ -196,20 +201,38 @@ namespace Innerclash.Core {
                         int neighbor = Mathf.Max(Mathf.Abs(nx - rootX), Mathf.Abs(ny - rootY));
                         if(neighbor <= radius && neighbor == currentLayer + 1) {
                             float dropoff = (nx != x && ny != y) ? diagonalDropoff : normalDropoff;
-                            int eidx = (radius + nx - rootX) + (radius + ny - rootY) * diameter;
+                            int eidx = radius + nx - rootX + (radius + ny - rootY) * diameter;
 
-                            var emit = singleEmission[eidx];
+                            var emit = emission[eidx];
                             if(Structs.InBounds(colors, nx + ny * width) && emit.r + emit.g + emit.b == 0f) {
                                 fillQueue.Add(new Vector2Int(nx, ny));
                             }
 
-                            singleEmission[eidx].r = Mathf.Max(targetColor.r * dropoff, singleEmission[eidx].r);
-                            singleEmission[eidx].g = Mathf.Max(targetColor.g * dropoff, singleEmission[eidx].g);
-                            singleEmission[eidx].b = Mathf.Max(targetColor.b * dropoff, singleEmission[eidx].b);
+                            emission[eidx].r = Mathf.Max(targetColor.r * dropoff, emission[eidx].r);
+                            emission[eidx].g = Mathf.Max(targetColor.g * dropoff, emission[eidx].g);
+                            emission[eidx].b = Mathf.Max(targetColor.b * dropoff, emission[eidx].b);
                         }
                     }
                 }
             }
+        }
+
+        Color[] GetEmissions(int radius) {
+            if(emissions.ContainsKey(radius)) {
+                return emissions[radius];
+            } else {
+                int diameter = radius * 2 + 1;
+                var emission = new Color[diameter * diameter];
+
+                emissions.Add(radius, emission);
+                return emission;
+            }
+        }
+
+        struct EmitLight {
+            public int rootX;
+            public int rootY;
+            public float dropoff;
         }
     }
 }
